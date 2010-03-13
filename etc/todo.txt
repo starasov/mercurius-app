@@ -18,7 +18,8 @@
     * no-ui way of the testing
     * ant integration
 
-- Configure intelliarts VPN connection and add sources under VCS.
++ Configure intelliarts VPN connection and add sources under VCS - added under GitHub
+  repository.
 
 - Check how to include resources into application package and the way how
   to read included resources.
