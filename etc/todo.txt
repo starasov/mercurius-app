@@ -1,0 +1,28 @@
++ Check how to continuously read logs for particular application.
+  *The best solution here is to find some tool could be used via ant.
+
++ Check how to use logging facilities inside the application: log levels,
+  app configuration, etc.
+
+- Decide where to place icons in the application stage headers. How to properly
+  place header icon on the right side.
+
+- Write persistence layer prototype.
+    * Think about possible ways of the database migration mechanism.
+
+    * Check whether there is any possibility to check whether device has
+      media or only built-in storage exists - it might be helpful for DB
+      creation.
+
+- Unit testing of the application.
+    * no-ui way of the testing
+    * ant integration
+
+- Configure intelliarts VPN connection and add sources under VCS.
+
+- Check how to include resources into application package and the way how
+  to read included resources.
+    * it seems http get could be helpful here.
+
+- Check where DB can be located in the emulator file system.
+    * use winscp: root/root

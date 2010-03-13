@@ -1,0 +1,35 @@
+[
+    {
+        "title": "Models.GenericManagerTest",
+        "source": "tests/models/genericManagerTest.js",
+        "testFunction": "Models.GenericManagerTest"
+    },
+
+    {
+        "title": "Models.GenericMapperTest",
+        "source": "tests/models/genericMapperTest.js",
+        "testFunction": "Models.GenericMapperTest"
+    },
+
+    {
+        "title": "Models.GenericManagerDeleteByIdIntegrationTest",
+        "source": "tests/models/genericManagerDeleteByIdIntergationTest.js",
+        "testFunction": "Models.GenericManagerDeleteByIdIntegrationTest"
+    },
+
+    {
+        "title": "Models.GenericManagerCountIntegrationTest",
+        "source": "tests/models/genericManagerCountIntegrationTest.js",
+        "testFunction": "Models.GenericManagerCountIntegrationTest"
+    },
+
+    {
+        "title": "Database.TypesTest",
+        "source": "tests/database/typesTest.js",
+        "testFunction": "Database.TypesTest"
+    },
+
+    {"source": "tests/utils.js"},
+    {"source": "tests/database/mocks.js"},
+    {"source": "tests/models/baseGenericManagerIntegrationTest.js"}
+]

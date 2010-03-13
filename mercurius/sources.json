@@ -1,0 +1,31 @@
+[
+    {"source": "app/assistants/stage-assistant.js"},
+    {
+        "scenes": "acecountView",
+        "source": "app/assistants/accountView-assistant.js"
+    },
+    {
+        "scenes": "sandboxView",
+        "source": "app/assistants/sandboxView-assistant.js"
+    },
+    {
+        "scenes": "currencyList",
+        "source": "app/assistants/currencyList-assistant.js"
+    },
+    {
+        "scenes": "currencyView",
+        "source": "app/assistants/currencyView-assistant.js"
+    },
+
+    {"source": "app/database/$package.js"},
+    {"source": "app/database/initializer.js"},
+    {"source": "app/database/service.js"},
+    {"source": "app/database/types.js"},
+    {"source": "app/database/versionProvider.js"},
+
+    {"source": "app/models/$package.js"},
+    {"source": "app/models/accounts.js"},
+    {"source": "app/models/currencies.js"},
+    {"source": "app/models/genericManager.js"},
+    {"source": "app/models/genericMapper.js"}
+]

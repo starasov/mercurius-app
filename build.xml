@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="mercurius" default="all">
+    <target name="all" depends="clean, package-application, install-application, launch-application"/>
+
+    <!-- Local properties -->
+    <property file="local.properties"/>
+
+    <!-- Build output specific properties -->
+    <property name="src.dir" value="${basedir}/mercurius"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
+
+    <property name="app.id" value="com.mercurius"/>
+    <property name="app.version" value="1.0.0"/>
+    <property name="ipk.file" value="${dist.dir}/${app.id}_${app.version}_all.ipk"/>
+
+    <!-- Mojo SDK specific properties -->
+    <property name="mojo.jars.path" value="${mojo.sdk.path}/share/jars"/>
+    <property name="webos.tools.jar.file" value="${mojo.jars.path}/webos-tools.jar"/>
+    <property name="webos.emulator.jar.file" value="${mojo.jars.path}/webos-emulator.jar"/>
+    <property name="webos.emulator.image.name" value="Palm SDK 1.3.5.368 (320x400)"/>
+
+    <target name="clean"
+            description="Perform cleanup of the directory with previously assembled app.">
+        <delete dir="${dist.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <target name="package-application" depends="clean"
+            description="Packages application using palm packaging tool.">
+        <antcall target="-call-webos-tools">
+            <param name="webos.tools.args" value="palm-package -o '${dist.dir}' ${src.dir}"/>
+        </antcall>
+    </target>
+
+    <target name="install-application" depends="package-application"
+            description="Install previously packaged application to the emulator.">
+        <antcall target="-call-webos-tools">
+            <param name="webos.tools.args" value="palm-install ${ipk.file}"/>
+        </antcall>
+    </target>
+
+    <target name="remove-application" depends="package-application"
+            description="Removes previously installed application from the emulator.">
+        <antcall target="-call-webos-tools">
+            <param name="webos.tools.args" value="palm-install -r ${app.id}"/>
+        </antcall>
+    </target>
+
+    <target name="launch-application"
+            description="Request emulator to launch application.">
+        <antcall target="-call-webos-tools">
+            <param name="webos.tools.args" value="palm-launch ${app.id}"/>
+        </antcall>
+    </target>
+
+    <target name="launch-emulator"
+            description="Launch emulator instance.">
+        <java jar="${webos.emulator.jar.file}" fork="true" failonerror="true">
+            <arg line="--start='${webos.emulator.image.name}'"/>
+        </java>
+    </target>
+
+    <target name="run-unit-tests" depends="install-application"
+            description="Request emulator to launch application in test running mode.">
+        <antcall target="-call-webos-tools">
+            <param name="webos.tools.args" value="palm-launch -p '{mojoTest:true}' ${app.id}"/>
+        </antcall>
+    </target>
+
+    <target name="follow-application-log"
+            description="Read application generated logs.">
+        <antcall target="-call-webos-tools">
+            <param name="webos.tools.args" value="palm-log -f ${app.id}"/>
+        </antcall>
+    </target>
+
+    <target name="-call-webos-tools">
+        <java jar="${webos.tools.jar.file}" fork="true" failonerror="true">
+            <arg line="${webos.tools.args}"/>
+        </java>
+    </target>
+</project>

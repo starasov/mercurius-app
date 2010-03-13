@@ -1,0 +1,9 @@
+{
+	"id": "com.mercurius",
+	"version": "1.0.0",
+	"vendor": "Mercurius",
+	"type": "web",
+	"main": "index.html",
+	"title": "Mercurius",
+	"icon": "icon.png"
+}

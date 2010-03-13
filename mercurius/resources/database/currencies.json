@@ -1,0 +1,8 @@
+{
+    "createSql": "CREATE TABLE IF EXISTS currencies(id INTEGER PRIMARY KEY, name TEXT, symbol TEXT, rate REAL, home_flag INTEGER); GO;",
+    "initialData": [
+        "INSERT INTO currencies(1, 'US Dollar', '$', 1.0, 1); GO;",
+        "INSERT INTO currencies(1, 'GB Pound', 'gbp', 1.5, 0); GO;",
+        "INSERT INTO currencies(1, 'Euro', 'eur', 1.2, 0); GO;"
+    ]
+}

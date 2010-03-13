@@ -1,0 +1,1 @@
+if (!Database) var Database = {};

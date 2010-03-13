@@ -1,0 +1,2 @@
+Models.CurrenciesManagerTest = Class.create({
+});
