@@ -10,32 +10,35 @@ Models.Mapper = Class.create({
 
     toInsertSql: function(entity) {
         Mojo.require(entity);
+        Mojo.require(entity.id == null || Object.isUndefined(entity.id));
 
-        var sql = "INSERT INTO " + this._tableModel.Name + " (";
+        var insertContext = {};
+        insertContext.sql = "INSERT INTO " + this._tableModel.Name + " (";
+        insertContext.params = [];
 
         for (var column in this._tableModel.Columns) {
-            sql += column + ",";
+            if (column != "id") {
+                insertContext.sql += column + ",";
+            }
         }
 
-        sql = sql.substring(0, sql.length - 1);
-        sql += ") VALUES(";
+        insertContext.sql = insertContext.sql.substring(0, sql.length - 1);
+        insertContext.sql += ") VALUES(";
 
         for (column in this._tableModel.Columns) {
-            var value = entity[column];
+            var value = Object.isUndefined(entity[column]) ? null : entity[column];
             var columnModel = this._tableModel.Columns[column];
 
-            if (column == "id" && Models.Mapper._isNull(value)) {
-                continue;
+            if (column != "id") {
+                insertContext.sql += column + "?,";
+                insertContext.params.push(columnModel.toSqlType(value));
             }
-
-            sql += (Models.Mapper._isNull(value) ? "NULL" : columnModel.toSql(value));
-            sql += ","
         }
 
-        sql = sql.substring(0, sql.length - 1); // removing last comma
-        sql += ");";
+        insertContext.sql = insertContext.sql.substring(0, sql.length - 1);
+        insertContext.sql += ");";
 
-        return sql;
+        return insertContext;
     },
 
     toUpdateSql: function(entity) {
@@ -47,7 +50,7 @@ Models.Mapper = Class.create({
         updateContext.params = [];
 
         for (var column in this._tableModel.Columns) {
-            var value = Object.isUndefined(value) ? null : entity[column];
+            var value = Object.isUndefined(entity[column]) ? null : entity[column];
             var columnModel = this._tableModel.Columns[column]; 
 
             if (column != "id") {

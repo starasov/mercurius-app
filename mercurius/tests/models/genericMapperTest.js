@@ -7,7 +7,7 @@ Models.GenericMapperTest = Class.create({
             Columns: {
                 id: new Database.Types.PrimaryKey(),
                 name: new Database.Types.String(),
-                some_flag: new Database.Types.Boolean()
+                some_flag: new Database.Types.Boolean(Database.Types.Null)
             }
         };
 
@@ -34,8 +34,11 @@ Models.GenericMapperTest = Class.create({
     },
 
     test_to_insert_sql_should_generate_valid_sql_when_all_data_available: function() {
-        var sql = this._mapper.toInsertSql({id: 1, name: "name", some_flag: true});
-        Mojo.requireEqual("INSERT INTO name_and_flag (id,name,some_flag) VALUES(1,'name',1);", sql);
+        var insertContext = this._mapper.toInsertSql({id: 1, name: "name", some_flag: true});
+
+        Mojo.requireEqual("INSERT INTO name_and_flag (id,name,some_flag) VALUES(1,'name',1);", insertContext.sql);
+        Mojo.requireEqual([1, "name", 1], insertContext.params);
+
         return Mojo.Test.passed;
     },
 
@@ -77,8 +80,11 @@ Models.GenericMapperTest = Class.create({
     },
 
     test_to_update_sql_should_generate_valid_sql_with_nulls_when_missing_fields_found: function() {
-        var sql = this._mapper.toUpdateSql({id: 1, some_flag: null});
-        Mojo.requireEqual("UPDATE name_and_flag SET name=NULL,some_flag=NULL WHERE id=1;", sql);
+        var updateContext = this._mapper.toUpdateSql({id: 1, some_flag: null});
+
+        Mojo.requireEqual("UPDATE name_and_flag SET name=?, some_flag=? WHERE id=?;", updateContext.sql);
+        Test.requireArraysEqual([null, null, 1], updateContext.params);
+
         return Mojo.Test.passed;
     }
 });

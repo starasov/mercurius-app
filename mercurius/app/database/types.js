@@ -78,6 +78,10 @@ Database.Types.Boolean = Class.create(Database.Types.BaseType, {
     },
 
     toSqlType: function(value) {
+        if (value == null && this.nullable == Database.Types.Null) {
+            return null;
+        }
+
         return (value ? 1 : 0);
     }
 });
