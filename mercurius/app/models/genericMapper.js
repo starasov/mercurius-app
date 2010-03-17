@@ -1,11 +1,16 @@
 Models.Mapper = Class.create({
     initialize: function(tableModel) {
-        Mojo.require(tableModel);
+        Mojo.require(tableModel, "Table model should be defined and can't be null.");
         this._tableModel = tableModel;
     },
 
     toCountSql: function() {
-        return "SELECT COUNT(*) as count FROM " + this._tableModel.Name + ";";
+        var countContext = {};
+
+        countContext.sql = "SELECT COUNT(*) as count FROM " + this._tableModel.Name + ";";
+        countContext.params = [];
+
+        return countContext;
     },
 
     toInsertSql: function(entity) {
@@ -22,7 +27,7 @@ Models.Mapper = Class.create({
             }
         }
 
-        insertContext.sql = insertContext.sql.substring(0, insertContext.sql.length - 2);
+        insertContext.sql = Models.Mapper._trimLastCommaAndSpace(insertContext.sql);
         insertContext.sql += ") VALUES(";
 
         for (column in this._tableModel.Columns) {
@@ -35,15 +40,15 @@ Models.Mapper = Class.create({
             }
         }
 
-        insertContext.sql = insertContext.sql.substring(0, insertContext.sql.length - 2);
+        insertContext.sql = Models.Mapper._trimLastCommaAndSpace(insertContext.sql);
         insertContext.sql += ");";
 
         return insertContext;
     },
 
     toUpdateSql: function(entity) {
-        Mojo.require(entity);
-        Mojo.require(entity.id);
+        Mojo.require(entity, "Entity to update should be defined and can't be null.");
+        Mojo.require(entity.id, "Passed entity should have id value to be updated.");
 
         var updateContext = {};
         updateContext.sql = "UPDATE " + this._tableModel.Name + " SET ";
@@ -59,7 +64,7 @@ Models.Mapper = Class.create({
             }
         }
 
-        updateContext.sql = updateContext.sql.substring(0, updateContext.sql.length - 2); // removing last comma and space
+        updateContext.sql = Models.Mapper._trimLastCommaAndSpace(updateContext.sql);
         updateContext.sql += " WHERE id=?;";
         updateContext.params.push(this._tableModel.Columns.id.toSqlType(entity.id));
 
@@ -67,9 +72,25 @@ Models.Mapper = Class.create({
     },
 
     toDeleteSql: function(id) {
-    } 
+    }
 });
 
-Models.Mapper._isNull = function(value) {
-    return Object.isUndefined(value) || value == null; 
+/**
+ * Remove last comma and space from sting.
+ * For mapper internal use only.
+ *
+ * Note: actually the method removes last 2 characters from the end
+ * and no extra checks are done here.
+ *
+ * @param str - {string} a string that ends with ", "
+ * @return {string} A string with last 2 characters trimmed.
+ *
+ * @private
+ * @static
+ */
+Models.Mapper._trimLastCommaAndSpace = function(str) {
+    Mojo.require(str, "Passed string should be defined and can't be null.");
+    Mojo.require(str.length > 2, "Passed string should contain more than 2 characters. Actual string length is " + str.length);
+    
+    return str.substring(0, str.length - 2); 
 };

@@ -16,12 +16,21 @@ Test.defaultDatabaseErrorCallback = function(recordResults, transaction, error) 
     reportResults(error.message);
 };
 
+/**
+ * Ensures that two passed arrays are equal.
+ *
+ * Two arrays will be considered as equal in case when both arrays have equal
+ * lengths and elements at the same positions of each array are equal too.
+ *
+ * @param array1 - {array} first array to test.
+ * @param array2 - {array} second array to test.
+ */
 Test.requireArraysEqual = function(array1, array2) {
-    Mojo.requireArray(array1);
-    Mojo.requireArray(array2);
-    Mojo.requireEqual(array1.length, array2.length);
+    Mojo.requireArray(array1, "1st array parameter should be defined and can't be null.");
+    Mojo.requireArray(array2, "2nd array parameter should be defined and can't be null.");
+    Mojo.requireEqual(array1.length, array2.length, "Arrays should be equal length.");
 
     for (var i = 0; i < array1.length; i++) {
-        Mojo.requireEqual(array1[i], array2[i]);
+        Mojo.requireEqual(array1[i], array2[i], "An " + i + "th array elements are not equal: " + array1[i] + " != " + array2[i]);
     }
 };

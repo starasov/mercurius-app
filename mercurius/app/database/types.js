@@ -1,5 +1,7 @@
 if (!Database.Types) Database.Types = {};
 
+// ToDO: rename Null -> Nullable.
+// ToDO: check whether NotNull value is useful.
 
 Database.Types.Null = "NULL";
 Database.Types.NotNull = "NOT NULL";
@@ -10,10 +12,15 @@ Database.Types.BaseType = Class.create({
      * Base SQL type.
      *
      * @param nullable - {Database.Types.Null} or {Database.Types.NotNull} identifies
-     *                   whether nulls are acceptable values for particular database column.
+     *                   whether nulls are acceptable values for particular database
+     *                   column.
      */
     initialize: function(nullable) {
-        this.nullable = nullable;
+        this._nullable = nullable;
+    },
+
+    isNullable: function() {
+        return this._nullable == Database.Types.Null;
     },
 
     fromSqlType: function(value) {
@@ -73,12 +80,15 @@ Database.Types.Boolean = Class.create(Database.Types.BaseType, {
     },
 
     fromSqlType: function(value) {
-        return new Boolean(value);
-
+        if (value == null && this.isNullable()) {
+            return null;
+        }
+        
+        return (value ? true : false);
     },
 
     toSqlType: function(value) {
-        if (value == null && this.nullable == Database.Types.Null) {
+        if (value == null && this.isNullable()) {
             return null;
         }
 
@@ -90,32 +100,10 @@ Database.Types.Boolean = Class.create(Database.Types.BaseType, {
 /**
  * Real type.
  */
-Database.Types.String = Class.create(Database.Types.BaseType, {
+Database.Types.Real = Class.create(Database.Types.BaseType, {
     SqlType: "REAL",
 
     initialize: function($super, nullable) {
         $super(nullable);
     }
 });
-
-
-// ToDO: remove it as far as generic mapper become ready
-Database.Types.String.SPECIAL_CHARACTERS = ["'", ";", "(", ")", "\\"];
-
-// ToDO: remove it as far as generic mapper become ready
-Database.Types.String.toSql = function(value) {
-    Mojo.requireString(value);
-
-    var escapedValue = "";
-    for (var i = 0; i < value.length; i++) {
-        var c = value[i];
-
-        if (Database.Types.String.SPECIAL_CHARACTERS.indexOf(c) != -1) {
-            escapedValue += "\\";
-        }
-
-        escapedValue += c;
-    }
-
-    return "'" + escapedValue + "'";
-};
