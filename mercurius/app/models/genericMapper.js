@@ -9,8 +9,8 @@ Models.Mapper = Class.create({
     },
 
     toInsertSql: function(entity) {
-        Mojo.require(entity);
-        Mojo.require(entity.id == null || Object.isUndefined(entity.id));
+        Mojo.require(entity, "Entity to insert should be defined and can't be null.");
+        Mojo.require(entity.id == null || Object.isUndefined(entity.id), "Can't insert entity - entity has id value specified: id=" + entity.id);
 
         var insertContext = {};
         insertContext.sql = "INSERT INTO " + this._tableModel.Name + " (";
@@ -18,11 +18,11 @@ Models.Mapper = Class.create({
 
         for (var column in this._tableModel.Columns) {
             if (column != "id") {
-                insertContext.sql += column + ",";
+                insertContext.sql += column + ", ";
             }
         }
 
-        insertContext.sql = insertContext.sql.substring(0, sql.length - 1);
+        insertContext.sql = insertContext.sql.substring(0, insertContext.sql.length - 2);
         insertContext.sql += ") VALUES(";
 
         for (column in this._tableModel.Columns) {
@@ -30,12 +30,12 @@ Models.Mapper = Class.create({
             var columnModel = this._tableModel.Columns[column];
 
             if (column != "id") {
-                insertContext.sql += column + "?,";
+                insertContext.sql += "?, ";
                 insertContext.params.push(columnModel.toSqlType(value));
             }
         }
 
-        insertContext.sql = insertContext.sql.substring(0, sql.length - 1);
+        insertContext.sql = insertContext.sql.substring(0, insertContext.sql.length - 2);
         insertContext.sql += ");";
 
         return insertContext;

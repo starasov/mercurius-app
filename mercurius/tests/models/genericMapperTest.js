@@ -34,10 +34,12 @@ Models.GenericMapperTest = Class.create({
     },
 
     test_to_insert_sql_should_generate_valid_sql_when_all_data_available: function() {
-        var insertContext = this._mapper.toInsertSql({id: 1, name: "name", some_flag: true});
+        Mojo.Log.info(" ------ [test_to_insert_sql_should_generate_valid_sql_when_all_data_available]");
 
-        Mojo.requireEqual("INSERT INTO name_and_flag (id,name,some_flag) VALUES(1,'name',1);", insertContext.sql);
-        Mojo.requireEqual([1, "name", 1], insertContext.params);
+        var insertContext = this._mapper.toInsertSql({name: "name", some_flag: true});
+
+        Mojo.requireEqual("INSERT INTO name_and_flag (name, some_flag) VALUES(?, ?);", insertContext.sql);
+        Test.requireArraysEqual(["name", 1], insertContext.params);
 
         return Mojo.Test.passed;
     },
