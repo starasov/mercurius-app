@@ -13,7 +13,7 @@ Models.GenericManagerCountIntegrationTest = Class.create(Models.BaseGenericManag
     },
 
     _ensure_count: function(expectedCount, reportResults) {
-        var genericManager = new Models.GenericManager(this._service.getDatabase(), this._tableModel);
+        var genericManager = new Models.GenericManager(this._service.getDatabase(), this._mapper);
         genericManager.count(
                 function(tr, count) {
                         Mojo.Log.info("[Models.GenericManagerCountIntegrationTest._ensure_count] - expected=%s actual=%s", expectedCount, count);

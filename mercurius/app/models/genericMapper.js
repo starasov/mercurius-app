@@ -1,4 +1,4 @@
-Models.Mapper = Class.create({
+Models.GenericMapper = Class.create({
     initialize: function(tableModel) {
         Mojo.require(tableModel, "Table model should be defined and can't be null.");
         this._tableModel = tableModel;
@@ -27,7 +27,7 @@ Models.Mapper = Class.create({
             }
         }
 
-        insertContext.sql = Models.Mapper._trimLastCommaAndSpace(insertContext.sql);
+        insertContext.sql = Models.GenericMapper._trimLastCommaAndSpace(insertContext.sql);
         insertContext.sql += ") VALUES(";
 
         for (column in this._tableModel.Columns) {
@@ -40,7 +40,7 @@ Models.Mapper = Class.create({
             }
         }
 
-        insertContext.sql = Models.Mapper._trimLastCommaAndSpace(insertContext.sql);
+        insertContext.sql = Models.GenericMapper._trimLastCommaAndSpace(insertContext.sql);
         insertContext.sql += ");";
 
         return insertContext;
@@ -64,7 +64,7 @@ Models.Mapper = Class.create({
             }
         }
 
-        updateContext.sql = Models.Mapper._trimLastCommaAndSpace(updateContext.sql);
+        updateContext.sql = Models.GenericMapper._trimLastCommaAndSpace(updateContext.sql);
         updateContext.sql += " WHERE id=?;";
         updateContext.params.push(this._tableModel.Columns.id.toSqlType(entity.id));
 
@@ -72,6 +72,12 @@ Models.Mapper = Class.create({
     },
 
     toDeleteSql: function(id) {
+        var deleteContext = {};
+
+        deleteContext.sql =  "DELETE FROM " + this._tableModel.Name + " WHERE id=?";
+        deleteContext.params = [id];
+
+        return deleteContext;
     }
 });
 
@@ -88,7 +94,7 @@ Models.Mapper = Class.create({
  * @private
  * @static
  */
-Models.Mapper._trimLastCommaAndSpace = function(str) {
+Models.GenericMapper._trimLastCommaAndSpace = function(str) {
     Mojo.require(str, "Passed string should be defined and can't be null.");
     Mojo.require(str.length > 2, "Passed string should contain more than 2 characters. Actual string length is " + str.length);
     

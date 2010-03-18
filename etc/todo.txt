@@ -13,6 +13,10 @@
       media or only built-in storage exists - it might be helpful for DB
       creation.
 
+    - Check transaction types available in HTML 5 implementation under webos.
+      It seems that there are two different transaction types exists: read-only
+      and non-read-only transactions.
+
 - Unit testing of the application.
     - no-ui way of the testing
     + ant integration
@@ -27,3 +31,7 @@
 
 - Check where DB can be located in the emulator file system.
     * use winscp: root/root
+
+- Download latest mojo sdk (1.4)
+
+- Check out plug-in APIs from mojo skd 1.4

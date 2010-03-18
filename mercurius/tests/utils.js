@@ -34,3 +34,16 @@ Test.requireArraysEqual = function(array1, array2) {
         Mojo.requireEqual(array1[i], array2[i], "An " + i + "th array elements are not equal: " + array1[i] + " != " + array2[i]);
     }
 };
+
+Test.requireException = function(f) {
+    Mojo.requireFunction(f, "Passed argument should be a function.");
+
+    try {
+        f();
+    } catch (e) {
+        // Expected behavior.
+        return;
+    }
+
+    Mojo.require(false, "Function call passed, but exception was expected instead.");
+};

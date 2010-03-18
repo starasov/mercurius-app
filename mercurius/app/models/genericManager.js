@@ -1,17 +1,20 @@
 Models.GenericManager = Class.create({
     /**
-     * @param db - {Database} an initialized database instance.
-     * @param tableModel - {map} a table model to be managed.
-     * @param mapper - {Database.Mapper} a database mapper for particular model.
+     * Initializes generic manager instance.
      *
-     * ToDO: move all other methods like count and delete into mapper.
+     * Generic manager is data access object (in some degree). It contains
+     * a set of generic methods to work with particular table model. It gives
+     * access to manager client to delete, count, insert and update instances
+     * of particular table model entities.
+     *
+     * @param db - {Database} an initialized database instance.
+     * @param mapper - {Database.Mapper} a database mapper for particular model.
      */
-    initialize: function(db, tableModel, mapper) {
-        Mojo.require(db);
-        Mojo.require(tableModel);
+    initialize: function(db, mapper) {
+        Mojo.require(db, "Database should be defined and can't be null.");
+        Mojo.require(mapper, "Mapper should be defined and can't be null.");
 
         this._db = db;
-        this._tableModel = tableModel;
         this._mapper = mapper;
     },
 
@@ -27,7 +30,9 @@ Models.GenericManager = Class.create({
      */
     count: function(successCallback, errorCallback) {
         this._db.transaction((function(transaction) {
-            transaction.executeSql(this._mapper.toCountSql(), [],
+            var countContext = this._mapper.toCountSql();
+
+            transaction.executeSql(countContext.sql, countContext.params,
                     function(tr, resultSet) {
                         successCallback(tr, resultSet.rows.item(0).count)
                     }, errorCallback);
@@ -78,15 +83,16 @@ Models.GenericManager = Class.create({
     /**
      * Deletes record by specified id from the table.
      *
-     * @param successCallback - {callback} (transaction, resultSet)
-     * @param errorCallback - {callback} (transaction, error)
+     * @param id - {number} an entity id to be deleted.
+     * @param successCallback - {callback} (transaction, resultSet) a successful deletion callback.
+     * @param errorCallback - {callback} (transaction, error) an error callback.
      */
     deleteById: function(id, successCallback, errorCallback) {
-        Mojo.requireNumber(id);
+        Mojo.requireNumber(id, "id parameter should be a number.");
 
         this._db.transaction((function(transaction) {
-            var sql = "DELETE FROM " + this._tableModel.Name + " WHERE id=?";
-            transaction.executeSql(sql, [id], successCallback, errorCallback);
+            var deleteContext = this._mapper.toDeleteSql(id);
+            transaction.executeSql(deleteContext.sql, deleteContext.params, successCallback, errorCallback);
         }).bind(this));
     },
 

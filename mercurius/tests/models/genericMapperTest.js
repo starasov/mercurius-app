@@ -11,7 +11,7 @@ Models.GenericMapperTest = Class.create({
             }
         };
 
-        this._mapper = new Models.Mapper(this._tableModel);
+        this._mapper = new Models.GenericMapper(this._tableModel);
         
         return Mojo.Test.beforeFinished;
     },
@@ -23,13 +23,10 @@ Models.GenericMapperTest = Class.create({
     },
 
     test_to_insert_sql_should_fail_when_entity_not_passed: function() {
-        try {
+        Test.requireException((function() {
             this._mapper.toInsertSql(undefined);
-            Mojo.require(false);
-        } catch (e) {
-            // Expected behavior.
-        }
-
+        }).bind(this));
+        
         return Mojo.Test.passed;
     },
 
@@ -52,23 +49,17 @@ Models.GenericMapperTest = Class.create({
     },
 
     test_to_update_sql_should_require_entity: function() {
-        try {
+        Test.requireException((function() {
             this._mapper.toUpdateSql(undefined);
-            Mojo.require(false);
-        } catch (e) {
-            // Expected behavior.
-        }
+        }).bind(this));
 
         return Mojo.Test.passed;
     },
 
     test_to_update_sql_should_require_id_field_in_entity: function() {
-        try {
+        Test.requireException((function() {
             this._mapper.toUpdateSql({name: '1'});
-            Mojo.require(false);
-        } catch (e) {
-            // Expected behavior.
-        }
+        }).bind(this));
 
         return Mojo.Test.passed;
     },

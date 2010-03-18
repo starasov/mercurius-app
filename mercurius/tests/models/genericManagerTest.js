@@ -26,18 +26,6 @@ Models.GenericManagerTest = Class.create({
         }
 
         return Mojo.Test.passed;
-    },
-
-    test_delete_should_generate_valid_sql_statement: function() {
-        var genericManager = new Models.GenericManager(this._db, this._testTableModel);
-        genericManager.deleteById(1, Prototype.emptyFunction, Prototype.emptyFunction);
-
-        var mockTransaction = new MockTransaction();
-        this._db.callback(mockTransaction);
-
-        Mojo.requireEqual("DELETE FROM test_table_1 WHERE id=?", mockTransaction.sql);
-        Mojo.requireEqual(1, mockTransaction.parameters[0]);
-
-        return Mojo.Test.passed;
     }
+
 });

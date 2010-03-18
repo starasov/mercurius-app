@@ -2,6 +2,7 @@ Models.BaseGenericManagerIntegrationTest = Class.create({
     before: function(completionCallback) {
         this._tableModel = this.getTableModel();
         this._fixtures = this.getFixtures(this._tableModel);
+        this._mapper = this.getMapper(this._tableModel);
 
         this._service = new Database.Service("mercurius_test", "1.0", "mercurius_test", 100000);
         this._service.setDatabaseInitializer(new Database.Initializer());
@@ -32,6 +33,10 @@ Models.BaseGenericManagerIntegrationTest = Class.create({
 
     getFixtures: function(tableModel) {
         return ["DELETE FROM " + tableModel.Name + ";"];
+    },
+
+    getMapper: function(tableModel) {
+        return new Models.GenericMapper(tableModel);
     },
 
     executeStatements: function(statements, successCallback, errorCallback) {
