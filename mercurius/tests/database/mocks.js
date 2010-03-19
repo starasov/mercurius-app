@@ -9,6 +9,7 @@ var MockTransaction = Class.create({
 
 var MockDatabase = Class.create({
     transaction: function(callback) {
+        this.transactionCalled = true;
         this.callback = callback;
     }
 });

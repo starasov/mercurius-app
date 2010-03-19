@@ -1,12 +1,8 @@
 Models.GenericManagerTest = Class.create({
     before: function() {
         this._db = new MockDatabase();
-        this._testTableModel = {
-            Name: "test_table_1",
-            Columns: {
-                id: new Database.Types.PrimaryKey()
-            }
-        };
+        this._mapper = new MockGenericMapper();
+        this._genericManager = new Models.GenericManager(this._db, this._mapper);
 
         return Mojo.Test.beforeFinished;
     },
@@ -15,17 +11,29 @@ Models.GenericManagerTest = Class.create({
         completionCallback();
     },
 
-    test_delete_should_fail_if_no_id_specified: function() {
-        var genericManager = new Models.GenericManager(this._db, this._testTableModel);
+    test_count_should_use_generic_mapper_to_generate_query: function() {
+        this._genericManager.count(Prototype.emptyFunction, Prototype.emptyFunction);
+        this._db.callback(new MockTransaction());
 
-        try {
-            genericManager.deleteById("not a number", Prototype.emptyFunction, Prototype.emptyFunction);
-            Mojo.requre(false, "Shouldn't reach here - manager should raise an exception in case when passed id not a number.")            
-        } catch(e) {
-            // Generic manager should raise an exception here.
-        }
+        Mojo.require(this._mapper.countCalled);
+
+        return Mojo.Test.passed;
+    },
+
+    test_delete_should_fail_when_non_numeric_id_passed: function() {
+        Test.requireException((function() {
+            this._genericManager.deleteById("1", Prototype.emptyFunction, Prototype.emptyFunction);
+        }).bind(this));
+
+        return Mojo.Test.passed;
+    },
+
+    test_delete_should_use_generic_mapper_to_generate_query: function() {
+        this._genericManager.deleteById(1, Prototype.emptyFunction, Prototype.emptyFunction);
+        this._db.callback(new MockTransaction());
+
+        Mojo.require(this._mapper.toDeleteSqlCalled);
 
         return Mojo.Test.passed;
     }
-
 });

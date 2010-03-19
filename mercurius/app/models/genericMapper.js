@@ -1,6 +1,6 @@
 Models.GenericMapper = Class.create({
     initialize: function(tableModel) {
-        Mojo.require(tableModel, "Table model should be defined and can't be null.");
+        Mojo.require(tableModel, "'tableModel' should be defined and can't be null.");
         this._tableModel = tableModel;
     },
 
@@ -14,7 +14,7 @@ Models.GenericMapper = Class.create({
     },
 
     toInsertSql: function(entity) {
-        Mojo.require(entity, "Entity to insert should be defined and can't be null.");
+        Mojo.require(entity, "'entity' to insert should be defined and can't be null.");
         Mojo.require(entity.id == null || Object.isUndefined(entity.id), "Can't insert entity - entity has id value specified: id=" + entity.id);
 
         var insertContext = {};
@@ -47,8 +47,8 @@ Models.GenericMapper = Class.create({
     },
 
     toUpdateSql: function(entity) {
-        Mojo.require(entity, "Entity to update should be defined and can't be null.");
-        Mojo.require(entity.id, "Passed entity should have id value to be updated.");
+        Mojo.require(entity, "'entity' to update should be defined and can't be null.");
+        Mojo.require(entity.id, "Passed 'entity' should have 'id' value to be updated.");
 
         var updateContext = {};
         updateContext.sql = "UPDATE " + this._tableModel.Name + " SET ";
@@ -71,10 +71,20 @@ Models.GenericMapper = Class.create({
         return updateContext;
     },
 
+    /**
+     * Generates delete sql statement using passed 'id' parameter.
+     *
+     * @param id - {number} an entity id to be deleted.
+     *
+     * @return {hash} A delete context with delete sql statement string under
+     *                'sql' key and query parameters array under 'params' key.
+     */
     toDeleteSql: function(id) {
+        Mojo.requireNumber(id, "Passed 'id' should be defined and can't be null.");
+
         var deleteContext = {};
 
-        deleteContext.sql =  "DELETE FROM " + this._tableModel.Name + " WHERE id=?";
+        deleteContext.sql =  "DELETE FROM " + this._tableModel.Name + " WHERE id=?;";
         deleteContext.params = [id];
 
         return deleteContext;

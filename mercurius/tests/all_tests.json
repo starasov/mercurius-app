@@ -31,5 +31,6 @@
 
     {"source": "tests/utils.js"},
     {"source": "tests/database/mocks.js"},
+    {"source": "tests/models/mocks.js"},
     {"source": "tests/models/baseGenericManagerIntegrationTest.js"}
 ]

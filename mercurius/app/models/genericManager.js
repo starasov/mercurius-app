@@ -96,7 +96,15 @@ Models.GenericManager = Class.create({
         }).bind(this));
     },
 
+    /**
+     * Searches for particular record by specified id.
+     *
+     * @param id - {number} an entity id to be searched for.
+     * @param successCallback - {callback} (transaction, resultSet) a successful search callback.
+     * @param errorCallback - {callback} (transaction, error) an error callback.
+     */
     findById: function(id, successCallback, errorCallback) {
+        this.find({'id': id}, successCallback, errorCallback)
     },
 
     find: function(searchParameters, successCallback, errorCallback) {
