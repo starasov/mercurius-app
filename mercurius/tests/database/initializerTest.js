@@ -43,7 +43,7 @@ Database.InitializerTest.prototype.
     var testTableModel = {
         Name: "test",
         Columns: {
-            "name": new Database.Types.String(Database.Types.Null)
+            "name": new Database.Types.String(Database.Types.Nullable)
         }
     };
 
@@ -59,7 +59,7 @@ Database.InitializerTest.prototype.
     var testTableModel = {
         Name: "test",
         Columns: {
-            "name": new Database.Types.String(Database.Types.NotNull)
+            "name": new Database.Types.String(Database.Types.NonNullable)
         }
     };
 

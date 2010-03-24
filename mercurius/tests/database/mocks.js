@@ -13,3 +13,9 @@ var MockDatabase = Class.create({
         this.callback = callback;
     }
 });
+
+var MockVersionProvider = Class.create({
+   hasCurrentVersion: function() {
+       return false;
+   }
+});

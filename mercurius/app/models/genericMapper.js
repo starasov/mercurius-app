@@ -4,6 +4,11 @@ Models.GenericMapper = Class.create({
         this._tableModel = tableModel;
     },
 
+    toModelResultSet: function(sqlResultSet) {
+        Mojo.require(sqlResultSet, "'sqlResultSet' should be defined and can't be null.");
+        return new Models.ResultSet(this._tableModel, sqlResultSet.rows);
+    },
+
     toCountSql: function() {
         var countContext = {};
 
@@ -88,6 +93,52 @@ Models.GenericMapper = Class.create({
         deleteContext.params = [id];
 
         return deleteContext;
+    },
+
+    /**
+     * Generates simple select sql statement using passed parameters hash.
+     *
+     * The method doesn't support any "extra" functionality like <, >, 'like'
+     * operators and grouping and ordering functionality (seems like todo items
+     * here).
+     *
+     * @param searchParams - {hash} a hash with select parameters. If 'undefined'
+     *                       or 'null' is passed then no where part is generated
+     *                       and all records in the table will be returned.
+     *
+     * @return {hash} A select context with select sql statement string under
+     *                'sql' key and query parameters array under 'params' key.
+     */
+    toSelectSql: function(searchParams) {
+        var findContext = {};
+
+        findContext.sql = "SELECT ";
+        findContext.params = [];
+
+        for (var column in this._tableModel.Columns) {
+            findContext.sql += column + ", ";
+        }
+
+        findContext.sql = Models.GenericMapper._trimLastCommaAndSpace(findContext.sql);
+        findContext.sql += " FROM " + this._tableModel.Name;
+
+        if (Object.keys(searchParams).length > 0) {
+            findContext.sql += " WHERE ";
+
+            for (var parameter in searchParams) {
+                var columnModel = this._tableModel.Columns[parameter];
+                Mojo.require(columnModel, "Actual table model " + this._tableModel.Name + " desn't have " + parameter + " column defined.");
+
+                findContext.sql += parameter + "=?, ";
+                findContext.params.push(columnModel.toSqlType(searchParams[parameter]));
+            }
+
+            findContext.sql = Models.GenericMapper._trimLastCommaAndSpace(findContext.sql);
+        }
+
+        findContext.sql += ";";
+
+        return findContext;
     }
 });
 

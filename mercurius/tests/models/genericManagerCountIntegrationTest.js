@@ -1,8 +1,9 @@
 Models.GenericManagerCountIntegrationTest = Class.create(Models.BaseGenericManagerIntegrationTest, {
     test_should_return_zero_when_no_records_in_table: function(reportResults) {
+        Mojo.Log.info("[Models.GenericManagerCountIntegrationTest.test_should_return_zero_when_no_records_in_table] - begin");
         this._ensure_count(0, reportResults);
     },
-    
+
     test_should_return_valid_count_of_records_in_table: function(reportResults) {
         this.executeStatements([
                 "INSERT INTO test_table_1 VALUES(1);",
@@ -13,6 +14,8 @@ Models.GenericManagerCountIntegrationTest = Class.create(Models.BaseGenericManag
     },
 
     _ensure_count: function(expectedCount, reportResults) {
+        Mojo.Log.info("[Models.GenericManagerCountIntegrationTest._ensure_count] - begin");
+
         var genericManager = new Models.GenericManager(this._service.getDatabase(), this._mapper);
         genericManager.count(
                 function(tr, count) {

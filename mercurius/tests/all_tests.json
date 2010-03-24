@@ -12,15 +12,21 @@
     },
 
     {
+        "title": "Models.GenericManagerCountIntegrationTest",
+        "source": "tests/models/genericManagerCountIntegrationTest.js",
+        "testFunction": "Models.GenericManagerCountIntegrationTest"
+    },
+        
+    {
         "title": "Models.GenericManagerDeleteByIdIntegrationTest",
         "source": "tests/models/genericManagerDeleteByIdIntergationTest.js",
         "testFunction": "Models.GenericManagerDeleteByIdIntegrationTest"
     },
 
     {
-        "title": "Models.GenericManagerCountIntegrationTest",
-        "source": "tests/models/genericManagerCountIntegrationTest.js",
-        "testFunction": "Models.GenericManagerCountIntegrationTest"
+        "title": "Models.GenericManagerFindIntegrationTest",
+        "source": "tests/models/genericManagerFindIntegrationTest.js",
+        "testFunction": "Models.GenericManagerFindIntegrationTest"
     },
 
     {

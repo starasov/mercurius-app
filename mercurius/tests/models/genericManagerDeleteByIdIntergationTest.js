@@ -1,9 +1,9 @@
 Models.GenericManagerDeleteByIdIntegrationTest = Class.create(Models.BaseGenericManagerIntegrationTest, {
     getFixtures: function($super, tableModel) {
-        return $super(tableModel).concat([
+        return [
                 "INSERT INTO test_table_1 VALUES(1);",
                 "INSERT INTO test_table_1 VALUES(2);"
-        ]);
+        ];
     }, 
 
     test_should_delete_record_from_database_when_record_exists: function(reportResults) {

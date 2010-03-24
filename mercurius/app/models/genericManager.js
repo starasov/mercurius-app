@@ -107,6 +107,35 @@ Models.GenericManager = Class.create({
         this.find({'id': id}, successCallback, errorCallback)
     },
 
+    /**
+     * Searches for all available records in the table.
+     *
+     * @param successCallback - {callback} (transaction, resultSet) a successful search callback.
+     * @param errorCallback - {callback} (transaction, error) an error callback.
+     */
+    all: function(successCallback, errorCallback) {
+        this.find(null, successCallback, errorCallback);
+    },
+
+    /**
+     * Searches for records that match passed search parameters.
+     *
+     * @param searchParameters - {hash} a hash with select parameters. If 'undefined'
+     *                           or 'null' is passed then no where part is generated
+     *                           and all records in the table will be returned.
+
+     * @param successCallback - {callback} (transaction, resultSet) a successful search callback.
+     * @param errorCallback - {callback} (transaction, error) an error callback.
+     */
     find: function(searchParameters, successCallback, errorCallback) {
+        this._db.transaction((function(transaction) {
+            var selectContext = this._mapper.toSelectSql(searchParameters);
+            transaction.executeSql(selectContext.sql, selectContext.params, this._successCallback.bind(this, successCallback), errorCallback);
+        }).bind(this));
+    },
+
+    _successCallback: function(clientSuccessCallback, transaction, sqlResultSet) {
+        var resultSet = this._mapper.toModelResultSet(sqlResultSet);
+        clientSuccessCallback(transaction, resultSet);
     }
 });

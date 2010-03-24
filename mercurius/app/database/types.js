@@ -1,10 +1,7 @@
 if (!Database.Types) Database.Types = {};
 
-// ToDO: rename Null -> Nullable.
-// ToDO: check whether NotNull value is useful.
-
-Database.Types.Null = "NULL";
-Database.Types.NotNull = "NOT NULL";
+Database.Types.Nullable = "NULLABLE";
+Database.Types.NonNullable = "NON_NULLABLE";
 
 
 Database.Types.BaseType = Class.create({
@@ -20,7 +17,7 @@ Database.Types.BaseType = Class.create({
     },
 
     isNullable: function() {
-        return this._nullable == Database.Types.Null;
+        return this._nullable == Database.Types.Nullable;
     },
 
     fromSqlType: function(value) {
@@ -40,7 +37,7 @@ Database.Types.PrimaryKey = Class.create(Database.Types.BaseType, {
     SqlType: "INTEGER PRIMARY KEY",
 
     initialize: function($super) {
-        $super(Database.Types.NotNull);
+        $super(Database.Types.NonNullable);
     }
 });
 

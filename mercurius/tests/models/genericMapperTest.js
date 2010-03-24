@@ -7,7 +7,7 @@ Models.GenericMapperTest = Class.create({
             Columns: {
                 id: new Database.Types.PrimaryKey(),
                 name: new Database.Types.String(),
-                some_flag: new Database.Types.Boolean(Database.Types.Null)
+                some_flag: new Database.Types.Boolean(Database.Types.Nullable)
             }
         };
 
@@ -95,6 +95,32 @@ Models.GenericMapperTest = Class.create({
 
         Mojo.requireEqual("DELETE FROM name_and_flag WHERE id=?;", deleteContext.sql);
         Test.requireArraysEqual([1], deleteContext.params);
+
+        return Mojo.Test.passed;
+    },
+
+    test_to_select_sql_should_omit_where_clause_when_no_params_passed: function() {
+        var selectContext = this._mapper.toSelectSql();
+
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag;", selectContext.sql);
+        Test.requireArraysEqual([], selectContext.params);
+
+        return Mojo.Test.passed;
+    },
+
+    test_to_select_sql_should_raise_exception_when_non_existing_column_name_passed: function() {
+        Test.requireException((function() {
+            this._mapper.toSelectSql({non_exists: 1});
+        }).bind(this));
+
+        return Mojo.Test.passed;
+    },
+
+    test_to_select_sql_should_include_where_clause_when_parameters_passed: function() {
+        var selectContext = this._mapper.toSelectSql({id: 1});
+
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=?;", selectContext.sql);
+        Test.requireArraysEqual([1], selectContext.params);
 
         return Mojo.Test.passed;
     }

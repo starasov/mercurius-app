@@ -14,7 +14,7 @@ Database.Initializer.prototype.initialize = function(db, successHandler, errorHa
     Mojo.requireFunction(successHandler);
     Mojo.requireFunction(errorHandler);
 
-    var tableModelsSql = this._createTableModelsSql();
+    var tableModelsSql = this._generateDropTableModelsSql().concat(this._generateCreateTableModelsSql());
     this._pendingTransactions = tableModelsSql.length;
     Mojo.Log.info("[DatabaseInitializer.initialize] - this.pendingTransactions: %s", this._pendingTransactions);
 
@@ -22,30 +22,39 @@ Database.Initializer.prototype.initialize = function(db, successHandler, errorHa
         Mojo.Log.info("[DatabaseInitializer.initialize] - is about to execute (inner): %s", tableModelsSql[i]);
 
         var sql = tableModelsSql[i];
-        db.transaction((function(transaction) {
+        db.transaction((function(sql, transaction) {
             Mojo.Log.info("[DatabaseInitializer.initialize] - is about to execute (outer): %s", sql);
             this._executeSql(transaction, sql, successHandler, errorHandler);
-        }).bind(this));
+        }).bind(this, sql));
     }
 
     Mojo.Log.info("[DatabaseInitializer.initialize] - end");
 };
 
-Database.Initializer.prototype._createTableModelsSql = function() {
+Database.Initializer.prototype._generateDropTableModelsSql = function() {
+    var dropTableModelsSql = [];
+
+    for (var i = 0; i < this._tableModels.length; i++) {
+        dropTableModelsSql.push("DROP TABLE IF EXISTS " + this._tableModels[i].Name + "; GO;");
+    }
+
+    return dropTableModelsSql;
+};
+
+Database.Initializer.prototype._generateCreateTableModelsSql = function() {
     var tableModelsSql = [];
 
     for (var i = 0; i < this._tableModels.length; i++) {
-        var tableModelSql = this._createTableModelSql(this._tableModels[i]);
-        Mojo.Log.info("[DatabaseInitializer.createTableModelsSql] - '%s' table create sql: %s", this._tableModels[i].Name, tableModelSql);
+        var tableModelSql = this._generateCreateTableModelSql(this._tableModels[i]);
         tableModelsSql.push(tableModelSql);
     }
 
     return tableModelsSql;
 };
 
-Database.Initializer.prototype._createTableModelSql = function(tableModel) {
+Database.Initializer.prototype._generateCreateTableModelSql = function(tableModel) {
     var tableName = tableModel.Name;
-    var createTableSql = "CREATE TABLE IF NOT EXISTS " + tableName + "(";
+    var createTableSql = "CREATE TABLE " + tableName + "(";
 
 
     for (var columnName in tableModel.Columns) {
@@ -62,7 +71,7 @@ Database.Initializer.prototype._createTableModelSql = function(tableModel) {
 
     createTableSql = createTableSql.substring(0, createTableSql.length - 2);
     createTableSql += "); GO;";
-    
+
     return createTableSql;
 };
 

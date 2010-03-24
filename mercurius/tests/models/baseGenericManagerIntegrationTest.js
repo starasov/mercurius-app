@@ -6,7 +6,8 @@ Models.BaseGenericManagerIntegrationTest = Class.create({
 
         this._service = new Database.Service("mercurius_test", "1.0", "mercurius_test", 100000);
         this._service.setDatabaseInitializer(new Database.Initializer());
-        this._service.setVersionProvider(new Database.VersionProvider("mercurius_test"));
+//        this._service.setVersionProvider(new Database.VersionProvider("mercurius_test"));
+        this._service.setVersionProvider(new MockVersionProvider());
         this._service.addTableModel(this._tableModel);
 
         this._service.open(this._insert_sample_records.bind(this, completionCallback),
@@ -32,7 +33,7 @@ Models.BaseGenericManagerIntegrationTest = Class.create({
     },
 
     getFixtures: function(tableModel) {
-        return ["DELETE FROM " + tableModel.Name + ";"];
+        return [];
     },
 
     getMapper: function(tableModel) {
@@ -40,13 +41,17 @@ Models.BaseGenericManagerIntegrationTest = Class.create({
     },
 
     executeStatements: function(statements, successCallback, errorCallback) {
-        this._service.getDatabase().transaction((function(transaction) {
-            for (var i = 0; i < statements.length; i++) {
-                var successCallbackCurrent = (i == statements.length - 1) ? successCallback : Prototype.emptyFunction;
+        if (statements.length > 0) {
+            this._service.getDatabase().transaction((function(transaction) {
+                for (var i = 0; i < statements.length; i++) {
+                    var successCallbackCurrent = (i == statements.length - 1) ? successCallback : Prototype.emptyFunction;
 
-                transaction.executeSql(statements[i], [], successCallbackCurrent,
-                        this._handle_database_error.bind(this, errorCallback));
-            }
-        }).bind(this));
+                    transaction.executeSql(statements[i], [], successCallbackCurrent,
+                            this._handle_database_error.bind(this, errorCallback));
+                }
+            }).bind(this));
+        } else {
+            successCallback();
+        }
     }
 });
