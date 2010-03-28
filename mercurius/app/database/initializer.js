@@ -60,12 +60,8 @@ Database.Initializer.prototype._generateCreateTableModelSql = function(tableMode
     for (var columnName in tableModel.Columns) {
         var column = tableModel.Columns[columnName];
 
-        createTableSql += columnName + " " + column.SqlType;
-
-        if (typeof(column.nullable) != 'undefined') {
-            createTableSql += " " + column.nullable;
-        }
-
+        createTableSql += columnName + " " + column.SqlType + " ";
+        createTableSql += column.isNullable() ? "NULL" : "NOT NULL";
         createTableSql += ", ";
     }
 

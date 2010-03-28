@@ -1,5 +1,29 @@
 [
     {
+        "title": "Database.InitializerTest",
+        "source": "tests/database/initializerTest.js",
+        "testFunction": "Database.InitializerTest"
+    },
+
+    {
+        "title": "Database.ServiceIntegrationTest",
+        "source": "tests/database/serviceIntegrationTest.js",
+        "testFunction": "Database.ServiceIntegrationTest"
+    },
+
+    {
+        "title": "Database.TypesTest",
+        "source": "tests/database/typesTest.js",
+        "testFunction": "Database.TypesTest"
+    },
+
+    {
+        "title": "Database.VersionProviderTest",
+        "source": "tests/database/versionProviderTest.js",
+        "testFunction": "Database.VersionProviderTest"
+    },
+
+    {
         "title": "Models.GenericManagerTest",
         "source": "tests/models/genericManagerTest.js",
         "testFunction": "Models.GenericManagerTest"
@@ -27,12 +51,6 @@
         "title": "Models.GenericManagerFindIntegrationTest",
         "source": "tests/models/genericManagerFindIntegrationTest.js",
         "testFunction": "Models.GenericManagerFindIntegrationTest"
-    },
-
-    {
-        "title": "Database.TypesTest",
-        "source": "tests/database/typesTest.js",
-        "testFunction": "Database.TypesTest"
     },
 
     {"source": "tests/utils.js"},

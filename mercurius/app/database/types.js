@@ -13,7 +13,7 @@ Database.Types.BaseType = Class.create({
      *                   column.
      */
     initialize: function(nullable) {
-        this._nullable = nullable;
+        this._nullable = nullable ? nullable : Database.Types.Nullable;
     },
 
     isNullable: function() {

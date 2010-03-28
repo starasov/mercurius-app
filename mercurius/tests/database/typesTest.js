@@ -18,7 +18,7 @@ Database.TypesTest = Class.create({
     },
 
     test_boolean_to_sql_type_should_return_zero_when_null_passed_and_type_non_nullable: function() {
-        var booleanType = new Database.Types.Boolean();
+        var booleanType = new Database.Types.Boolean(Database.Types.NonNullable);
         Mojo.requireEqual(0, booleanType.toSqlType(null));
         return Mojo.Test.passed;
     },
@@ -30,7 +30,7 @@ Database.TypesTest = Class.create({
     },
 
     test_boolean_from_sql_type_should_return_false_when_null_passed_and_type_non_nullable: function() {
-        var booleanType = new Database.Types.Boolean();
+        var booleanType = new Database.Types.Boolean(Database.Types.NonNullable);
         Mojo.requireEqual(false, booleanType.fromSqlType(null));
         return Mojo.Test.passed;
     }
