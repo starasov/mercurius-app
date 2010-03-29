@@ -18,11 +18,18 @@ Models.GenericManagerFindIntegrationTest = Class.create(Models.BaseGenericManage
         ]);
     },
 
-    test_should_return_single_value_when_search_by_id_done: function(reportResults) {
+    test_should_return_non_null_model_instance_when_search_by_valid_id_done: function(recordResults) {
         var genericManager = new Models.GenericManager(this._service.getDatabase(), this._mapper);
-        genericManager.findById(1, (function(tr, resultSet) {
-            Test.validateAndContinue(reportResults, Mojo.requireEqual.curry(1, resultSet.length()));
-            Test.validate(reportResults, Mojo.requireEqual.curry(1, resultSet.item(0).id));
+        genericManager.findById(1, (function(tr, entity) {
+            Test.validateAndContinue(recordResults, Mojo.require.curry(entity));
+            Test.validate(recordResults, Mojo.requireEqual.curry(1, entity.id));
+        }).bind(this), Test.defaultDatabaseErrorCallback.curry(recordResults));
+    },
+
+    test_should_return_null_when_search_by_non_valid_id_done: function(reportResults) {
+        var genericManager = new Models.GenericManager(this._service.getDatabase(), this._mapper);
+        genericManager.findById(4, (function(tr, entity) {
+            Test.validate(reportResults, Mojo.requireEqual.curry(null, entity));
         }).bind(this), Test.defaultDatabaseErrorCallback.curry(reportResults));
     }
 });

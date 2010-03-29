@@ -30,7 +30,7 @@ Database.ServiceIntegrationTest = Class.create({
         return Mojo.Test.passed;
     },
 
-    test_should_create_and_initialize_new_database_when_no_database_exists: function(reportResults) {
+    test_should_create_and_initialize_new_database_when_no_database_exists: function(recordResults) {
         var testTableModel = {
             Name: "test",
             Columns: {
@@ -40,8 +40,8 @@ Database.ServiceIntegrationTest = Class.create({
 
         this.databaseService.addTableModel(testTableModel);
         this.databaseService.open(
-                (function(databaseService) { reportResults(Mojo.Test.passed); }).bind(this),
-                (function(databaseService, result) { reportResults(result); }).bind(this)
+                (function(databaseService) { recordResults(Mojo.Test.passed); }).bind(this),
+                (function(databaseService, result) { recordResults(result); }).bind(this)
         );
     }
 });

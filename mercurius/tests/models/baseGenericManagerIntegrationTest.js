@@ -6,7 +6,6 @@ Models.BaseGenericManagerIntegrationTest = Class.create({
 
         this._service = new Database.Service("mercurius_test", "1.0", "mercurius_test", 100000);
         this._service.setDatabaseInitializer(new Database.Initializer());
-//        this._service.setVersionProvider(new Database.VersionProvider("mercurius_test"));
         this._service.setVersionProvider(new MockVersionProvider());
         this._service.addTableModel(this._tableModel);
 

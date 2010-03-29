@@ -52,8 +52,7 @@ Models.GenericManager = Class.create({
     save: function(entity, successCallback, errorCallback) {
         this._db.transaction((function(transaction) {
             var sql = this._mapper.toInsertSql(entity);
-            transaction.executeSql(sql, [],
-                    function(tr, resultSet) {
+            transaction.executeSql(sql, [], function(tr, resultSet) {
                         successCallback(tr, resultSet)
                     }, errorCallback);
         }).bind(this));
@@ -63,7 +62,7 @@ Models.GenericManager = Class.create({
     /**
      * Updates existing record in the table with new data.
      *
-     * @param successCallback - {callback} (transaction, count) a callback receives
+     * @param successCallback - {callback} (transaction, resultSet) a callback receives
      * actual transaction and updates items count.
      *
      * @param errorCallback - {callback} (transaction, error) a callback receives error
@@ -72,8 +71,7 @@ Models.GenericManager = Class.create({
     update: function(entity, successCallback, errorCallback) {
         this._db.transaction((function(transaction) {
             var sql = this._mapper.toUpdateSql(entity);
-            transaction.executeSql(sql, [],
-                    function(tr, resultSet) {
+            transaction.executeSql(sql, [], function(tr, resultSet) {
                         successCallback(tr, resultSet)
                     }, errorCallback);
         }).bind(this));
@@ -100,17 +98,23 @@ Models.GenericManager = Class.create({
      * Searches for particular record by specified id.
      *
      * @param id - {number} an entity id to be searched for.
-     * @param successCallback - {callback} (transaction, resultSet) a successful search callback.
+     * @param successCallback - {callback} (transaction, Models.ResultSet) a successful search callback.
      * @param errorCallback - {callback} (transaction, error) an error callback.
      */
     findById: function(id, successCallback, errorCallback) {
-        this.find({'id': id}, successCallback, errorCallback)
+        this.find({'id': id}, function(transaction, resultSet) {
+            if (resultSet.length() > 0) {
+                successCallback(transaction, resultSet.item(0));
+            } else {
+                successCallback(transaction, null);
+            }
+        }, errorCallback)
     },
 
     /**
      * Searches for all available records in the table.
      *
-     * @param successCallback - {callback} (transaction, resultSet) a successful search callback.
+     * @param successCallback - {callback} (transaction, Models.ResultSet) a successful search callback.
      * @param errorCallback - {callback} (transaction, error) an error callback.
      */
     all: function(successCallback, errorCallback) {
@@ -124,7 +128,7 @@ Models.GenericManager = Class.create({
      *                           or 'null' is passed then no where part is generated
      *                           and all records in the table will be returned.
 
-     * @param successCallback - {callback} (transaction, resultSet) a successful search callback.
+     * @param successCallback - {callback} (transaction, Models.ResultSet) a successful search callback.
      * @param errorCallback - {callback} (transaction, error) an error callback.
      */
     find: function(searchParameters, successCallback, errorCallback) {

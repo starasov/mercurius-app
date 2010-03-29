@@ -24,6 +24,12 @@
     },
 
     {
+        "title": "Models.CurrenciesManagerHomeCurrencyIntergrationTest",
+        "source": "tests/models/currenciesManagerHomeCurrencyIntergrationTest.js",
+        "testFunction": "Models.CurrenciesManagerHomeCurrencyIntergrationTest"
+    },
+
+    {
         "title": "Models.GenericManagerTest",
         "source": "tests/models/genericManagerTest.js",
         "testFunction": "Models.GenericManagerTest"

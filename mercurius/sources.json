@@ -25,8 +25,8 @@
 
     {"source": "app/models/$package.js"},
     {"source": "app/models/accounts.js"},
-    {"source": "app/models/currencies.js"},
     {"source": "app/models/genericManager.js"},
     {"source": "app/models/genericMapper.js"},
-    {"source": "app/models/resultSet.js"}
+    {"source": "app/models/resultSet.js"},
+    {"source": "app/models/currencies.js"}
 ]
