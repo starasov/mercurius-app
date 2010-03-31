@@ -20,3 +20,6 @@ Mojo.requireFunction = function(s,t,u,b) {
 
 Mojo.requireNumber = function(s,t,u,b) {
 };
+
+Mojo.requireString = function(s,t,u,b) {
+};

@@ -2,10 +2,16 @@ Database.Initializer = function() {
     this._tableModels = [];
     this._pendingTransactions = 0;
     this._lastTransactionResult = "success";
+    this._postCreateStatements = [];
 };
 
 Database.Initializer.prototype.addTableModel = function(tableModel) {
     this._tableModels.push(tableModel);
+};
+
+Database.Initializer.prototype.addPostCreateSqlStatement = function(statement) {
+    Mojo.requireString(statement, "Passed 'statement' parameter should be string type.");
+    this._postCreateStatements.push(statement);
 };
 
 Database.Initializer.prototype.initialize = function(db, successHandler, errorHandler) {
@@ -14,14 +20,16 @@ Database.Initializer.prototype.initialize = function(db, successHandler, errorHa
     Mojo.requireFunction(successHandler);
     Mojo.requireFunction(errorHandler);
 
-    var tableModelsSql = this._generateDropTableModelsSql().concat(this._generateCreateTableModelsSql());
-    this._pendingTransactions = tableModelsSql.length;
+    var statements = this._generateDropTableModelsSql().concat(this._generateCreateTableModelsSql());
+    statements = statements.concat(this._postCreateStatements);
+
+    this._pendingTransactions = statements.length;
     Mojo.Log.info("[DatabaseInitializer.initialize] - this.pendingTransactions: %s", this._pendingTransactions);
 
-    for (var i =  0; i < tableModelsSql.length; i++) {
-        Mojo.Log.info("[DatabaseInitializer.initialize] - is about to execute (inner): %s", tableModelsSql[i]);
+    for (var i =  0; i < statements.length; i++) {
+        Mojo.Log.info("[DatabaseInitializer.initialize] - is about to execute (inner): %s", statements[i]);
 
-        var sql = tableModelsSql[i];
+        var sql = statements[i];
         db.transaction((function(sql, transaction) {
             Mojo.Log.info("[DatabaseInitializer.initialize] - is about to execute (outer): %s", sql);
             this._executeSql(transaction, sql, successHandler, errorHandler);
