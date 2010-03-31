@@ -1,54 +1,45 @@
 Database.Service = function(name, version, displayName, size) {
     Mojo.Log.info("[DbService.initialize] - begin");
 
-    Mojo.require(name, "'name' parameter is required");
-    Mojo.require(version, "'version' parameter is required");
-    Mojo.require(displayName, "'displayName' parameter is required");
-    Mojo.require(size, "'size' parameter is required");
+    Mojo.requireString(name, "'name' parameter is required");
+    Mojo.requireString(version, "'version' parameter is required");
+    Mojo.requireString(displayName, "'displayName' parameter is required");
+    Mojo.requireNumber(size, "'size' parameter is required");
 
-    this.name = name;
-    Mojo.Log.info("[DbService.initialize] this.name = %s", this.name);
-
-    this.version  = version;
-    Mojo.Log.info("[DbService.initialize] this.version = %s", this.version);
-
-    this.displayName = displayName;
-    Mojo.Log.info("[DbService.initialize] this.displayName = %s", this.displayName);
-
-    this.size = size;
-    Mojo.Log.info("[DbService.initialize] this.size = %s", this.size);
-
-    this.db = null;
-    this.modelDescriptors = [];
+    this._name = name;
+    this._version  = version;
+    this._displayName = displayName;
+    this._size = size;
+    this._db = null;
 
     Mojo.Log.info("[DbService.initialize] - end");
 };
 
 Database.Service.prototype.setVersionProvider = function(versionProvider) {
-    this.versionProvider = versionProvider;
+    this._versionProvider = versionProvider;
 };
 
 
 Database.Service.prototype.setDatabaseInitializer = function(databaseInitializer) {
-    this.databaseInitializer = databaseInitializer;
+    this._databaseInitializer = databaseInitializer;
 };
 
 
 Database.Service.prototype.addTableModel = function(tableModel) {
-    this.databaseInitializer.addTableModel(tableModel);
+    this._databaseInitializer.addTableModel(tableModel);
 };
 
 
 Database.Service.prototype.open = function(successHandler, errorHandler) {
     Mojo.Log.info("[DbService.open] - begin");
 
-    Mojo.require(this.versionProvider, "Database version provider instance should be set before 'open' method call.");
+    Mojo.require(this._versionProvider, "Database version provider instance should be set before 'open' method call.");
 
     try {
         Mojo.Log.info("[DbService.open] - opening database...");
 
-        this.db = openDatabase(this.name, "0.0", this.displayName, this.size);
-        if (!this.db) {
+        this._db = openDatabase(this._name, "0.0", this._displayName, this._size);
+        if (!this._db) {
             this.processOpenFailure(errorHandler);
         } else {
             this.processSuccessOpen(successHandler);
@@ -62,12 +53,12 @@ Database.Service.prototype.open = function(successHandler, errorHandler) {
 
 
 Database.Service.prototype.isOpened = function() {
-    return this.db != null;
+    return this._db != null;
 };
 
 
 Database.Service.prototype.getDatabase = function() {
-    return this.db;
+    return this._db;
 };
 
 
@@ -75,10 +66,10 @@ Database.Service.prototype.getDatabase = function() {
 Database.Service.prototype.processSuccessOpen = function processSuccessOpen(successHandler, errorHandler) {
     Mojo.Log.info("[DbService.processSuccessOpen] - end");
 
-    if (this.versionProvider.hasCurrentVersion() && this.version != this.versionProvider.getCurrentVersion()) {
-        Mojo.Log.info("[DbService.processSuccessOpen] - database version change detected from '%s' to '%s'", this.version, this.versionProvider.getCurrentVersion());
+    if (this._versionProvider.hasCurrentVersion() && this._version != this._versionProvider.getCurrentVersion()) {
+        Mojo.Log.info("[DbService.processSuccessOpen] - database version change detected from '%s' to '%s'", this._version, this._versionProvider.getCurrentVersion());
         this.handleDatabaseUpdate();
-    } else if (!this.versionProvider.hasCurrentVersion()) {
+    } else if (!this._versionProvider.hasCurrentVersion()) {
         Mojo.Log.info("[DbService.processSuccessOpen] - database has not been previously created");
         this.handleDatabaseCreation(successHandler, errorHandler);
     }
@@ -95,7 +86,6 @@ Database.Service.prototype.processOpenFailure = function processOpenFailure(erro
     }
 };
 
-
 /* @private */
 Database.Service.prototype.processOpenException = function processOpenException(e, errorHandler) {
     Mojo.Log.logException(e, "[DbService.open] - database open exception!");
@@ -107,7 +97,7 @@ Database.Service.prototype.processOpenException = function processOpenException(
 
 /* @private */
 Database.Service.prototype.handleDatabaseCreation = function handleDatabaseCreation(clientSuccessHandler, clientErrorHandler) {
-    this.databaseInitializer.initialize(this.db,
+    this._databaseInitializer.initialize(this._db,
             (function() { clientSuccessHandler(this); }).bind(this),
             (function(result) { clientErrorHandler(this, result); }).bind(this)
     );
