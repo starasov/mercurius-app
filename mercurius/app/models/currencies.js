@@ -32,7 +32,7 @@ Models.Currencies.ManagerFactory = Class.create({
 
 Models.Currencies.Manager = Class.create(Models.GenericManager, {
     getHomeCurrency: function(successCallback, errorCallback) {
-        this.find({home_flag: true}, function(transaction, resultSet) {
+        this.find({home_flag: true}, {}, function(transaction, resultSet) {
             if (resultSet.length() == 1) {
                 successCallback(transaction, resultSet.item(0));
             } else {

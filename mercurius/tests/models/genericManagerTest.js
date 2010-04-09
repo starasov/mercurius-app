@@ -38,7 +38,7 @@ Models.GenericManagerTest = Class.create({
     },
 
     test_find_should_use_generic_mapper_to_generate_query: function() {
-        this._genericManager.find({}, Prototype.emptyFunction, Prototype.emptyFunction);
+        this._genericManager.find({}, {}, Prototype.emptyFunction, Prototype.emptyFunction);
         this._db.callback(new MockTransaction());
 
         Mojo.require(this._mapper.toSelectSqlCalled);
@@ -47,7 +47,7 @@ Models.GenericManagerTest = Class.create({
     },
 
     test_find_should_use_generic_mapper_to_convert_sql_result_set: function() {
-        this._genericManager.find({}, Prototype.emptyFunction, Prototype.emptyFunction);
+        this._genericManager.find({}, {}, Prototype.emptyFunction, Prototype.emptyFunction);
 
         var transaction = new MockTransaction();
         this._db.callback(transaction);

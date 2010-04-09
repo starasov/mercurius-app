@@ -123,5 +123,59 @@ Models.GenericMapperTest = Class.create({
         Test.requireArraysEqual([1], selectContext.params);
 
         return Mojo.Test.passed;
+    },
+
+    test_to_select_sql_should_include_order_by_when_valid_column_name_specified: function() {
+        var selectContext = this._mapper.toSelectSql({id: 1}, {order: "name"});
+
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? ORDER BY ?;", selectContext.sql);
+        Test.requireArraysEqual([1, "name"], selectContext.params);
+
+        return Mojo.Test.passed;
+    },
+
+    test_to_select_sql_should_raise_exception_when_non_exiting_column_passed_with_order: function() {
+        Test.requireException((function() {
+            this._mapper.toSelectSql({id: 1}, {order: "gender"});
+        }).bind(this));
+
+        return Mojo.Test.passed;
+
+    },
+
+    test_to_select_sql_should_include_limit_when_passed: function() {
+        var selectContext = this._mapper.toSelectSql({id: 1}, {limit: 10});
+
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? LIMIT ?;", selectContext.sql);
+        Test.requireArraysEqual([1, 10], selectContext.params);
+
+        return Mojo.Test.passed;
+    },
+
+    test_to_select_sql_should_include_offset_when_passed: function() {
+        var selectContext = this._mapper.toSelectSql({id: 1}, {offset: 10});
+
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? OFFSET ?;", selectContext.sql);
+        Test.requireArraysEqual([1, 10], selectContext.params);
+
+        return Mojo.Test.passed;
+    },
+
+    test_to_select_sql_should_include_offset_when_zero_offset_passed: function() {
+        var selectContext = this._mapper.toSelectSql({id: 1}, {offset: 0});
+
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? OFFSET ?;", selectContext.sql);
+        Test.requireArraysEqual([1, 0], selectContext.params);
+
+        return Mojo.Test.passed;
+    },
+
+    test_to_select_sql_should_include_order_limit_and_offset_when_passed: function() {
+        var selectContext = this._mapper.toSelectSql({id: 1}, {order: "id", limit: 10, offset: 20});
+
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? ORDER BY ?, LIMIT ?, OFFSET ?;", selectContext.sql);
+        Test.requireArraysEqual([1, "id", 10, 20], selectContext.params);
+
+        return Mojo.Test.passed;
     }
 });

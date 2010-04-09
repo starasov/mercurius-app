@@ -1,3 +1,5 @@
+// ToDO: migrate from prototype based class creation to Class.create({}) form.
+
 Database.VersionProvider = function(databaseName) {
     Mojo.require(databaseName);
     

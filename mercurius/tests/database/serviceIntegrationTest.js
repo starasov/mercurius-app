@@ -38,7 +38,8 @@ Database.ServiceIntegrationTest = Class.create({
             }
         };
 
-        this.databaseService.addTableModel(testTableModel);
+        this.databaseInitializer.addTableModel(testTableModel);
+
         this.databaseService.open(
                 (function(databaseService) { recordResults(Mojo.Test.passed); }).bind(this),
                 (function(databaseService, result) { recordResults(result); }).bind(this)

@@ -19,7 +19,7 @@ Models.GenericManagerFindIntegrationTest = Class.create(Models.BaseGenericManage
     },
 
     test_should_return_non_null_model_instance_when_search_by_valid_id_done: function(recordResults) {
-        var genericManager = new Models.GenericManager(this._service.getDatabase(), this._mapper);
+        var genericManager = new Models.GenericManager(this._db, this._mapper);
         genericManager.findById(1, (function(tr, entity) {
             Test.validateAndContinue(recordResults, Mojo.require.curry(entity));
             Test.validate(recordResults, Mojo.requireEqual.curry(1, entity.id));
@@ -27,7 +27,7 @@ Models.GenericManagerFindIntegrationTest = Class.create(Models.BaseGenericManage
     },
 
     test_should_return_null_when_search_by_non_valid_id_done: function(reportResults) {
-        var genericManager = new Models.GenericManager(this._service.getDatabase(), this._mapper);
+        var genericManager = new Models.GenericManager(this._db, this._mapper);
         genericManager.findById(4, (function(tr, entity) {
             Test.validate(reportResults, Mojo.requireEqual.curry(null, entity));
         }).bind(this), Test.defaultDatabaseErrorCallback.curry(reportResults));

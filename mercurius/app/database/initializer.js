@@ -1,3 +1,5 @@
+// ToDO: migrate from prototype based class creation to Class.create({}) form.
+
 Database.Initializer = function() {
     this._tableModels = [];
     this._pendingTransactions = 0;
@@ -17,8 +19,8 @@ Database.Initializer.prototype.addPostCreateSqlStatement = function(statement) {
 Database.Initializer.prototype.initialize = function(db, successHandler, errorHandler) {
     Mojo.Log.info("[DatabaseInitializer.initialize] - begin");
 
-    Mojo.requireFunction(successHandler);
-    Mojo.requireFunction(errorHandler);
+    Mojo.requireFunction(successHandler, "[Database.Initializer.initialize] - 'successHandler' parameter should be a function.");
+    Mojo.requireFunction(errorHandler, "[Database.Initializer.initialize] - 'errorHandler' parameter should be a function.");
 
     var statements = this._generateDropTableModelsSql().concat(this._generateCreateTableModelsSql());
     statements = statements.concat(this._postCreateStatements);

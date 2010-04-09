@@ -1,1 +1,42 @@
-/* Put Application specific CSS here. */
+.float-left {
+    float: left;
+}
+
+.block {
+    display: block;
+}
+
+.none {
+    display: none;
+}
+
+.list-header-text {
+	text-align:left;
+}
+
+.list-header-icon {
+	float:left;
+	height: 50px;
+	width: 30px;
+	margin-left: -5px;
+	margin-right: 5px;
+}
+
+.list-header-icon.default {
+  background: url(../images/currency-small.png) center center no-repeat;
+}
+
+.currency-rate-text {
+    float: right;
+    padding-top: 13px;
+    padding-bottom: 15px;
+    margin-right: 8px;
+}
+
+.home-currency-icon {
+    float: right;
+    margin: 12px -9px 0 0;
+    width: 56px;
+    height: 26px;
+    background: url(../images/currency-home.png) center center no-repeat;
+}

@@ -102,7 +102,7 @@ Models.GenericManager = Class.create({
      * @param errorCallback - {callback} (transaction, error) an error callback.
      */
     findById: function(id, successCallback, errorCallback) {
-        this.find({'id': id}, function(transaction, resultSet) {
+        this.find({'id': id}, {}, function(transaction, resultSet) {
             if (resultSet.length() > 0) {
                 successCallback(transaction, resultSet.item(0));
             } else {
@@ -117,8 +117,8 @@ Models.GenericManager = Class.create({
      * @param successCallback - {callback} (transaction, Models.ResultSet) a successful search callback.
      * @param errorCallback - {callback} (transaction, error) an error callback.
      */
-    all: function(successCallback, errorCallback) {
-        this.find(null, successCallback, errorCallback);
+    all: function(extraParameters, successCallback, errorCallback) {
+        this.find({}, extraParameters, successCallback, errorCallback);
     },
 
     /**
@@ -127,13 +127,17 @@ Models.GenericManager = Class.create({
      * @param searchParameters - {hash} a hash with select parameters. If 'undefined'
      *                           or 'null' is passed then no where part is generated
      *                           and all records in the table will be returned.
-
+     *
+     * @param extraParameters - {hash} a hash with some extra search query parameters.
+     *                          Following extra parameters are supported: 'order', 'limit'
+     *                          and offset.
+     * 
      * @param successCallback - {callback} (transaction, Models.ResultSet) a successful search callback.
      * @param errorCallback - {callback} (transaction, error) an error callback.
      */
-    find: function(searchParameters, successCallback, errorCallback) {
+    find: function(searchParameters, extraParameters, successCallback, errorCallback) {
         this._db.transaction((function(transaction) {
-            var selectContext = this._mapper.toSelectSql(searchParameters);
+            var selectContext = this._mapper.toSelectSql(searchParameters, extraParameters);
             transaction.executeSql(selectContext.sql, selectContext.params, this._successCallback.bind(this, successCallback), errorCallback);
         }).bind(this));
     },

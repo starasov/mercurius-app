@@ -1,15 +1,10 @@
 function CurrencyViewAssistant(currencyId) {
-    Mojo.Log.info("-> [CurrencyViewAssistant]");
-    Mojo.Log.info("|- [CurrencyViewAssistant] currencyId=%d", currencyId);
-
     this.currencies = new Currencies();
     this.currencyId = currencyId;
-
-    Mojo.Log.info("<- [CurrencyViewAssistant]");
 }
 
 CurrencyViewAssistant.prototype.setup = function() {
-    Mojo.Log.info("-> [CurrencyViewAssistant.setup]");
+1    Mojo.Log.info("-> [CurrencyViewAssistant.setup]");
 
     Mojo.Log.info("-- [CurrencyViewAssistant.setup] looking for currency with id=%d", this.currencyId);
     this.currency = this.currencies.for_id(this.currencyId);

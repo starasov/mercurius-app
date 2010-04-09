@@ -46,7 +46,7 @@
         "source": "tests/models/genericManagerCountIntegrationTest.js",
         "testFunction": "Models.GenericManagerCountIntegrationTest"
     },
-        
+
     {
         "title": "Models.GenericManagerDeleteByIdIntegrationTest",
         "source": "tests/models/genericManagerDeleteByIdIntergationTest.js",
@@ -57,6 +57,12 @@
         "title": "Models.GenericManagerFindIntegrationTest",
         "source": "tests/models/genericManagerFindIntegrationTest.js",
         "testFunction": "Models.GenericManagerFindIntegrationTest"
+    },
+
+    {
+        "title": "Utils.JsonResourceReaderIntegrationTest",
+        "source": "tests/utils/jsonResourceReaderIntegrationTest.js",
+        "testFunction": "Utils.JsonResourceReaderIntegrationTest"
     },
 
     {"source": "tests/utils.js"},

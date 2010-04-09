@@ -23,5 +23,16 @@ Models.ResultSet = Class.create({
         }
 
         return model;
+    },
+
+    toArray: function() {
+        var length = this.length();
+        var result = [];
+
+        for (var i = 0; i < length; i++) {
+            result.push(this.item(i));
+        }
+
+        return result;
     }
 });

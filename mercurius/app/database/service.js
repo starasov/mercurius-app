@@ -1,3 +1,5 @@
+// ToDO: migrate from prototype based class creation to Class.create({}) form.
+
 Database.Service = function(name, version, displayName, size) {
     Mojo.Log.info("[DbService.initialize] - begin");
 
@@ -19,46 +21,47 @@ Database.Service.prototype.setVersionProvider = function(versionProvider) {
     this._versionProvider = versionProvider;
 };
 
-
 Database.Service.prototype.setDatabaseInitializer = function(databaseInitializer) {
     this._databaseInitializer = databaseInitializer;
 };
 
-
-Database.Service.prototype.addTableModel = function(tableModel) {
-    this._databaseInitializer.addTableModel(tableModel);
+Database.Service.prototype.getDatabase = function(successHandler, errorHandler) {
+    if (this.isOpened()) {
+        successHandler(this._db);
+    } else {
+        this.open(successHandler, errorHandler);
+    }
 };
 
-
 Database.Service.prototype.open = function(successHandler, errorHandler) {
-    Mojo.Log.info("[DbService.open] - begin");
+    Mojo.Log.info("[Database.Service.open] - begin");
 
-    Mojo.require(this._versionProvider, "Database version provider instance should be set before 'open' method call.");
+    Mojo.require(this._databaseInitializer, "Database initializer instance should be set before 'open' method called.");
+    Mojo.require(this._versionProvider, "Database version provider instance should be set before 'open' method called.");
+
+    var clientSuccessHandler = successHandler || Prototype.emptyFunction;
+    var clientErrorHandler = errorHandler || Prototype.emptyFunction;
 
     try {
-        Mojo.Log.info("[DbService.open] - opening database...");
-
+        Mojo.Log.info("[Database.Service.open] - opening database...");
         this._db = openDatabase(this._name, "0.0", this._displayName, this._size);
         if (!this._db) {
-            this.processOpenFailure(errorHandler);
+            Mojo.Log.error("[DbService.open] - failed to open database!");
+            clientErrorHandler();
         } else {
-            this.processSuccessOpen(successHandler);
+            this.processSuccessOpen(clientSuccessHandler, clientErrorHandler);
         }
     } catch(e) {
-        this.processOpenException(e, errorHandler);
+        Mojo.Log.error("[DbService.open] - failed to open database - %s", e);
+        clientErrorHandler(e);
     }
 
-    Mojo.Log.info("[DbService.open] - end");
+    Mojo.Log.info("[Database.Service.open] - end");
 };
 
 
 Database.Service.prototype.isOpened = function() {
     return this._db != null;
-};
-
-
-Database.Service.prototype.getDatabase = function() {
-    return this._db;
 };
 
 
@@ -79,27 +82,10 @@ Database.Service.prototype.processSuccessOpen = function processSuccessOpen(succ
 
 
 /* @private */
-Database.Service.prototype.processOpenFailure = function processOpenFailure(errorHandler) {
-    Mojo.Log.error("[DbService.open] - database open failed!");
-    if (typeof(errorHandler) != 'undefined') {
-        errorHandler(this);
-    }
-};
-
-/* @private */
-Database.Service.prototype.processOpenException = function processOpenException(e, errorHandler) {
-    Mojo.Log.logException(e, "[DbService.open] - database open exception!");
-    if (typeof(errorHandler) != 'undefined') {
-        errorHandler(this);
-    }
-};
-
-
-/* @private */
 Database.Service.prototype.handleDatabaseCreation = function handleDatabaseCreation(clientSuccessHandler, clientErrorHandler) {
     this._databaseInitializer.initialize(this._db,
-            (function() { clientSuccessHandler(this); }).bind(this),
-            (function(result) { clientErrorHandler(this, result); }).bind(this)
+            (function() { clientSuccessHandler(this._db); }).bind(this),
+            clientErrorHandler
     );
 };
 

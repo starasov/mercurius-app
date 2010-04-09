@@ -2,7 +2,7 @@ Models.CurrenciesManagerHomeCurrencyIntergrationTest = Class.create(Models.BaseG
     before: function($super, completionCallback) {
         $super((function() {
             var factory = new Models.Currencies.ManagerFactory();
-            this._currenciesManager = factory.create(this._service.getDatabase());
+            this._currenciesManager = factory.create(this._db);
             completionCallback();
         }).bind(this));
     },

@@ -1,12 +1,23 @@
-function StageAssistant() {
-}
+StageAssistant = Class.create({
+    setup: function() {
+        this.databaseService = this._create_database_service();
+        this.controller.pushScene("currencyList", this.databaseService);
+    },
 
-StageAssistant.prototype.setup = function() {
-    Mojo.Log.info(">> [StageAssistant.setup]");
-//    this.accounts = new Accounts();
-//    this.controller.pushScene("accountView", this.accounts.for_id(1));
-    this.controller.pushScene("sandboxView");
-//    this.controller.pushScene("currencyList");
-//    this.controller.pushScene("currencyView", 1);
-    Mojo.Log.info("<< [StageAssistant.setup]");
-};
+    _create_database_service: function() {
+        var databaseService = new Database.Service("mercurius", "1.0", "Mercurius Database", 200000);
+        databaseService.setVersionProvider(new Database.VersionProvider("mercurius"));
+
+        var databaseInitializer = new Database.Initializer();
+        databaseInitializer.addTableModel(Models.Currencies.TableModel);
+
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(1, 'US Dollar', '$', 1.0, 1);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(2, 'Euro', 'EUR', 1.2, 0);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(3, 'GB Pound', 'GPB', 1.4, 0);");
+
+        databaseService.setDatabaseInitializer(databaseInitializer);
+
+        return databaseService;
+    }
+});
+

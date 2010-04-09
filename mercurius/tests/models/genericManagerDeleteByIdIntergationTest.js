@@ -7,7 +7,7 @@ Models.GenericManagerDeleteByIdIntegrationTest = Class.create(Models.BaseGeneric
     }, 
 
     test_should_delete_record_from_database_when_record_exists: function(recordResults) {
-        var genericManager = new Models.GenericManager(this._service.getDatabase(), this._mapper);
+        var genericManager = new Models.GenericManager(this._db, this._mapper);
 
         genericManager.deleteById(1,
                 function(tr, resultSet) {
@@ -19,7 +19,7 @@ Models.GenericManagerDeleteByIdIntegrationTest = Class.create(Models.BaseGeneric
     },
 
     test_should_return_zero_affected_rows_when_no_record_found: function(recordResults) {
-        var genericManager = new Models.GenericManager(this._service.getDatabase(), this._mapper);
+        var genericManager = new Models.GenericManager(this._db, this._mapper);
 
         genericManager.deleteById(3,
             function(tr, resultSet) {

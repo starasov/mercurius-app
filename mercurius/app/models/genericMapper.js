@@ -32,7 +32,7 @@ Models.GenericMapper = Class.create({
             }
         }
 
-        insertContext.sql = Models.GenericMapper._trimLastCommaAndSpace(insertContext.sql);
+        insertContext.sql = this._trimLastCommaAndSpace(insertContext.sql);
         insertContext.sql += ") VALUES(";
 
         for (column in this._tableModel.Columns) {
@@ -45,7 +45,7 @@ Models.GenericMapper = Class.create({
             }
         }
 
-        insertContext.sql = Models.GenericMapper._trimLastCommaAndSpace(insertContext.sql);
+        insertContext.sql = this._trimLastCommaAndSpace(insertContext.sql);
         insertContext.sql += ");";
 
         return insertContext;
@@ -69,7 +69,7 @@ Models.GenericMapper = Class.create({
             }
         }
 
-        updateContext.sql = Models.GenericMapper._trimLastCommaAndSpace(updateContext.sql);
+        updateContext.sql = this._trimLastCommaAndSpace(updateContext.sql);
         updateContext.sql += " WHERE id=?;";
         updateContext.params.push(this._tableModel.Columns.id.toSqlType(entity.id));
 
@@ -106,10 +106,14 @@ Models.GenericMapper = Class.create({
      *                       or 'null' is passed then no where part is generated
      *                       and all records in the table will be returned.
      *
+     * @param extraParams - {hash} a hash with some extra search query parameters.
+     *                      Following extra parameters are supported: 'order', 'limit'
+     *                      and offset.
+     *
      * @return {hash} A select context with select sql statement string under
      *                'sql' key and query parameters array under 'params' key.
      */
-    toSelectSql: function(searchParams) {
+    toSelectSql: function(searchParams, extraParams) {
         var findContext = {};
 
         findContext.sql = "SELECT ";
@@ -119,45 +123,74 @@ Models.GenericMapper = Class.create({
             findContext.sql += column + ", ";
         }
 
-        findContext.sql = Models.GenericMapper._trimLastCommaAndSpace(findContext.sql);
+        findContext.sql = this._trimLastCommaAndSpace(findContext.sql);
         findContext.sql += " FROM " + this._tableModel.Name;
 
-        if (Object.keys(searchParams).length > 0) {
-            findContext.sql += " WHERE ";
-
-            for (var parameter in searchParams) {
-                var columnModel = this._tableModel.Columns[parameter];
-                Mojo.require(columnModel, "Actual table model " + this._tableModel.Name + " desn't have " + parameter + " column defined.");
-
-                findContext.sql += parameter + "=?, ";
-                findContext.params.push(columnModel.toSqlType(searchParams[parameter]));
-            }
-
-            findContext.sql = Models.GenericMapper._trimLastCommaAndSpace(findContext.sql);
-        }
+        this._buildWhereClause(findContext, searchParams);
+        this._buildOrderAndLimitClause(findContext, extraParams);
 
         findContext.sql += ";";
 
         return findContext;
+    },
+
+    _buildWhereClause: function(findContext, searchParams) {
+        if (this._nonEmptyHash(searchParams)) {
+            findContext.sql += " WHERE ";
+            for (var parameter in searchParams) {
+                var columnModel = this._tableModel.Columns[parameter];
+                Mojo.require(columnModel, "Actual table model " + this._tableModel.Name + " desn't have " + parameter + " column defined.");
+                findContext.sql += parameter + "=?, ";
+                findContext.params.push(columnModel.toSqlType(searchParams[parameter]));
+            }
+            findContext.sql = this._trimLastCommaAndSpace(findContext.sql);
+        }
+    },
+
+    _buildOrderAndLimitClause: function(findContext, extraParams) {
+        if (this._nonEmptyHash(extraParams)) {
+            findContext.sql += " ";
+            
+            if (extraParams.order) {
+                Mojo.require(this._tableModel.Columns[extraParams.order], "Table model should contain '" + extraParams.order + "' column.");
+                
+                findContext.sql += "ORDER BY ?, ";
+                findContext.params.push(extraParams.order);
+            }
+
+            if (Object.isNumber(extraParams.limit)) {
+                findContext.sql += "LIMIT ?, ";
+                findContext.params.push(extraParams.limit);
+            }
+
+            if (Object.isNumber(extraParams.offset)) {
+                findContext.sql += "OFFSET ?";
+                findContext.params.push(extraParams.offset);
+            }
+
+            findContext.sql = this._trimLastCommaAndSpace(findContext.sql);
+        }
+    },
+
+    /**
+     * Remove last comma and space from sting.
+     * Note: for mapper internal use only.
+     *
+     * @param str - {string} a string that ends with ", "
+     * @return {string} A string with last ", " characters trimmed.
+     *
+     * @private
+     */
+    _trimLastCommaAndSpace: function(str) {
+        Mojo.require(str, "Passed string should be defined and can't be null.");
+        Mojo.require(str.length > 2, "Passed string should contain more than 2 characters. Actual string length is " + str.length);
+
+        var index = str.lastIndexOf(", ");
+        return (index == str.length - 2) ? str.substring(0, str.length - 2) : str; 
+    },
+
+    _nonEmptyHash: function(hash) {
+        return Object.keys(hash).length > 0;
     }
 });
 
-/**
- * Remove last comma and space from sting.
- * For mapper internal use only.
- *
- * Note: actually the method removes last 2 characters from the end
- * and no extra checks are done here.
- *
- * @param str - {string} a string that ends with ", "
- * @return {string} A string with last 2 characters trimmed.
- *
- * @private
- * @static
- */
-Models.GenericMapper._trimLastCommaAndSpace = function(str) {
-    Mojo.require(str, "Passed string should be defined and can't be null.");
-    Mojo.require(str.length > 2, "Passed string should contain more than 2 characters. Actual string length is " + str.length);
-    
-    return str.substring(0, str.length - 2); 
-};

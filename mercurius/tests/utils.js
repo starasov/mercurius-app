@@ -13,7 +13,7 @@ Test.validateAndContinue = function(recordResults, f) {
 };
 
 Test.defaultDatabaseErrorCallback = function(recordResults, transaction, error) {
-    recordResults(error.message);
+    recordResults(error);
 };
 
 /**

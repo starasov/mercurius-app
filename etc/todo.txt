@@ -3,19 +3,20 @@
 + Check how to use logging facilities inside the application: log levels,
   app configuration, etc.
 
-- Decide where to place icons in the application stage headers. How to properly
-  place header icon on the right side.
++ Decide where to place icons in the application stage headers. How to properly
+  place header icon on the right side:
+    * see sample code of contacts application
 
 - Write persistence layer prototype.
     - Think about possible ways of the database migration mechanism.
 
-    - Check whether there is any possibility to check whether device has
-      media or only built-in storage exists - it might be helpful for DB
-      creation.
+    - Check if there are any possibility to check if device has media or
+      only built-in storage exists - it might be helpful for DB creation.
 
     + Check transaction types available in HTML 5 implementation under webos.
       It seems that there are two different transaction types exists: read-only
-      and non-read-only transactions: Looks like read-only transaction doesn't work.
+      and non-read-only transactions:
+        * looks like read-only transaction doesn't work
 
 - Unit testing of the application.
     - no-ui way of the testing
@@ -25,7 +26,7 @@
 + Configure intelliarts VPN connection and add sources under VCS - added under GitHub
   repository.
 
-- Check how to include resources into application package and the way how
++ Check how to include resources into application package and the way how
   to read included resources.
     * it seems http get could be helpful here.
 
@@ -35,3 +36,5 @@
 + Download latest mojo sdk (1.4)
 
 - Check out plug-in APIs from mojo skd 1.4
+
+- Get graphics for application.

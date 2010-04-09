@@ -3,22 +3,25 @@ Models.BaseGenericManagerIntegrationTest = Class.create({
         this._tableModel = this.getTableModel();
         this._fixtures = this.getFixtures(this._tableModel);
         this._mapper = this.getMapper(this._tableModel);
+        this._db = null;
 
         this._service = new Database.Service("mercurius_test", "1.0", "mercurius_test", 100000);
-        this._service.setDatabaseInitializer(new Database.Initializer());
+
+        var initializer = new Database.Initializer();
+        initializer.addTableModel(this._tableModel);
+        this._service.setDatabaseInitializer(initializer);
+
         this._service.setVersionProvider(new MockVersionProvider());
-        this._service.addTableModel(this._tableModel);
 
-        this._service.open(this._insert_sample_records.bind(this, completionCallback),
-            this._handle_database_error.bind(this, completionCallback));
+
+        this._service.open((function(db) {
+                this._db = db;
+                this.executeStatements(this._fixtures, completionCallback, completionCallback);
+            }).bind(this), this._handle_database_error.bind(this, completionCallback));
     },
 
-    _insert_sample_records: function(completionCallback, _) {
-        this.executeStatements(this._fixtures, completionCallback, completionCallback);
-    },
-
-    _handle_database_error: function(completionCallback, _, error) {
-        Mojo.Log.info("[Models.GenericManagerIntegrationTest._handle_database_error] - " + error.message);
+    _handle_database_error: function(completionCallback, error) {
+        Mojo.Log.info("[Models.BaseGenericManagerIntegrationTest._handle_database_error] - " + error);
         completionCallback();
     },
 
@@ -40,10 +43,14 @@ Models.BaseGenericManagerIntegrationTest = Class.create({
     },
 
     executeStatements: function(statements, successCallback, errorCallback) {
+        Mojo.Log.info("[Models.BaseGenericManagerIntegrationTest.executeStatements] - begin - %s", statements);
+
         if (statements.length > 0) {
-            this._service.getDatabase().transaction((function(transaction) {
+            this._db.transaction((function(transaction) {
                 for (var i = 0; i < statements.length; i++) {
                     var successCallbackCurrent = (i == statements.length - 1) ? successCallback : Prototype.emptyFunction;
+
+                    Mojo.Log.info("[Models.BaseGenericManagerIntegrationTest.executeStatements] - %s", statements[i]);
 
                     transaction.executeSql(statements[i], [], successCallbackCurrent,
                             this._handle_database_error.bind(this, errorCallback));
