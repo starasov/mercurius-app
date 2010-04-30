@@ -20,6 +20,7 @@
 
 - Unit testing of the application.
     - no-ui way of the testing
+    - IDE integration
     + ant integration
     + restore all previously disabled tests
 
@@ -38,3 +39,9 @@
 - Check out plug-in APIs from mojo skd 1.4
 
 - Get graphics for application.
+
++ Think about possible forms approach for new/edit views (django way could fit there quite well).
+
+- Think about extraction of reusable UI components: headers, progress spinners, etc.
+
+- Think about extraction of reusable assistants logic: busy/ready states switching, retrieving manager instance.

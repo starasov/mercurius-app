@@ -1,4 +1,9 @@
 Models.GenericMapper = Class.create({
+    /**
+     * Constructs mapper instance.
+     *
+     * @param tableModel - {hash} (required) a table model descriptor.
+     */
     initialize: function(tableModel) {
         Mojo.require(tableModel, "'tableModel' should be defined and can't be null.");
         this._tableModel = tableModel;
@@ -147,27 +152,40 @@ Models.GenericMapper = Class.create({
         }
     },
 
+    /**
+     * Creates ORDER BY and LIMIT + OFFSET sql clauses.
+     *
+     * Passed findContext parameter will be updated with generated
+     * sql and query parameters.
+     *
+     * @param findContext - {hash} a previously created select context
+     *                             with 'sql' and 'params' keys.
+     *
+     * @param extraParams - {hash} a hash with ORDER BY, LIMIT and OFFSET
+     *                             values. Lookup of following keys are done
+     *                             here: 'order', 'limit' and 'offset'.
+     *
+     * @private
+     */
     _buildOrderAndLimitClause: function(findContext, extraParams) {
         if (this._nonEmptyHash(extraParams)) {
             findContext.sql += " ";
             
             if (extraParams.order) {
                 Mojo.require(this._tableModel.Columns[extraParams.order], "Table model should contain '" + extraParams.order + "' column.");
-                
-                findContext.sql += "ORDER BY ?, ";
-                findContext.params.push(extraParams.order);
+                findContext.sql += "ORDER BY " + extraParams.order + ", ";
             }
 
             if (Object.isNumber(extraParams.limit)) {
-                findContext.sql += "LIMIT ?, ";
+                findContext.sql += "LIMIT ?";
                 findContext.params.push(extraParams.limit);
-            }
 
-            if (Object.isNumber(extraParams.offset)) {
-                findContext.sql += "OFFSET ?";
-                findContext.params.push(extraParams.offset);
+                if (Object.isNumber(extraParams.offset)) {
+                    findContext.sql += " OFFSET ?";
+                    findContext.params.push(extraParams.offset);
+                }
             }
-
+            
             findContext.sql = this._trimLastCommaAndSpace(findContext.sql);
         }
     },
@@ -186,7 +204,9 @@ Models.GenericMapper = Class.create({
         Mojo.require(str.length > 2, "Passed string should contain more than 2 characters. Actual string length is " + str.length);
 
         var index = str.lastIndexOf(", ");
-        return (index == str.length - 2) ? str.substring(0, str.length - 2) : str; 
+        var result = (index == str.length - 2) ? str.substring(0, str.length - 2) : str;
+        
+        return result.trim();
     },
 
     _nonEmptyHash: function(hash) {

@@ -1,6 +1,4 @@
 Models.GenericMapperTest = Class.create({
-    name: "Models.GenericMapperTest",
-    
     before: function() {
         this._tableModel = {
             Name: "name_and_flag",
@@ -128,8 +126,8 @@ Models.GenericMapperTest = Class.create({
     test_to_select_sql_should_include_order_by_when_valid_column_name_specified: function() {
         var selectContext = this._mapper.toSelectSql({id: 1}, {order: "name"});
 
-        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? ORDER BY ?;", selectContext.sql);
-        Test.requireArraysEqual([1, "name"], selectContext.params);
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? ORDER BY name;", selectContext.sql);
+        Test.requireArraysEqual([1], selectContext.params);
 
         return Mojo.Test.passed;
     },
@@ -152,20 +150,20 @@ Models.GenericMapperTest = Class.create({
         return Mojo.Test.passed;
     },
 
-    test_to_select_sql_should_include_offset_when_passed: function() {
+    test_to_select_sql_should_not_include_offset_when_no_limit_passed: function() {
         var selectContext = this._mapper.toSelectSql({id: 1}, {offset: 10});
 
-        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? OFFSET ?;", selectContext.sql);
-        Test.requireArraysEqual([1, 10], selectContext.params);
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=?;", selectContext.sql);
+        Test.requireArraysEqual([1], selectContext.params);
 
         return Mojo.Test.passed;
     },
 
-    test_to_select_sql_should_include_offset_when_zero_offset_passed: function() {
-        var selectContext = this._mapper.toSelectSql({id: 1}, {offset: 0});
+    test_to_select_sql_should_include_offset_when_limit_and_offset_passed: function() {
+        var selectContext = this._mapper.toSelectSql({id: 1}, {limit: 1, offset: 0});
 
-        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? OFFSET ?;", selectContext.sql);
-        Test.requireArraysEqual([1, 0], selectContext.params);
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? LIMIT ? OFFSET ?;", selectContext.sql);
+        Test.requireArraysEqual([1, 1, 0], selectContext.params);
 
         return Mojo.Test.passed;
     },
@@ -173,8 +171,8 @@ Models.GenericMapperTest = Class.create({
     test_to_select_sql_should_include_order_limit_and_offset_when_passed: function() {
         var selectContext = this._mapper.toSelectSql({id: 1}, {order: "id", limit: 10, offset: 20});
 
-        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? ORDER BY ?, LIMIT ?, OFFSET ?;", selectContext.sql);
-        Test.requireArraysEqual([1, "id", 10, 20], selectContext.params);
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? ORDER BY id, LIMIT ? OFFSET ?;", selectContext.sql);
+        Test.requireArraysEqual([1, 10, 20], selectContext.params);
 
         return Mojo.Test.passed;
     }

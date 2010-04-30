@@ -43,15 +43,10 @@ Models.BaseGenericManagerIntegrationTest = Class.create({
     },
 
     executeStatements: function(statements, successCallback, errorCallback) {
-        Mojo.Log.info("[Models.BaseGenericManagerIntegrationTest.executeStatements] - begin - %s", statements);
-
         if (statements.length > 0) {
             this._db.transaction((function(transaction) {
                 for (var i = 0; i < statements.length; i++) {
                     var successCallbackCurrent = (i == statements.length - 1) ? successCallback : Prototype.emptyFunction;
-
-                    Mojo.Log.info("[Models.BaseGenericManagerIntegrationTest.executeStatements] - %s", statements[i]);
-
                     transaction.executeSql(statements[i], [], successCallbackCurrent,
                             this._handle_database_error.bind(this, errorCallback));
                 }

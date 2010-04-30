@@ -1,4 +1,4 @@
-function CurrencyViewAssistant(currencyId) {
+function CurrencyViewAssistant(currencyId, databaseService) {
     this.currencies = new Currencies();
     this.currencyId = currencyId;
 }

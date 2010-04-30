@@ -1,0 +1,1 @@
+if (!Widgets) var Widgets = {};

@@ -16,6 +16,10 @@
         "scenes": "currencyView",
         "source": "app/assistants/currencyView-assistant.js"
     },
+    {
+        "scenes": "currencyEdit",
+        "source": "app/assistants/currencyEdit-assistant.js"
+    },
 
     {"source": "app/database/$package.js"},
     {"source": "app/database/initializer.js"},
@@ -25,11 +29,25 @@
 
     {"source": "app/models/$package.js"},
     {"source": "app/models/accounts.js"},
+    {"source": "app/models/genericForm.js"},
     {"source": "app/models/genericManager.js"},
     {"source": "app/models/genericMapper.js"},
+    {"source": "app/models/genericValidator.js"},
     {"source": "app/models/resultSet.js"},
-    {"source": "app/models/currencies.js"},
+
+    {"source": "app/currencies/$package.js"},
+    {"source": "app/currencies/factory.js"},
+    {"source": "app/currencies/fields.js"},
+    {"source": "app/currencies/manager.js"},
+    {"source": "app/currencies/tableModel.js"},
+    {"source": "app/currencies/validator.js"},
 
     {"source": "app/utils/$package.js"},
-    {"source": "app/utils/jsonResourceReader.js"}
+    {"source": "app/utils/asyncChain.js"},
+    {"source": "app/utils/jsonResourceReader.js"},
+
+    {"source": "app/widgets/$package.js"},
+    {"source": "app/widgets/fullScreenSpinner.js"},
+
+    {"source": "app/applicationContext.js"}
 ]

@@ -1,64 +1,98 @@
-function CurrencyListAssistant(databaseService) {
-    Mojo.Log.info("[CurrencyListAssistant] - begin");
+CurrencyListAssistant = Class.create({
+    initialize: function(applicationContext) {
+        Mojo.Log.info("[CurrencyListAssistant] - begin");
 
-    this.databaseService = databaseService;
-    this.currencyFormatters = {
-        rate: function(rate) {
-            return Mojo.Format.formatNumber(rate, 2);
-        },
+        this.context = applicationContext;
+        this.manager = null;
 
-        homeIconStyle: function(_, model) {
-            return model.home_flag ? "block" : "none";
-        },
+        this.spinner = new Widgets.FullScreenSpinner({
+            parentId: "currencies-spinner",
+            spinnerContainerId: "currencies-spinner-container",
+            spinnerWidgetId: "currencies-spinner-widget"
+        });
 
-        rateStyle: function(_, model) {
-            return model.home_flag ? "none" : "block";
+        this.currencyFormatters = {
+            rate: function(rate) { return Mojo.Format.formatNumber(rate, 2); },
+            homeIconStyle: function(_, model) { return model.home_flag ? "block" : "none"; },
+            rateStyle: function(_, model) { return model.home_flag ? "none" : "block"; }
+        };
+
+        this.currencyListAttributes = {
+            itemTemplate: "currencyList/listitem",
+            listTemplate: "currencyList/listcontainer",
+            swipeToDelete: false,
+            renderLimit: 20,
+            reorderable: false,
+            formatters: this.currencyFormatters,
+            itemsCallback: this._handleCurrencyListCallback.bind(this)
+        };
+        
+        Mojo.Log.info("[CurrencyListAssistant] - end");
+    },
+
+    setup: function() {
+        Mojo.Log.info("[CurrencyListAssistant][setup] - begin");
+
+        this.controller.setupWidget(Mojo.Menu.commandMenu, undefined,
+                {items: [{icon: "new", command: "addCurrency"}]});
+
+        this.controller.setupWidget("currency-list-widget",
+                this.currencyListAttributes);
+
+        this.spinner.setup(this.controller);
+
+        Mojo.Log.info("[CurrencyListAssistant][setup] - end");
+    },
+
+    activate: function(event) {
+    },
+
+    deactivate: function(event) {
+    },
+
+    cleanup: function(event) {
+    },
+
+    handleCommand: function(event) {
+        if (event.type == Mojo.Event.command) {
+            switch (event.command) {
+            case "addCurrency":
+                this.controller.stageController.pushScene("currencyEdit", this.context);
+                event.stop();
+            }
         }
-    };
+    },
 
-    Mojo.Log.info("[CurrencyListAssistant] - end");
-}
+    _handleCurrencyListCallback: function(list, offset, limit) {
+        Mojo.Log.info("[CurrencyListAssistant][_handleCurrencyListCallback] - begin");
 
-CurrencyListAssistant.prototype.setup = function() {
-    Mojo.Log.info("[CurrencyListAssistant.setup] - begin");
+        if (this.manager == null) {
+            this._setupCurrenciesManager(list, offset, limit);
+        } else {
+            this._loadCurrencies(list, offset, limit);
+        }
 
-    this.currencyListAttributes = {
-        itemTemplate: "currencyList/listitem",
-        listTemplate: "currencyList/listcontainer",
-        swipeToDelete: false,
-        renderLimit: 20,
-        reorderable: false,
-        formatters: this.currencyFormatters
-    };
+        Mojo.Log.info("[CurrencyListAssistant][_handleCurrencyListCallback] - end");
+    },
 
-    this.currencyListModel = {
-        items: []
-    };
+    _setupCurrenciesManager: function(list, offset, limit) {
+        this.spinner.show();
 
-    this.controller.setupWidget("currency-list-widget",
-            this.currencyListAttributes, this.currencyListModel);
+        this.context.getDatabase((function(db) {
+            this.manager = this.context.getCurrenciesFactory().createManager(db);
+            this._loadCurrencies(list, offset, limit);
+            this.spinner.hide();
+        }).bind(this), this._handleDatabaseError.bind(this));
+    },
 
-    this.controller.setupWidget(Mojo.Menu.commandMenu, undefined,
-            {items: [{icon: 'new', command: 'addCurrency'}]});
-    
-    this.databaseService.getDatabase((function(db) {
-        Mojo.Log.info("[CurrencyListAssistant.setup] - retrieved database");
-        this.manager = new Models.Currencies.ManagerFactory().create(db);
+    _loadCurrencies: function(list, offset, limit) {
+        this.manager.find({}, {limit: limit, offset: offset}, function(transaction, resultSet) {
+            list.mojo.noticeUpdatedItems(offset, resultSet.toArray());
+        }, this._handleDatabaseError.bind(this));
+    },
 
-        this.manager.all({}, (function(tr, resultSet) {
-            this.currencyListModel.items = resultSet.toArray();            
-            this.controller.modelChanged(this.currencyListModel, this);
-        }).bind(this), function() {});
-    }).bind(this), function(error) {});
-
-    Mojo.Log.info("[CurrencyListAssistant.setup] - end");
-};
-
-CurrencyListAssistant.prototype.activate = function(event) {
-};
-
-CurrencyListAssistant.prototype.deactivate = function(event) {
-};
-
-CurrencyListAssistant.prototype.cleanup = function(event) {
-};
+    _handleDatabaseError: function(transaction, error) {
+        this.spinner.hide();
+        // ToDO: add some error logic handling here.
+    }
+});

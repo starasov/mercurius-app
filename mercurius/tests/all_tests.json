@@ -1,5 +1,23 @@
 [
     {
+        "title": "Currencies.ManagerHomeCurrencyIntergrationTest",
+        "source": "tests/currencies/managerHomeCurrencyIntergrationTest.js",
+        "testFunction": "Currencies.ManagerHomeCurrencyIntergrationTest"
+    },
+
+    {
+        "title": "Currencies.ManagerGetCurrencyByNameIntergrationTest",
+        "source": "tests/currencies/managerGetCurrencyByNameIntergrationTest.js",
+        "testFunction": "Currencies.ManagerGetCurrencyByNameIntergrationTest"
+    },
+
+    {
+        "title": "Currencies.ValidatorTest",
+        "source": "tests/currencies/validatorTest.js",
+        "testFunction": "Currencies.ValidatorTest"
+    },
+
+    {
         "title": "Database.InitializerTest",
         "source": "tests/database/initializerTest.js",
         "testFunction": "Database.InitializerTest"
@@ -24,24 +42,6 @@
     },
 
     {
-        "title": "Models.CurrenciesManagerHomeCurrencyIntergrationTest",
-        "source": "tests/models/currenciesManagerHomeCurrencyIntergrationTest.js",
-        "testFunction": "Models.CurrenciesManagerHomeCurrencyIntergrationTest"
-    },
-
-    {
-        "title": "Models.GenericManagerTest",
-        "source": "tests/models/genericManagerTest.js",
-        "testFunction": "Models.GenericManagerTest"
-    },
-
-    {
-        "title": "Models.GenericMapperTest",
-        "source": "tests/models/genericMapperTest.js",
-        "testFunction": "Models.GenericMapperTest"
-    },
-
-    {
         "title": "Models.GenericManagerCountIntegrationTest",
         "source": "tests/models/genericManagerCountIntegrationTest.js",
         "testFunction": "Models.GenericManagerCountIntegrationTest"
@@ -60,13 +60,48 @@
     },
 
     {
+        "title": "Models.GenericManagerTest",
+        "source": "tests/models/genericManagerTest.js",
+        "testFunction": "Models.GenericManagerTest"
+    },
+
+    {
+        "title": "Models.GenericMapperTest",
+        "source": "tests/models/genericMapperTest.js",
+        "testFunction": "Models.GenericMapperTest"
+    },
+
+    {
+        "title": "Models.GenericFormTest",
+        "source": "tests/models/genericFormTest.js",
+        "testFunction": "Models.GenericFormTest"
+    },
+
+    {
+        "title": "Models.GenericValidatorTest",
+        "source": "tests/models/genericValidatorTest.js",
+        "testFunction": "Models.GenericValidatorTest"
+    },
+
+    {
         "title": "Utils.JsonResourceReaderIntegrationTest",
         "source": "tests/utils/jsonResourceReaderIntegrationTest.js",
         "testFunction": "Utils.JsonResourceReaderIntegrationTest"
     },
 
+    {
+        "title": "Utils.AsyncChainTest",
+        "source": "tests/utils/asyncChainTest.js",
+        "testFunction": "Utils.AsyncChainTest"
+    },
+
     {"source": "tests/utils.js"},
     {"source": "tests/database/mocks.js"},
-    {"source": "tests/models/mocks.js"},
-    {"source": "tests/models/baseGenericManagerIntegrationTest.js"}
+
+    {"source": "tests/currencies/baseManagerIntergrationTest.js"},
+    {"source": "tests/currencies/mocks.js"},
+
+    {"source": "tests/models/baseGenericManagerIntegrationTest.js"},
+    {"source": "tests/models/mocks.js"}
+
 ]

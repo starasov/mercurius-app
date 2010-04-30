@@ -1,24 +1,4 @@
-Models.CurrenciesManagerHomeCurrencyIntergrationTest = Class.create(Models.BaseGenericManagerIntegrationTest, {
-    before: function($super, completionCallback) {
-        $super((function() {
-            var factory = new Models.Currencies.ManagerFactory();
-            this._currenciesManager = factory.create(this._db);
-            completionCallback();
-        }).bind(this));
-    },
-
-    getTableModel: function() {
-        return Models.Currencies.TableModel;
-    },
-
-    getFixtures: function($super, tableModel) {
-        return $super(tableModel).concat([
-                "INSERT INTO currencies VALUES(1, 'US Dollar', '$', 1.0, 1);",
-                "INSERT INTO currencies VALUES(2, 'Euro', 'EUR', 1.2, 0);",
-                "INSERT INTO currencies VALUES(3, 'GB Pound', 'GPB', 1.4, 0);"
-        ]);
-    },
-
+Currencies.ManagerHomeCurrencyIntergrationTest = Class.create(Currencies.BaseManagerIntegrationTest, {
     test_should_return_home_currency_instance_when_exists: function(recordResults) {
         this._currenciesManager.getHomeCurrency(function(transaction, currency) {
             Test.validateAndContinue(recordResults, Mojo.require.curry(currency));

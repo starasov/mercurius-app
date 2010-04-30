@@ -26,13 +26,27 @@ Test.defaultDatabaseErrorCallback = function(recordResults, transaction, error) 
  * @param array2 - {array} second array to test.
  */
 Test.requireArraysEqual = function(array1, array2) {
-    Mojo.requireArray(array1, "1st array parameter should be defined and can't be null.");
-    Mojo.requireArray(array2, "2nd array parameter should be defined and can't be null.");
+    if (!array1 && !array2) {
+        return;
+    }
+
     Mojo.requireEqual(array1.length, array2.length, "Arrays should be equal length.");
 
     for (var i = 0; i < array1.length; i++) {
         Mojo.requireEqual(array1[i], array2[i], "An " + i + "th array elements are not equal: " + array1[i] + " != " + array2[i]);
     }
+};
+
+Test.requireMapsEqual = function(map1, map2) {
+    if (!map1 && !map2) {
+        return;
+    }
+
+    var hash1 = $H(map1);
+    var hash2 = $H(map2);
+
+    Test.requireArraysEqual(hash1.keys(), hash2.keys());
+    Test.requireArraysEqual(hash1.values(), hash2.values());
 };
 
 Test.requireException = function(f) {
@@ -45,5 +59,5 @@ Test.requireException = function(f) {
         return;
     }
 
-    Mojo.require(false, "Function call passed, but exception was expected instead.");
+    Mojo.require(false, "Function was succeed, but exception was expected instead.");
 };

@@ -1,0 +1,1 @@
+if (!Currencies) var Currencies = {};
