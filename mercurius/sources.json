@@ -34,6 +34,7 @@
     {"source": "app/models/genericMapper.js"},
     {"source": "app/models/genericValidator.js"},
     {"source": "app/models/resultSet.js"},
+    {"source": "app/models/validationUtils.js"},
 
     {"source": "app/currencies/$package.js"},
     {"source": "app/currencies/factory.js"},

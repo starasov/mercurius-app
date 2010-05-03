@@ -5,9 +5,9 @@ Currencies.Validator = Class.create(Models.GenericValidator, {
         this.currenciesManager = currenciesManager;
     },
 
-    _validateName: function(name, successCallback, errorCallback) {
-        if (!name || name.trim().length == 0) {
-            errorCallback("name", "Currency name should be defined.");
+    _validateName: function(name, fieldModel, successCallback, errorCallback) {
+        if (!Models.ValidationUtils.validateNotEmpty(name)) {
+            errorCallback("name", "Currency name can't be empty.");
         }
 
         this.currenciesManager.getCurrencyByName(name, function(transaction, currency) {
@@ -19,5 +19,26 @@ Currencies.Validator = Class.create(Models.GenericValidator, {
         }, function(transaction, error) {
             errorCallback("_all", "Failed to read currencies data.");
         });
+    },
+
+    _validateSymbol: function(symbol, fieldModel, successCallback, errorCallback) {
+        if (!Models.ValidationUtils.validateNotEmpty(symbol)) {
+            errorCallback("symbol", "Currency symbol can't be empty.");
+        } else {
+            successCallback();
+        }
+    },
+
+    _validateRate: function(rateData, fieldModel, successCallback, errorCallback) {
+        if (!Models.ValidationUtils.validateNotEmpty(rateData)) {
+            errorCallback("rate", "Currency exchange rate can't be empty.");
+        }
+
+        var rate = fieldModel.fromFormData(rateData);
+        if (rate > 0.0) {
+            successCallback();
+        } else {
+            errorCallback("rate", "Rate should be positive number.")
+        }
     }
 });

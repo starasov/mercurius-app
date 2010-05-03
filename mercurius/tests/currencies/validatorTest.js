@@ -14,7 +14,7 @@ Currencies.ValidatorTest = Class.create({
         });
     },
 
-    test_validation_should_fail_when_whitespaces_name_is_specified: function(recordResults) {
+    test_validation_should_fail_when_whitespace_name_is_specified: function(recordResults) {
         this._currencyData.name = "   ";
         this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
             Test.validate(recordResults, Mojo.requireEqual.curry("name", key));
@@ -25,6 +25,34 @@ Currencies.ValidatorTest = Class.create({
         this._currenciesManager.getCurrencyByNameResult = this._currencyData;
         this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
             Test.validate(recordResults, Mojo.requireEqual.curry("name", key));
+        });
+    },
+
+    test_validation_should_fail_when_empty_symbol_is_specified: function(recordResults) {
+        this._currencyData.symbol = "";
+        this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
+            Test.validate(recordResults, Mojo.requireEqual.curry("symbol", key));
+        });
+    },
+
+    test_validation_should_fail_when_empty_rate_is_specified: function(recordResults) {
+        this._currencyData.rate = "";
+        this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
+            Test.validate(recordResults, Mojo.requireEqual.curry("rate", key));
+        });
+    },
+
+    test_validation_should_fail_when_non_numeric_rate_is_specified: function(recordResults) {
+        this._currencyData.rate = "qwerty";
+        this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
+            Test.validate(recordResults, Mojo.requireEqual.curry("rate", key));
+        });
+    },
+
+    test_validation_should_fail_when_zero_rate_is_specified: function(recordResults) {
+        this._currencyData.rate = "0.0";
+        this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
+            Test.validate(recordResults, Mojo.requireEqual.curry("rate", key));
         });
     },
 

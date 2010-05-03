@@ -84,6 +84,12 @@
     },
 
     {
+        "title": "Models.ValidationUtilsTest",
+        "source": "tests/models/validationUtilsTest.js",
+        "testFunction": "Models.ValidationUtilsTest"
+    },
+
+    {
         "title": "Utils.JsonResourceReaderIntegrationTest",
         "source": "tests/utils/jsonResourceReaderIntegrationTest.js",
         "testFunction": "Utils.JsonResourceReaderIntegrationTest"

@@ -23,7 +23,7 @@ Models.GenericValidator = Class.create({
             var functionName = "_validate" + fieldName.capitalize();
             var fieldValidationFunction = this[functionName];
             if (fieldValidationFunction) {
-                asyncChain.add(fieldValidationFunction.bind(this, modelData[fieldName]));
+                asyncChain.add(fieldValidationFunction.bind(this, modelData[fieldName], this.fields[fieldName]));
             }
         }
     },

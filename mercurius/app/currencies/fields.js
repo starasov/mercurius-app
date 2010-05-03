@@ -4,10 +4,11 @@ Currencies.Fields = {
         attributes: {
             hintText: $L("Name..."),
             modelProperty: "name",
-            multiline: true,
+            multiline: false,
             enterSubmits: true,
             textCase: Mojo.Widget.steModeTitleCase,
-            autoReplace: false
+            autoReplace: false,
+            maxLength: 20
         },
         changeEvent: Mojo.Event.propertyChanged
     },
@@ -17,10 +18,11 @@ Currencies.Fields = {
         attributes: {
             hintText: $L("Symbol..."),
             modelProperty: "symbol",
-            multiline: true,
+            multiline: false,
             enterSubmits: true,
             textCase: Mojo.Widget.steModeTitleCase,
-            autoReplace: false
+            autoReplace: false,
+            maxLength: 3
         },
         changeEvent: Mojo.Event.propertyChanged
     },
