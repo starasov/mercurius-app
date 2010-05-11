@@ -11,26 +11,26 @@
 }
 
 .list-header-text {
-	text-align:left;
+    text-align: left;
 }
 
 .list-header-icon {
-	float:left;
-	height: 50px;
-	width: 30px;
-	margin-left: -5px;
-	margin-right: 5px;
+    float: left;
+    height: 50px;
+    width: 30px;
+    margin-left: -5px;
+    margin-right: 5px;
 }
 
 .currency-form-icon {
-  width: 32px;
-  height: 32px;
-  float: left;
-  background-image: url(../images/currency-small.png) !important;
+    width: 32px;
+    height: 32px;
+    float: left;
+    background-image: url(../images/currency-small.png) !important;
 }
 
-.list-header-icon.default {
-  background: url(../images/currency-small.png) center center no-repeat;
+.list-header-icon.currency {
+    background: url(../images/currency-small.png) center center no-repeat;
 }
 
 .currency-rate-text {
@@ -48,10 +48,11 @@
     background: url(../images/currency-home.png) center center no-repeat;
 }
 
-.error-icon {
-    float: right;
-    margin: 12px -9px 0 0;
-    width: 56px;
-    height: 26px;
-    background: url(../images/error-small.png) center center no-repeat;
+.home-currency-header-icon {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: 11px;
+    right: 11px;
+    background-image: url(../images/currency-home.png);
 }

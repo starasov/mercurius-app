@@ -1,52 +1,87 @@
-function CurrencyViewAssistant(currencyId, databaseService) {
-    this.currencies = new Currencies();
-    this.currencyId = currencyId;
-}
+CurrencyViewAssistant = Class.create({
+    initialize: function(applicationContext, currencyId) {
+        this.context = applicationContext;
+        this.factory = applicationContext.getCurrenciesFactory();
 
-CurrencyViewAssistant.prototype.setup = function() {
-1    Mojo.Log.info("-> [CurrencyViewAssistant.setup]");
+        this.currencyId = currencyId;
+        this.manager = null;
+        this.lastEditEvent = null;
 
-    Mojo.Log.info("-- [CurrencyViewAssistant.setup] looking for currency with id=%d", this.currencyId);
-    this.currency = this.currencies.for_id(this.currencyId);
-    Mojo.Log.info("-- [CurrencyViewAssistant.setup] found currency=%j", this.currency);
+        this.spinner = new Widgets.FullScreenSpinner({
+            parentId: "currency-spinner",
+            spinnerContainerId: "currency-spinner-container",
+            spinnerWidgetId: "currency-spinner-widget"
+        });
 
-    var currencyNameElement = this.controller.get("currency-name");
-    currencyNameElement.innerHTML = this.currency.name;
+        this.commandMenuModel = {
+            items: [{label: "Edit", disabled: false, command: "editCurrency"}]
+        };
+    },
 
-    if (this.currency.home) {
-        var currencyHomeTextElement = this.controller.get("currency-home-text");
-        currencyHomeTextElement.innerHTML = "Home Currency";
-    }
+    setup: function() {
+        this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
 
-    var currencySymbolElement = this.controller.get("currency-symbol");
-    currencySymbolElement.innerHTML = this.currency.symbol;
+        this.spinner.setup(this.controller);
 
-    var currencyExchangeRateElement = this.controller.get("currency-exchange-rate");
-    currencyExchangeRateElement.innerHTML =
-        Mojo.Format.formatNumber(parseFloat(this.currency.exchangeRate), {fractionDigits: "2"});
+        this.spinner.show();
+        this.context.getDatabase(this._initialize.bind(this), this._handleDatabaseError.bind(this));
+    },
 
-    this.controller.setupWidget(Mojo.Menu.commandMenu, undefined,
-            {items: [{label: "Edit", command: "editCurrency"}]});
-
-    Mojo.Log.info("<- [CurrencyViewAssistant.setup]");
-};
-
-CurrencyViewAssistant.prototype.activate = function(event) {
-};
-
-
-CurrencyViewAssistant.prototype.deactivate = function(event) {
-};
-
-CurrencyViewAssistant.prototype.cleanup = function(event) {
-};
-
-CurrencyViewAssistant.prototype.handleCommand = function(event) {
-    if (event.type == Mojo.Event.command) {
-        switch (event.command) {
-            case "editCurrency":
-                Mojo.Controller.errorDialog("Edit Clicked!", this.controller.window);
-                break;
+    activate: function(event) {
+        if (event) {
+            switch (event.source) {
+            case "currencyEdit":
+                this.lastEditEvent = event;
+                this._loadCurrency();
+            }
         }
+    },
+
+    deactivate: function(event) {
+    },
+
+    cleanup: function(event) {
+    },
+
+    handleCommand: function(event) {
+        if (event.type == Mojo.Event.command) {
+            switch (event.command) {
+            case "editCurrency":
+                this.controller.stageController.pushScene("currencyEdit", this.context, this.currencyId);
+                event.stop();
+            }
+        }
+    },
+
+    _initialize: function(db) {
+        this.manager = this.factory.createManager(db);
+        this._loadCurrency();
+    },
+
+    _loadCurrency: function() {
+        this.manager.findById(this.currencyId, this._updateView.bind(this), this._handleDatabaseError.bind(this));
+    },
+
+    _updateView: function(transaction, currency) {
+        this.controller.get("currency-view-title").innerHTML = currency.name;
+        this.controller.get("currency-symbol").innerHTML = currency.symbol;
+        this.controller.get("currency-rate").innerHTML = Currencies.Fields.rate.toFormData(currency.rate);
+
+        if (currency.home_flag) {
+            this.controller.get("title-home-icon").show();
+        }
+
+        this.spinner.hide();
+    },
+
+    _handleDatabaseError: function(transaction, error) {
+        this.spinner.hide();
+        this.controller.showAlertDialog({
+            title: "Error",
+            message: error.message,
+            choices: [
+                {label: "OK", value: "ok", type: "medium"}
+            ]
+        });
     }
-};
+});

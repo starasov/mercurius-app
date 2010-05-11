@@ -51,10 +51,10 @@ Models.GenericManager = Class.create({
      */
     save: function(entity, successCallback, errorCallback) {
         this._db.transaction((function(transaction) {
-            var sql = this._mapper.toInsertSql(entity);
-            transaction.executeSql(sql, [], function(tr, resultSet) {
-                        successCallback(tr, resultSet)
-                    }, errorCallback);
+            var insertContext = this._mapper.toInsertSql(entity);
+            transaction.executeSql(insertContext.sql, insertContext.params, function(tr, resultSet) {
+                successCallback(tr, resultSet.insertId)
+            }, errorCallback);
         }).bind(this));
     },
 
@@ -70,13 +70,20 @@ Models.GenericManager = Class.create({
      */
     update: function(entity, successCallback, errorCallback) {
         this._db.transaction((function(transaction) {
-            var sql = this._mapper.toUpdateSql(entity);
-            transaction.executeSql(sql, [], function(tr, resultSet) {
-                        successCallback(tr, resultSet)
-                    }, errorCallback);
+            var updateContext = this._mapper.toUpdateSql(entity);
+            transaction.executeSql(updateContext.sql, updateContext.params, function(tr, resultSet) {
+                successCallback(tr, resultSet)
+            }, errorCallback);
         }).bind(this));
     },
 
+    saveOrUpdate: function(entity, successCallback, errorCallback) {
+        if (entity.id) {
+            this.update(entity, successCallback, errorCallback);
+        } else {
+            this.save(entity, successCallback, errorCallback);
+        }
+    },
 
     /**
      * Deletes record by specified id from the table.

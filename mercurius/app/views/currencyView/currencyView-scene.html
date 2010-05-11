@@ -1,8 +1,9 @@
 <div class="palm-page-header multi-line">
-    <div class="palm-page-header-wrapper">
-        <div id="currency-name" class="title left"></div>
-        <div id="currency-home-text" class="subtitle left"></div>
-    </div>
+ <div class="palm-page-header-wrapper">
+	<div id="title-icon" class="icon currency-form-icon"></div>
+ 	<div class="title" id="currency-view-title" style="display:block;">View Currency</div>
+    <div id="title-home-icon" class="home-currency-header-icon" style="display:none;"></div>
+ </div>
 </div>
 
 <div class="palm-group unlabeled">
@@ -23,10 +24,12 @@
         <div class="palm-row single">
             <div class="palm-row-wrapper textfield-group">
                 <div class="title">
-                    <span id="currency-exchange-rate"></span>
-                    <span class="label">Exchange Rate</span>
+                    <span id="currency-rate"></span>
+                    <span class="label">Rate</span>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<div id="currency-spinner"></div>

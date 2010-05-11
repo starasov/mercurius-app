@@ -40,6 +40,6 @@ Currencies.Fields = {
         },
         changeEvent: Mojo.Event.propertyChanged,
         toFormData: function(rate) { return Mojo.Format.formatNumber(rate, 2); },
-        fromFormData: function(rateData) { return Number(rateData); }
+        fromFormData: function(rate) { return Utils.Parsing.parseNumber(rate); }
     }
 };

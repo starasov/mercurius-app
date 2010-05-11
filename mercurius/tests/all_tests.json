@@ -1,5 +1,11 @@
 [
     {
+        "title": "Currencies.FieldsTest",
+        "source": "tests/currencies/fieldsTest.js",
+        "testFunction": "Currencies.FieldsTest"
+    },
+
+    {
         "title": "Currencies.ManagerHomeCurrencyIntergrationTest",
         "source": "tests/currencies/managerHomeCurrencyIntergrationTest.js",
         "testFunction": "Currencies.ManagerHomeCurrencyIntergrationTest"
@@ -99,6 +105,12 @@
         "title": "Utils.AsyncChainTest",
         "source": "tests/utils/asyncChainTest.js",
         "testFunction": "Utils.AsyncChainTest"
+    },
+
+    {
+        "title": "Utils.ParsingTest",
+        "source": "tests/utils/parsingTest.js",
+        "testFunction": "Utils.ParsingTest"
     },
 
     {"source": "tests/utils.js"},

@@ -1,4 +1,9 @@
 var MockGenericMapper = Class.create({
+    initialize: function() {
+        this.toInsertSqlResult = null;
+        this.toUpdateSqlResult = null;
+    },
+
     toModelResultSet: function(sqlResultSet) {
         this.toModelResultSetCalled = true;
         return {};
@@ -7,6 +12,16 @@ var MockGenericMapper = Class.create({
     toCountSql: function(id) {
         this.countCalled = true;
         return {};
+    },
+
+    toInsertSql: function(entity) {
+        this.toInsertSqlCalled = true;
+        return this.toInsertSqlResult || {};
+    },
+
+    toUpdateSql: function(entity) {
+        this.toUpdateSqlCalled = true;
+        return this.toUpdateSqlResult || {};
     },
 
     toDeleteSql: function(id) {

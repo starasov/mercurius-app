@@ -38,16 +38,31 @@ CurrencyListAssistant = Class.create({
 
         this.controller.setupWidget("currency-list-widget",
                 this.currencyListAttributes);
+        this.listWidget = this.controller.get("currency-list-widget");
 
         this.spinner.setup(this.controller);
+
+        this.currencyItemTapHandler = this._handleCurrencyItemTap.bind(this);
 
         Mojo.Log.info("[CurrencyListAssistant][setup] - end");
     },
 
     activate: function(event) {
+        if (event) {
+            switch (event.source) {
+            case "currencyEdit":
+                var expectedNewLength = this.listWidget.mojo.getLength() + event.rowsAdded;
+                this.listWidget.mojo.setLengthAndInvalidate(expectedNewLength);
+            }
+        } else {
+            this.listWidget.mojo.setLengthAndInvalidate(this.listWidget.mojo.getLength());
+        }
+
+        this.controller.listen("currency-list-widget", Mojo.Event.listTap, this.currencyItemTapHandler);
     },
 
     deactivate: function(event) {
+        this.controller.stopListening("currency-list-widget", Mojo.Event.listTap, this.currencyItemTapHandler);
     },
 
     cleanup: function(event) {
@@ -73,6 +88,10 @@ CurrencyListAssistant = Class.create({
         }
 
         Mojo.Log.info("[CurrencyListAssistant][_handleCurrencyListCallback] - end");
+    },
+
+    _handleCurrencyItemTap: function(event) {
+        this.controller.stageController.pushScene("currencyView", this.context, event.item.id);
     },
 
     _setupCurrenciesManager: function(list, offset, limit) {

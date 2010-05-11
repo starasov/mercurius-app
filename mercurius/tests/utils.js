@@ -61,3 +61,11 @@ Test.requireException = function(f) {
 
     Mojo.require(false, "Function was succeed, but exception was expected instead.");
 };
+
+Test.requireNumbersEqual = function(number1, number2, eps) {
+    Mojo.requireNumber(number1, "Passed 'number1' argument should be a number.");
+    Mojo.requireNumber(number2, "Passed 'number2' argument should be a number.");
+
+    var absoluteDiff = Math.abs(number1 - number2);
+    Mojo.require(absoluteDiff < (eps || 1e-6));
+};

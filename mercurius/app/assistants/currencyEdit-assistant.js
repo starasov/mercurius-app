@@ -3,7 +3,7 @@ CurrencyEditAssistant = Class.create({
         this.context = applicationContext;
         this.factory = applicationContext.getCurrenciesFactory();
 
-        this.currencyId = null;
+        this.currencyId = currencyId;
 
         this.manager = null;
         this.validator = null;
@@ -55,11 +55,12 @@ CurrencyEditAssistant = Class.create({
 
     _initialize: function(db) {
         this.manager = this.factory.createManager(db);
-        this.validator = this.factory.createValidator(this.manager);
 
         if (this.currencyId) {
+            this.validator = this.factory.createEditCurrencyValidator(this.manager);
             this._loadCurrency();
         } else {
+            this.validator = this.factory.createNewCurrencyValidator(this.manager);
             this.form.update(this.factory.createEmptyModel());
             this.spinner.hide();
         }
@@ -74,18 +75,36 @@ CurrencyEditAssistant = Class.create({
 
     _validateAndSave: function() {
         this.spinner.show();
+        this.validator.validate(this.form.modelData, this._save.bind(this),
+                this._handleValidationError.bind(this));
+    },
 
-        this.validator.validate(this.form.modelData, (function() {
-            // ToDO
-            this.spinner.hide();
-        }).bind(this), (function(key, message) {
-            // ToDO
-            this.spinner.hide();
-        }).bind(this));
+    _save: function() {
+        var currency = this.form.getModel();
+        this.manager.saveOrUpdate(currency, (function(transaction, id) {
+            this.controller.stageController.popScene({source: "currencyEdit", id: id, rowsAdded: 1});
+        }).bind(this), this._handleDatabaseError.bind(this));
+    },
+
+    _handleValidationError: function(key, message) {
+        this.spinner.hide();
+        this.controller.showAlertDialog({
+            title: "Please correct '" + key + "' field",
+            message: message,
+            choices: [
+                {label: "OK", value: "ok", type: "medium"}
+            ]
+        });
     },
 
     _handleDatabaseError: function(transaction, error) {
         this.spinner.hide();
-        // ToDO: add some error logic handling here.
+        this.controller.showAlertDialog({
+            title: "Error",
+            message: error.message,
+            choices: [
+                {label: "OK", value: "ok", type: "medium"}
+            ]
+        });
     }
 });

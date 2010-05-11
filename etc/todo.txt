@@ -45,3 +45,5 @@
 - Think about extraction of reusable UI components: headers, progress spinners, etc.
 
 - Think about extraction of reusable assistants logic: busy/ready states switching, retrieving manager instance.
+
+- Error handling logic and dialogs

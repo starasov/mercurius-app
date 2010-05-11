@@ -46,6 +46,7 @@
     {"source": "app/utils/$package.js"},
     {"source": "app/utils/asyncChain.js"},
     {"source": "app/utils/jsonResourceReader.js"},
+    {"source": "app/utils/parsing.js"},
 
     {"source": "app/widgets/$package.js"},
     {"source": "app/widgets/fullScreenSpinner.js"},
