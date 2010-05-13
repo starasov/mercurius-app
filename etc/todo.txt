@@ -1,3 +1,6 @@
+Configuration Management
+------------------------
+
 + Check how to continuously read logs for particular application.
 
 + Check how to use logging facilities inside the application: log levels,
@@ -6,17 +9,6 @@
 + Decide where to place icons in the application stage headers. How to properly
   place header icon on the right side:
     * see sample code of contacts application
-
-- Write persistence layer prototype.
-    - Think about possible ways of the database migration mechanism.
-
-    - Check if there are any possibility to check if device has media or
-      only built-in storage exists - it might be helpful for DB creation.
-
-    + Check transaction types available in HTML 5 implementation under webos.
-      It seems that there are two different transaction types exists: read-only
-      and non-read-only transactions:
-        * looks like read-only transaction doesn't work
 
 - Unit testing of the application.
     - no-ui way of the testing
@@ -38,7 +30,26 @@
 
 - Check out plug-in APIs from mojo skd 1.4
 
+
+Misc
+----
+
 - Get graphics for application.
+
+
+General
+-------
+
+- Write persistence layer prototype.
+    - Think about possible ways of the database migration mechanism.
+
+    - Check if there are any possibility to check if device has media or
+      only built-in storage exists - it might be helpful for DB creation.
+
+    + Check transaction types available in HTML 5 implementation under webos.
+      It seems that there are two different transaction types exists: read-only
+      and non-read-only transactions:
+        * looks like read-only transaction doesn't work
 
 + Think about possible forms approach for new/edit views (django way could fit there quite well).
 
@@ -47,3 +58,11 @@
 - Think about extraction of reusable assistants logic: busy/ready states switching, retrieving manager instance.
 
 - Error handling logic and dialogs
+
+
+Currencies
+----------
+
+- Add home currency setting functionality
+
+- Add delete currency functionality
