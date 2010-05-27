@@ -62,7 +62,7 @@ CurrencyViewAssistant = Class.create({
         this.manager.findById(this.currencyId, this._updateView.bind(this), this._handleDatabaseError.bind(this));
     },
 
-    _updateView: function(transaction, currency) {
+    _updateView: function(currency) {
         this.controller.get("currency-view-title").innerHTML = currency.name;
         this.controller.get("currency-symbol").innerHTML = currency.symbol;
         this.controller.get("currency-rate").innerHTML = Currencies.Fields.rate.toFormData(currency.rate);

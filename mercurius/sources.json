@@ -28,12 +28,12 @@
     {"source": "app/database/versionProvider.js"},
 
     {"source": "app/models/$package.js"},
-    {"source": "app/models/accounts.js"},
     {"source": "app/models/genericForm.js"},
     {"source": "app/models/genericManager.js"},
+    {"source": "app/models/genericManagerHelper.js"},
     {"source": "app/models/genericMapper.js"},
     {"source": "app/models/genericValidator.js"},
-    {"source": "app/models/resultSet.js"},
+    {"source": "app/models/resultSetMapper.js"},
     {"source": "app/models/validationUtils.js"},
 
     {"source": "app/currencies/$package.js"},

@@ -1,8 +1,9 @@
 Models.GenericManagerTest = Class.create({
     before: function() {
         this._db = new MockDatabase();
-        this._mapper = new MockGenericMapper();
-        this._genericManager = new Models.GenericManager(this._db, this._mapper);
+        this._helper = new MockGenericHelper();
+        this._resultSetMapper = new MockResultSetMapper();
+        this._genericManager = new Models.GenericManager(this._db, this._resultSetMapper, this._helper);
 
         return Mojo.Test.beforeFinished;
     },
@@ -15,13 +16,13 @@ Models.GenericManagerTest = Class.create({
         this._genericManager.count(Prototype.emptyFunction, Prototype.emptyFunction);
         this._db.callback(new MockTransaction());
 
-        Mojo.require(this._mapper.countCalled);
+        Mojo.require(this._helper.countCalled);
 
         return Mojo.Test.passed;
     },
 
     test_save_should_execute_valid_sql_query_when_called: function() {
-        this._mapper.toInsertSqlResult = {sql: "insert_sql", params: "insert_params"};
+        this._helper.toInsertSqlResult = {sql: "insert_sql", params: "insert_params"};
         this._genericManager.save({}, Prototype.emptyFunction, Prototype.emptyFunction);
 
         var transaction = new MockTransaction();
@@ -34,7 +35,7 @@ Models.GenericManagerTest = Class.create({
     },
 
     test_update_should_execute_valid_sql_query_when_called: function() {
-        this._mapper.toUpdateSqlResult = {sql: "update_sql", params: "update_params"};
+        this._helper.toUpdateSqlResult = {sql: "update_sql", params: "update_params"};
         this._genericManager.update({}, Prototype.emptyFunction, Prototype.emptyFunction);
 
         var transaction = new MockTransaction();
@@ -58,7 +59,7 @@ Models.GenericManagerTest = Class.create({
         this._genericManager.deleteById(1, Prototype.emptyFunction, Prototype.emptyFunction);
         this._db.callback(new MockTransaction());
 
-        Mojo.require(this._mapper.toDeleteSqlCalled);
+        Mojo.require(this._helper.toDeleteSqlCalled);
 
         return Mojo.Test.passed;
     },
@@ -67,7 +68,7 @@ Models.GenericManagerTest = Class.create({
         this._genericManager.find({}, {}, Prototype.emptyFunction, Prototype.emptyFunction);
         this._db.callback(new MockTransaction());
 
-        Mojo.require(this._mapper.toSelectSqlCalled);
+        Mojo.require(this._helper.toSelectSqlCalled);
 
         return Mojo.Test.passed;
     },
@@ -79,7 +80,7 @@ Models.GenericManagerTest = Class.create({
         this._db.callback(transaction);
         transaction.successHandler(transaction, {});
 
-        Mojo.require(this._mapper.toModelResultSetCalled);
+        Mojo.require(this._resultSetMapper.mapCalled);
 
         return Mojo.Test.passed;
     }

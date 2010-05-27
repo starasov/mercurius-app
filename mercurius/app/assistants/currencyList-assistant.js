@@ -105,8 +105,8 @@ CurrencyListAssistant = Class.create({
     },
 
     _loadCurrencies: function(list, offset, limit) {
-        this.manager.find({}, {limit: limit, offset: offset}, function(transaction, resultSet) {
-            list.mojo.noticeUpdatedItems(offset, resultSet.toArray());
+        this.manager.find({}, {limit: limit, offset: offset}, function(currencies) {
+            list.mojo.noticeUpdatedItems(offset, currencies);
         }, this._handleDatabaseError.bind(this));
     },
 

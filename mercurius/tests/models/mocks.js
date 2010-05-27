@@ -1,12 +1,7 @@
-var MockGenericMapper = Class.create({
+var MockGenericHelper = Class.create({
     initialize: function() {
         this.toInsertSqlResult = null;
         this.toUpdateSqlResult = null;
-    },
-
-    toModelResultSet: function(sqlResultSet) {
-        this.toModelResultSetCalled = true;
-        return {};
     },
 
     toCountSql: function(id) {
@@ -35,6 +30,13 @@ var MockGenericMapper = Class.create({
     }
 });
 
+var MockResultSetMapper = Class.create({
+    map: function(resultSet, successCallback, errorCallback) {
+        this.mapCalled = true;
+        successCallback([]);
+    }
+});
+
 var MockController = Class.create({
     initialize: function() {
         this.setupWidgetCalls = [];
@@ -57,5 +59,23 @@ var MockController = Class.create({
 
     setWidgetModel: function(id, model) {
         this.setWidgetModelCalls.push({id: id, model: model});
+    }
+});
+
+var MockGenericMapper = Class.create({
+    initialize: function() {
+        this.modelResult = null;
+        this.shouldCallSuccessCallback = true;
+        this.mapRowCalledNumber = 0;
+    },
+
+    mapRow: function(row, successCallback, errorCallback) {
+        this.mapRowCalledNumber += 1;
+
+        if (this.shouldCallSuccessCallback) {
+            successCallback(this.modelResult);
+        } else {
+            errorCallback();
+        }
     }
 });

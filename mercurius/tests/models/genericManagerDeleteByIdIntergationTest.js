@@ -7,23 +7,19 @@ Models.GenericManagerDeleteByIdIntegrationTest = Class.create(Models.BaseGeneric
     }, 
 
     test_should_delete_record_from_database_when_record_exists: function(recordResults) {
-        var genericManager = new Models.GenericManager(this._db, this._mapper);
-
-        genericManager.deleteById(1,
-                function(tr, resultSet) {
-                    Test.validateAndContinue(recordResults, Mojo.requireEqual.curry(1, resultSet.rowsAffected));
-                    genericManager.count(function(tr, count) {
+        this._manager.deleteById(1,
+                (function(rowsAffected) {
+                    Test.validateAndContinue(recordResults, Mojo.requireEqual.curry(1, rowsAffected));
+                    this._manager.count(function(count) {
                                 Test.validate(recordResults, Mojo.requireEqual.curry(1, count));
                             }, Test.defaultDatabaseErrorCallback.curry(recordResults));
-                }, Test.defaultDatabaseErrorCallback.curry(recordResults));
+                }).bind(this), Test.defaultDatabaseErrorCallback.curry(recordResults));
     },
 
     test_should_return_zero_affected_rows_when_no_record_found: function(recordResults) {
-        var genericManager = new Models.GenericManager(this._db, this._mapper);
-
-        genericManager.deleteById(3,
-            function(tr, resultSet) {
-                Test.validate(recordResults, Mojo.requireEqual.curry(0, resultSet.rowsAffected));
+        this._manager.deleteById(3,
+            function(rowsAffected) {
+                Test.validate(recordResults, Mojo.requireEqual.curry(0, rowsAffected));
             }, Test.defaultDatabaseErrorCallback.curry(recordResults));
     }
 });

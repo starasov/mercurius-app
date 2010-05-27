@@ -67,7 +67,7 @@ CurrencyEditAssistant = Class.create({
     },
 
     _loadCurrency: function() {
-        this.manager.findById(this.currencyId, (function(transaction, currency) {
+        this.manager.findById(this.currencyId, (function(currency) {
             this.form.update(currency);
             this.spinner.hide();
         }).bind(this), this._handleDatabaseError.bind(this));
@@ -81,7 +81,7 @@ CurrencyEditAssistant = Class.create({
 
     _save: function() {
         var currency = this.form.getModel();
-        this.manager.saveOrUpdate(currency, (function(transaction, id) {
+        this.manager.saveOrUpdate(currency, (function(id) {
             this.controller.stageController.popScene({source: "currencyEdit", id: id, rowsAdded: 1});
         }).bind(this), this._handleDatabaseError.bind(this));
     },

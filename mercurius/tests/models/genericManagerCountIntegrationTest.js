@@ -13,8 +13,7 @@ Models.GenericManagerCountIntegrationTest = Class.create(Models.BaseGenericManag
     },
 
     _ensure_count: function(expectedCount, recordResults) {
-        var genericManager = new Models.GenericManager(this._db, this._mapper);
-        genericManager.count(function(tr, count) {
+        this._manager.count(function(count) {
                         Test.validate(recordResults, Mojo.requireEqual.curry(expectedCount, count));
         }, Test.defaultDatabaseErrorCallback.curry(recordResults));
     }});

@@ -72,9 +72,21 @@
     },
 
     {
+        "title": "Models.GenericManagerHelperTest",
+        "source": "tests/models/genericManagerHelperTest.js",
+        "testFunction": "Models.GenericManagerHelperTest"
+    },
+
+    {
         "title": "Models.GenericMapperTest",
         "source": "tests/models/genericMapperTest.js",
         "testFunction": "Models.GenericMapperTest"
+    },
+
+    {
+        "title": "Models.ResultSetMapperTest",
+        "source": "tests/models/resultSetMapperTest.js",
+        "testFunction": "Models.ResultSetMapperTest"
     },
 
     {
@@ -121,5 +133,4 @@
 
     {"source": "tests/models/baseGenericManagerIntegrationTest.js"},
     {"source": "tests/models/mocks.js"}
-
 ]

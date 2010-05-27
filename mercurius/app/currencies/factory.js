@@ -9,7 +9,10 @@ Currencies.Factory = Class.create({
     },
 
     createManager: function(database) {
-        return new Currencies.Manager(database, new Models.GenericMapper(Currencies.TableModel));
+        return new Currencies.Manager(
+                database,
+                new Models.ResultSetMapper(new Models.GenericMapper(Currencies.TableModel)),
+                new Models.GenericManagerHelper(Currencies.TableModel));
     },
 
     createForm: function() {

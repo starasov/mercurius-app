@@ -1,7 +1,7 @@
 Currencies.BaseManagerIntegrationTest = Class.create(Models.BaseGenericManagerIntegrationTest, {
     before: function($super, completionCallback) {
         $super((function() {
-            this._currenciesManager = Currencies.Manager.create(this._db);
+            this._currenciesManager = new Currencies.Factory().createManager(this._db);
             completionCallback();
         }).bind(this));
     },
