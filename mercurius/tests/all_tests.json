@@ -1,5 +1,11 @@
 [
     {
+        "title": "Accounts.MapperTest",
+        "source": "tests/accounts/mapperTest.js",
+        "testFunction": "Accounts.MapperTest"
+    },
+
+    {
         "title": "Currencies.FieldsTest",
         "source": "tests/currencies/fieldsTest.js",
         "testFunction": "Currencies.FieldsTest"

@@ -79,3 +79,15 @@ var MockGenericMapper = Class.create({
         }
     }
 });
+
+var MockGenericManager = Class.create({
+    initialize: function() {
+        this.findByIdResult = null;
+        this.findByIdCalledNumber = 0;
+    },
+
+    findById: function(id, successCallback, errorCallback) {
+        this.findByIdCalledNumber += 1;
+        successCallback(this.findByIdResult);
+    }
+});

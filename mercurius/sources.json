@@ -36,6 +36,10 @@
     {"source": "app/models/resultSetMapper.js"},
     {"source": "app/models/validationUtils.js"},
 
+    {"source": "app/accounts/$package.js"},
+    {"source": "app/accounts/mapper.js"},
+    {"source": "app/accounts/tableModel.js"},
+
     {"source": "app/currencies/$package.js"},
     {"source": "app/currencies/factory.js"},
     {"source": "app/currencies/fields.js"},
