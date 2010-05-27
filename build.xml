@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <project name="mercurius" default="all">
-    <target name="all" depends="clean, package-application, install-application, launch-application"/>
+    <target name="all" depends="clean, package-app, install-app, launch-app"/>
 
     <!-- Local properties -->
     <property file="local.properties"/>
@@ -26,28 +26,28 @@
         <mkdir dir="${dist.dir}"/>
     </target>
 
-    <target name="package-application" depends="clean"
+    <target name="package-app" depends="clean"
             description="Packages application using palm packaging tool.">
         <antcall target="-call-webos-tools">
             <param name="webos.tools.args" value="palm-package -o '${dist.dir}' ${src.dir}"/>
         </antcall>
     </target>
 
-    <target name="install-application" depends="package-application"
+    <target name="install-app" depends="package-app"
             description="Install previously packaged application to the emulator.">
         <antcall target="-call-webos-tools">
             <param name="webos.tools.args" value="palm-install ${ipk.file}"/>
         </antcall>
     </target>
 
-    <target name="remove-application" depends="package-application"
+    <target name="remove-app" depends="package-app"
             description="Removes previously installed application from the emulator.">
         <antcall target="-call-webos-tools">
             <param name="webos.tools.args" value="palm-install -r ${app.id}"/>
         </antcall>
     </target>
 
-    <target name="launch-application"
+    <target name="launch-app"
             description="Request emulator to launch application.">
         <antcall target="-call-webos-tools">
             <param name="webos.tools.args" value="palm-launch ${app.id}"/>
@@ -62,14 +62,14 @@
         </java>
     </target>
 
-    <target name="run-unit-tests" depends="install-application"
+    <target name="run-unit-tests" depends="install-app"
             description="Request emulator to launch application in test running mode.">
         <antcall target="-call-webos-tools">
             <param name="webos.tools.args" value="palm-launch -p '{mojoTest:true}' ${app.id}"/>
         </antcall>
     </target>
 
-    <target name="follow-application-log"
+    <target name="follow-log"
             description="Read application generated logs.">
         <antcall target="-call-webos-tools">
             <param name="webos.tools.args" value="palm-log -f ${app.id}"/>
