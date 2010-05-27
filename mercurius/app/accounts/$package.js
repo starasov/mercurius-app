@@ -1,0 +1,1 @@
+if (!Accounts) var Accounts = {};
