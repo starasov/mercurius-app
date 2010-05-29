@@ -14,9 +14,7 @@ AccountListAssistant = Class.create(BaseListAssistant, {
     },
 
     getCommandMenuItems: function() {
-        return [
-            {icon: "new", command: "addAccount"}
-        ];
+        return [{icon: "new", command: "addAccount"}];
     },
 
     getManager: function(db) {
