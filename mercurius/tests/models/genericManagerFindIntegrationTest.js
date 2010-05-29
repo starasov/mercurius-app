@@ -1,24 +1,24 @@
 Models.GenericManagerFindIntegrationTest = Class.create(Models.BaseGenericManagerIntegrationTest, {
-    getTableModel: function($super) {
-        return {
+    getTableModels: function($super) {
+        return [{
             Name: "fruits",
             Columns: {
                 id: new Database.Types.PrimaryKey(),
                 name: new Database.Types.String(),
                 count: new Database.Types.Integer()
             }
-        };
+        }];
     },
 
-    getFixtures: function($super, tableModel) {
-        return $super(tableModel).concat([
-                "INSERT INTO fruits VALUES(1, 'orange', 1);",
-                "INSERT INTO fruits VALUES(2, 'lemon', 1);",
-                "INSERT INTO fruits VALUES(3, 'cherry', 2);",
-                "INSERT INTO fruits VALUES(4, 'banana', 1);",
-                "INSERT INTO fruits VALUES(5, 'kiwi', 2);",
-                "INSERT INTO fruits VALUES(6, 'watermelon', 1);"
-        ]);
+    getFixtures: function() {
+        return [
+            "INSERT INTO fruits VALUES(1, 'orange', 1);",
+            "INSERT INTO fruits VALUES(2, 'lemon', 1);",
+            "INSERT INTO fruits VALUES(3, 'cherry', 2);",
+            "INSERT INTO fruits VALUES(4, 'banana', 1);",
+            "INSERT INTO fruits VALUES(5, 'kiwi', 2);",
+            "INSERT INTO fruits VALUES(6, 'watermelon', 1);"
+        ];
     },
 
     test_should_return_non_null_model_instance_when_search_by_valid_id_done: function(recordResults) {

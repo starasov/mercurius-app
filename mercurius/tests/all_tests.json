@@ -131,12 +131,19 @@
         "testFunction": "Utils.ParsingTest"
     },
 
+    {
+        "title": "Accounts.ManagerFindIntegrationTest",
+        "source": "tests/accounts/managerFindIntegrationTest.js",
+        "testFunction": "Accounts.ManagerFindIntegrationTest"
+    },
+
     {"source": "tests/utils.js"},
     {"source": "tests/database/mocks.js"},
 
-    {"source": "tests/currencies/baseManagerIntergrationTest.js"},
+    {"source": "tests/currencies/baseManagerIntegrationTest.js"},
     {"source": "tests/currencies/mocks.js"},
 
     {"source": "tests/models/baseGenericManagerIntegrationTest.js"},
+    {"source": "tests/models/baseManagerIntegrationTest.js"},
     {"source": "tests/models/mocks.js"}
 ]

@@ -1,8 +1,8 @@
 Models.GenericManagerDeleteByIdIntegrationTest = Class.create(Models.BaseGenericManagerIntegrationTest, {
-    getFixtures: function($super, tableModel) {
+    getFixtures: function() {
         return [
-                "INSERT INTO test_table_1 VALUES(1);",
-                "INSERT INTO test_table_1 VALUES(2);"
+            "INSERT INTO test_table_1 VALUES(1);",
+            "INSERT INTO test_table_1 VALUES(2);"
         ];
     }, 
 

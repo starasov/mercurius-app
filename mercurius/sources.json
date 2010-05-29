@@ -37,6 +37,8 @@
     {"source": "app/models/validationUtils.js"},
 
     {"source": "app/accounts/$package.js"},
+    {"source": "app/accounts/factory.js"},
+    {"source": "app/accounts/manager.js"},
     {"source": "app/accounts/mapper.js"},
     {"source": "app/accounts/tableModel.js"},
 

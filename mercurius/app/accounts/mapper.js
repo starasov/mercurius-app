@@ -1,4 +1,5 @@
 Accounts.Mapper = Class.create(Models.GenericMapper, {
+
     initialize: function($super, accountsTableModel, currenciesManager) {
         $super(accountsTableModel);
         this.currenciesManager = currenciesManager;
