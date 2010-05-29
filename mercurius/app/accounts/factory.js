@@ -6,9 +6,9 @@ Accounts.Factory = Class.create({
     createEmptyModel: function() {
         return {
             name: "",
-            symbol: "",
-            rate: 1.0,
-            home_flag: false
+            opening_balance: 0.0,
+            currency_id: 0,
+            closed_flag: false
         };
     },
 
