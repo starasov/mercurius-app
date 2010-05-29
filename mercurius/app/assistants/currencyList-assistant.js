@@ -19,7 +19,7 @@ CurrencyListAssistant = Class.create({
 
         this.currencyListAttributes = {
             itemTemplate: "currencyList/listitem",
-            listTemplate: "currencyList/listcontainer",
+            listTemplate: "common/listcontainer",
             swipeToDelete: false,
             renderLimit: 20,
             reorderable: false,
