@@ -6,11 +6,7 @@ BaseListAssistant = Class.create({
         this.context = applicationContext;
         this.manager = null;
 
-        this.spinner = new Widgets.FullScreenSpinner({
-            parentId: this.name + "-spinner",
-            spinnerContainerId: this.name + "-spinner-container",
-            spinnerWidgetId: this.name + "-spinner-widget"
-        });
+        this.spinner = new Widgets.FullScreenSpinner(this.name);
 
         this.listAttributes = {
             itemTemplate: this.name + "List/listitem",

@@ -1,24 +1,35 @@
-<div id="main" class="palm-hasheader">
-	<div class="palm-header center" id="main-hdr">
-        <div id="accountViewTitle" class="title left">
-            #{title}
-        </div>
-	</div>
+<div class="palm-page-header multi-line">
+ <div class="palm-page-header-wrapper">
+	<div id="title-icon" class="icon form-icon account"></div>
+ 	<div id="account-view-title" class="title" style="display:block;">View Account</div>
+    <div id="title-closed-icon" class="closed-account-header-icon" style="display:none;"></div>
+ </div>
 </div>
 
-
-<div class="palm-text-wrapper">
-    <div id="accountViewSummary" class="palm-body-text">
-        #{text}
+<div class="palm-group unlabeled">
+    <div class="palm-list">
+        <div class="palm-row single">
+            <div class="palm-row-wrapper textfield-group">
+                <div class="title">
+                    <span id="account-opening-balance"></span>
+                    <span class="label">Opening Balance</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<!--<div id="accountViewScene">-->
-    <!--<div class="palm-page-header multi-line">-->
-        <!--<div class="palm-page-header-wrapper">-->
-            <!--<div id="accountViewTitle" class="title left">-->
-                <!--#{title}-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
+<div class="palm-group unlabeled">
+    <div class="palm-list">
+        <div class="palm-row single">
+            <div class="palm-row-wrapper textfield-group">
+                <div class="title">
+                    <span id="account-currency-name"></span>
+                    <span class="label">Currency</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="account-spinner"></div>

@@ -1,10 +1,15 @@
 [
     {"source": "app/assistants/stage-assistant.js"},
     {"source": "app/assistants/baseListAssistant.js"},
-        
+    {"source": "app/assistants/baseViewAssistant.js"},
+
     {
         "scenes": "accountList",
         "source": "app/assistants/accountList-assistant.js"
+    },
+    {
+        "scenes": "accountView",
+        "source": "app/assistants/accountView-assistant.js"
     },
     {
         "scenes": "sandboxView",

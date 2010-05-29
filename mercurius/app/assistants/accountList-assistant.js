@@ -13,6 +13,12 @@ AccountListAssistant = Class.create(BaseListAssistant, {
         }
     },
 
+    getFormatters: function() {
+        return {
+            nameStyle: function(_, model) { return model.closed_flag ? "palm-textfield-disabled" : null; }
+        };
+    },
+
     getCommandMenuItems: function() {
         return [{icon: "new", command: "addAccount"}];
     },

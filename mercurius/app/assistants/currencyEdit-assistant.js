@@ -9,11 +9,7 @@ CurrencyEditAssistant = Class.create({
         this.validator = null;
         this.form = this.factory.createForm();
 
-        this.spinner = new Widgets.FullScreenSpinner({
-            parentId: "currency-spinner",
-            spinnerContainerId: "currency-spinner-container",
-            spinnerWidgetId: "currency-spinner-widget"
-        });
+        this.spinner = new Widgets.FullScreenSpinner("currency");
 
         this.commandMenuModel = {
             items: [{label: "Done", disabled: false, command: "saveCurrency"}]

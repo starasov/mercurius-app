@@ -1,12 +1,16 @@
 Widgets.FullScreenSpinner = Class.create({
     /**
-     * @param model {hash} a hash with 'parentId' 'spinnerContainerId' and 'spinnerWidgetId'
+     * @param name {hash} a hash with 'parentId' 'spinnerContainerId' and 'spinnerWidgetId'
      *                     keys that specify parent element for the widget, spinner container
      *                     div id and spinner widget div id appropriately.
      */
-    initialize: function(model) {
-        Mojo.require(model);
-        this.model = model;
+    initialize: function(name) {
+        Mojo.requireString(name);
+        this.model = {
+            parentId: name + "-spinner",
+            spinnerContainerId: name + "-spinner-container",
+            spinnerWidgetId: name + "-spinner-widget"
+        };
     },
 
     setup: function(controller) {

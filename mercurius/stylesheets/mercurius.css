@@ -22,15 +22,26 @@
     margin-right: 5px;
 }
 
-.currency-form-icon {
+.list-header-icon.currency {
+    background: url(../images/currency-small.png) center center no-repeat;
+}
+
+.list-header-icon.account {
+    background: url(../images/account-small.png) center center no-repeat;
+}
+
+.form-icon {
     width: 32px;
     height: 32px;
     float: left;
+}
+
+.form-icon.currency {
     background-image: url(../images/currency-small.png) !important;
 }
 
-.list-header-icon.currency {
-    background: url(../images/currency-small.png) center center no-repeat;
+.form-icon.account {
+    background-image: url(../images/account-small.png) !important;
 }
 
 .currency-rate-text {
@@ -48,7 +59,7 @@
     background: url(../images/currency-home.png) center center no-repeat;
 }
 
-.home-currency-header-icon {
+.home-currency-header-icon, .closed-account-header-icon {
     width: 32px;
     height: 32px;
     position: absolute;

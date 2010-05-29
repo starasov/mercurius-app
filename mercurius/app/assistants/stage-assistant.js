@@ -1,7 +1,7 @@
 StageAssistant = Class.create({
     setup: function() {
         this.context = this._createApplicationContext();
-        this.controller.pushScene("currencyList", this.context);
+        this.controller.pushScene("accountList", this.context);
     },
 
     _createApplicationContext: function() {
@@ -26,7 +26,8 @@ StageAssistant = Class.create({
 
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(1, 'Cash', 100.0, 1, 0);");
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(2, 'VISA USD', 2000.0, 1, 0);");
-        
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(3, 'VISA EUR', 0.0, 2, 1);");
+
         databaseService.setDatabaseInitializer(databaseInitializer);
 
         return databaseService;

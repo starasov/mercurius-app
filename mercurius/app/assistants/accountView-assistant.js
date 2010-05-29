@@ -1,21 +1,42 @@
-function AccountViewAssistant(account) {
-    this.account = account;
-}
+AccountViewAssistant = Class.create(BaseViewAssistant, {
+    initialize: function($super, applicationContext, accountId) {
+        $super("account", applicationContext, accountId);
+    },
 
-AccountViewAssistant.prototype.setup = function() {
-    var accountViewTitleElement = this.controller.get("accountViewTitle");
-    accountViewTitleElement.innerHTML = this.account.name;
+    getManager: function(db) {
+        return this.context.getAccountsFactory().createManager(db);
+    },
 
-    var accountViewSummaryElement = this.controller.get("accountViewSummary");
-    accountViewSummaryElement.innerHTML = "Opening balance: " + this.account.openingBalance;
-}
+    getCommandMenuItems: function() {
+        return [{label: "Edit", disabled: false, command: "editAccount"}];
+    },
 
-AccountViewAssistant.prototype.activate = function(event) {
-}
+    activate: function(event) {
+        if (event) {
+            switch (event.source) {
+            case "accountEdit":
+                this.loadModel();
+            }
+        }
+    },
 
+    handleCommand: function(event) {
+        if (event.type == Mojo.Event.command) {
+            switch (event.command) {
+            case "editAccount":
+                this.controller.stageController.pushScene("accountEdit", this.context, this.modelId);
+                event.stop();
+            }
+        }
+    },
 
-AccountViewAssistant.prototype.deactivate = function(event) {
-}
+    updateView: function(account) {
+        this.controller.get("account-view-title").innerHTML = account.name;
+        this.controller.get("account-opening-balance").innerHTML = Mojo.Format.formatNumber(account.opening_balance, 2);
+        this.controller.get("account-currency-name").innerHTML = account.currency.name;
 
-AccountViewAssistant.prototype.cleanup = function(event) {
-}
+        if (account.closed_flag) {
+            this.controller.get("title-closed-icon").show();
+        }
+    }
+});
