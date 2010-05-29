@@ -1,8 +1,8 @@
 [
     {"source": "app/assistants/stage-assistant.js"},
     {
-        "scenes": "acecountView",
-        "source": "app/assistants/accountView-assistant.js"
+        "scenes": "accountList",
+        "source": "app/assistants/accountList-assistant.js"
     },
     {
         "scenes": "sandboxView",

@@ -1,12 +1,15 @@
 StageAssistant = Class.create({
     setup: function() {
         this.context = this._createApplicationContext();
-        this.controller.pushScene("currencyList", this.context);
+        this.controller.pushScene("accountList", this.context);
     },
 
     _createApplicationContext: function() {
         var databaseService = this._createDatabaseService();
-        return new ApplicationContext(databaseService, new Currencies.Factory());
+        var currenciesFactory = new Currencies.Factory();
+        var accountsFactory = new Accounts.Factory(currenciesFactory);
+
+        return new ApplicationContext(databaseService, currenciesFactory, accountsFactory);
     },
 
     _createDatabaseService: function() {
@@ -15,11 +18,15 @@ StageAssistant = Class.create({
 
         var databaseInitializer = new Database.Initializer();
         databaseInitializer.addTableModel(Currencies.TableModel);
+        databaseInitializer.addTableModel(Accounts.TableModel);
 
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(1, 'US Dollar', '$', 11223344.0, 1);");
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(2, 'Euro', 'EUR', 1.2, 0);");
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(3, 'GB Pound', 'GPB', 1.4, 0);");
 
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(1, 'Cash', 100.0, 1, 0);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(2, 'VISA USD', 2000.0, 1, 0);");
+        
         databaseService.setDatabaseInitializer(databaseInitializer);
 
         return databaseService;

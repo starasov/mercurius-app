@@ -1,6 +1,6 @@
 Accounts.Factory = Class.create({
-    initialize: function(currenciesManager) {
-        this.currenciesManager = currenciesManager;
+    initialize: function(currenciesFactory) {
+        this.currenciesFactory = currenciesFactory;
     },
 
     createEmptyModel: function() {
@@ -13,9 +13,11 @@ Accounts.Factory = Class.create({
     },
 
     createManager: function(database) {
+        var currenciesManager = this.currenciesFactory.createManager(database);
+        
         return new Accounts.Manager(
                 database,
-                new Models.ResultSetMapper(new Accounts.Mapper(Accounts.TableModel, this.currenciesManager)),
+                new Models.ResultSetMapper(new Accounts.Mapper(Accounts.TableModel, currenciesManager)),
                 new Models.GenericManagerHelper(Accounts.TableModel));
     }
 });
