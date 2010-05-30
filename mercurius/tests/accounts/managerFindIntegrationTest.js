@@ -1,8 +1,7 @@
 Accounts.ManagerFindIntegrationTest = Class.create(Models.BaseManagerIntegrationTest, {
     before: function($super, completionCallback) {
         $super((function() {
-            var currenciesManager = new Currencies.Factory().createManager(this._db);
-            this._accountsManager = new Accounts.Factory(currenciesManager).createManager(this._db);
+            this._accountsManager = new Accounts.Factory(new Currencies.Factory()).createManager(this._db);
             completionCallback();
         }).bind(this));
     },
