@@ -1,8 +1,9 @@
 Models.GenericForm = Class.create({
-    initialize: function(fields) {
+    initialize: function(fields, fieldsModels) {
         Mojo.require(fields, "Passed 'fields' parameter can't be null or undefined.");
 
         this.fields = fields;
+        this.fieldsModels = fieldsModels || {};
         this.stateChangedCallbacks = [];
     },
 
@@ -19,7 +20,8 @@ Models.GenericForm = Class.create({
 
         for (var fieldName in this.fields) {
             var field = this.fields[fieldName];
-            this.controller.setupWidget(field.id, field.attributes, {});
+            var fieldModel = this.fieldsModels[fieldName] || {};
+            this.controller.setupWidget(field.id, field.attributes, fieldModel);
             this.controller.listen(field.id, field.changeEvent, this.formWidgetslistener);
         }
     },
