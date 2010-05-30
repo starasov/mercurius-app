@@ -35,6 +35,7 @@
     {"source": "app/database/versionProvider.js"},
 
     {"source": "app/models/$package.js"},
+    {"source": "app/models/fields.js"},
     {"source": "app/models/genericForm.js"},
     {"source": "app/models/genericManager.js"},
     {"source": "app/models/genericManagerHelper.js"},

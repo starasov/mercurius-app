@@ -54,6 +54,12 @@
     },
 
     {
+        "title": "Models.FieldsTest",
+        "source": "tests/models/fieldsTest.js",
+        "testFunction": "Models.FieldsTest"
+    },
+
+    {
         "title": "Models.GenericManagerCountIntegrationTest",
         "source": "tests/models/genericManagerCountIntegrationTest.js",
         "testFunction": "Models.GenericManagerCountIntegrationTest"
