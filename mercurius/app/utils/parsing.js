@@ -3,6 +3,10 @@ Utils.Parsing = {};
 Utils.Parsing.parseNumber = function(numberStr, options) {
     Mojo.requireString(numberStr, "'str' parameter should be a string");
 
+    if (this.isEmptyString(numberStr)) {
+        return Number.NaN; 
+    }
+
     var formatHash = Mojo.Format.getFormatHash(options && options.countryCode);
 
     var decimal = formatHash.numberDecimal;
@@ -14,4 +18,8 @@ Utils.Parsing.parseNumber = function(numberStr, options) {
     }
 
     return new Number(clearedNumberStr);
+};
+
+Utils.Parsing.isEmptyString = function(string) {
+    return !string || string.trim().length == 0;
 };
