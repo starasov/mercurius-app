@@ -20,10 +20,10 @@ Currencies.Factory = Class.create({
     },
 
     createNewCurrencyValidator: function(currenciesManager) {
-        return new Currencies.Validator(Currencies.Fields, currenciesManager);
+        return new Currencies.Validator(Currencies.Fields, currenciesManager, true);
     },
 
     createEditCurrencyValidator: function(currenciesManager) {
-        return new Currencies.Validator(Currencies.Fields, currenciesManager);
+        return new Currencies.Validator(Currencies.Fields, currenciesManager, false);
     }
 });
