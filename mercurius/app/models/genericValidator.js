@@ -36,17 +36,13 @@ Models.GenericValidator = Class.create({
     },
 
     _getFieldValidationFunctionName: function(fieldName) {
-        Mojo.Log.info("[_getFieldValidationFunctionName]: fieldName: '%s'", fieldName);
-
         var fieldNameWords = fieldName.split("_");
-        Mojo.Log.info("[_getFieldValidationFunctionName]: fieldNameWords: '%j'", fieldNameWords);
 
         var functionName = "_validate";
         for (var i = 0; i < fieldNameWords.length; i++) {
             functionName += fieldNameWords[i].capitalize();
         }
 
-        Mojo.Log.info("[_getFieldValidationFunctionName]: '%s'", functionName);
         return functionName;
     }
 });
