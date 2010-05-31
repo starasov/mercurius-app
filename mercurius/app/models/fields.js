@@ -1,26 +1,33 @@
 Models.Fields = {
-    createTextField: function(id, text, modelProperty, maxLength) {
+    createTextField: function(id, text, maxLength) {
         return {
             id: id,
             attributes: {
                 hintText: $L(text),
-                modelProperty: modelProperty,
                 multiline: false,
                 enterSubmits: true,
                 textCase: Mojo.Widget.steModeTitleCase,
                 autoReplace: false,
                 maxLength: maxLength || 20
             },
-            changeEvent: Mojo.Event.propertyChanged
+
+            changeEvent: Mojo.Event.propertyChanged,
+
+            toFieldModel: function(value) {
+                return {value: value};
+            },
+
+            fromFieldModel: function(fieldModel) {
+                return fieldModel.value;
+            }
         }
     },
 
-    createDecimalField: function(id, text, modelProperty, fractionDigits) {
+    createDecimalField: function(id, text, fractionDigits) {
         return {
             id: id,
             attributes: {
                 hintText: $L(text),
-                modelProperty: modelProperty,
                 multiline: false,
                 enterSubmits: true,
                 modifierState: Mojo.Widget.numLock,
@@ -28,8 +35,50 @@ Models.Fields = {
                 autoReplace: false
             },
             changeEvent: Mojo.Event.propertyChanged,
-            toFormData: function(number) { return Mojo.Format.formatNumber(number, fractionDigits || 2); },
-            fromFormData: function(numberStr) { return Utils.Parsing.parseNumber(numberStr); }
+
+            toFieldModel: function(value) {
+                return {value: Mojo.Format.formatNumber(value, fractionDigits || 2)};
+            },
+
+            fromFieldModel: function(fieldModel) {
+                return Utils.Parsing.parseNumber(fieldModel.value);
+            }
         }
+    },
+
+    createSelectorField: function(id, text, choicesField) {
+        return {
+            id: id,
+            attributes: {
+                label: $L(text),
+                choices: [],
+                multiline: false
+            },
+            changeEvent: Mojo.Event.propertyChanged,
+
+            toFieldModel: function(value, model) {
+                return {
+                    value: value,
+                    choices: model[choicesField]
+                };
+            },
+
+            fromFieldModel: function(fieldModel) {
+                return fieldModel.value;
+            }
+        }
+    },
+
+    toChoices: function(models, labelField, valueField) {
+        var choices = [];
+
+        for (var i = 0; i < models.length; i++) {
+            choices.push({
+                label: models[i][labelField],
+                value: models[i][valueField]
+            });
+        }
+
+        return choices;
     }
 };

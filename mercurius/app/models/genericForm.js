@@ -36,7 +36,7 @@ Models.GenericForm = Class.create({
 
         for (var fieldName in this.fields) {
             var field = this.fields[fieldName];
-            this.controller.setWidgetModel(field.id, this.modelData);
+            this.controller.setWidgetModel(field.id, this.modelData[fieldName]);
         }
     },
 
@@ -45,13 +45,8 @@ Models.GenericForm = Class.create({
 
         for (var fieldName in this.modelData) {
             var field = this.fields[fieldName];
-            var formValue = this.modelData[fieldName];
-
-            if (field && field.fromFormData) {
-                model[fieldName] = field.fromFormData(formValue);
-            } else {
-                model[fieldName] = formValue;
-            }
+            var fieldModel = this.modelData[fieldName];
+            model[fieldName] = field.fromFieldModel(fieldModel);
         }
 
         return model;
@@ -64,10 +59,8 @@ Models.GenericForm = Class.create({
             var modelValue = model[fieldName];
 
             var field = this.fields[fieldName];
-            if (field && field.toFormData) {
-                formData[fieldName] = field.toFormData(modelValue);
-            } else {
-                formData[fieldName] = modelValue;
+            if (field) {
+                formData[fieldName] = field.toFieldModel(modelValue, model);
             }
         }
 

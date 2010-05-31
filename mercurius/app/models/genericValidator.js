@@ -4,34 +4,49 @@ Models.GenericValidator = Class.create({
         this.fields = fields;
     },
 
-    validate: function(formData, successCallback, errorCallback) {
-        Mojo.require(formData, "Passed 'formData' parameter can't be null or undefined.");
+    validate: function(formFields, successCallback, errorCallback) {
+        Mojo.require(formFields, "Passed 'formFields' parameter can't be null or undefined.");
         Mojo.requireFunction(successCallback, "Passed 'successCallback' should be a function.");
         Mojo.requireFunction(errorCallback, "Passed 'errorCallback' should be a function.");
 
         var asyncChain = new Utils.AsyncChain(successCallback, errorCallback);
 
-        this._addFieldsValidationToChain(asyncChain, formData);
-        this._addFormValidationToChain(asyncChain, formData);
+        this._addFieldsValidationToChain(asyncChain, formFields);
+        this._addFormValidationToChain(asyncChain, formFields);
 
         Mojo.require(asyncChain.isNotEmpty(), "At least one validation method required.");
         asyncChain.call();
     },
 
-    _addFieldsValidationToChain: function(asyncChain, modelData) {
+    _addFieldsValidationToChain: function(asyncChain, formFields) {
         for (var fieldName in this.fields) {
-            var functionName = "_validate" + fieldName.capitalize();
+            var functionName = this._getFieldValidationFunctionName(fieldName);
             var fieldValidationFunction = this[functionName];
             if (fieldValidationFunction) {
-                asyncChain.add(fieldValidationFunction.bind(this, modelData[fieldName], this.fields[fieldName]));
+                asyncChain.add(fieldValidationFunction.bind(this, formFields[fieldName], this.fields[fieldName]));
             }
         }
     },
 
-    _addFormValidationToChain: function(asyncChain, modelData) {
+    _addFormValidationToChain: function(asyncChain, formFields) {
         var validationFunction = this["_validate"];
         if (validationFunction) {
-            asyncChain.add(validationFunction.bind(this, modelData));
+            asyncChain.add(validationFunction.bind(this, formFields));
         }
+    },
+
+    _getFieldValidationFunctionName: function(fieldName) {
+        Mojo.Log.info("[_getFieldValidationFunctionName]: fieldName: '%s'", fieldName);
+
+        var fieldNameWords = fieldName.split("_");
+        Mojo.Log.info("[_getFieldValidationFunctionName]: fieldNameWords: '%j'", fieldNameWords);
+
+        var functionName = "_validate";
+        for (var i = 0; i < fieldNameWords.length; i++) {
+            functionName += fieldNameWords[i].capitalize();
+        }
+
+        Mojo.Log.info("[_getFieldValidationFunctionName]: '%s'", functionName);
+        return functionName;
     }
 });

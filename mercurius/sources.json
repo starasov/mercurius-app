@@ -4,6 +4,11 @@
     {"source": "app/assistants/baseViewAssistant.js"},
 
     {
+        "scenes": "sandboxView",
+        "source": "app/assistants/sandboxView-assistant.js"
+    },
+        
+    {
         "scenes": "accountList",
         "source": "app/assistants/accountList-assistant.js"
     },
@@ -12,8 +17,8 @@
         "source": "app/assistants/accountView-assistant.js"
     },
     {
-        "scenes": "sandboxView",
-        "source": "app/assistants/sandboxView-assistant.js"
+        "scenes": "accountEdit",
+        "source": "app/assistants/accountEdit-assistant.js"
     },
     {
         "scenes": "currencyList",
@@ -46,6 +51,7 @@
 
     {"source": "app/accounts/$package.js"},
     {"source": "app/accounts/factory.js"},
+    {"source": "app/accounts/fields.js"},
     {"source": "app/accounts/manager.js"},
     {"source": "app/accounts/mapper.js"},
     {"source": "app/accounts/tableModel.js"},

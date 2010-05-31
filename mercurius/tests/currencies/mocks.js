@@ -6,6 +6,6 @@ Currencies.MockManager = Class.create({
 
     getCurrencyByName: function(name, successCallback, errorCallback) {
         this.getCurrencyByNameInvokedCount++;
-        successCallback({}, this.getCurrencyByNameResult);
+        successCallback(this.getCurrencyByNameResult);
     }
 });

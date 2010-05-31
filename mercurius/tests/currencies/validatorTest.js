@@ -2,20 +2,25 @@ Currencies.ValidatorTest = Class.create({
     before: function() {
         this._currenciesManager = new Currencies.MockManager();
         this._validator = new Currencies.Validator(Currencies.Fields, this._currenciesManager, true);
-        this._currencyData = {name: "USD", symbol: "$", rate: "1.0"};
+
+        this._currencyData = {
+            name: {value: "USD"},
+            symbol: {value: "$"},
+            rate: {value: "1.0"}
+        };
 
         return Mojo.Test.beforeFinished;
     },
 
     test_validation_should_fail_when_empty_name_is_specified: function(recordResults) {
-        this._currencyData.name = "";
+        this._currencyData.name.value = "";
         this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
             Test.validate(recordResults, Mojo.requireEqual.curry("name", key));
         });
     },
 
     test_validation_should_fail_when_whitespace_name_is_specified: function(recordResults) {
-        this._currencyData.name = "   ";
+        this._currencyData.name.value = "   ";
         this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
             Test.validate(recordResults, Mojo.requireEqual.curry("name", key));
         });
@@ -29,28 +34,28 @@ Currencies.ValidatorTest = Class.create({
     },
 
     test_validation_should_fail_when_empty_symbol_is_specified: function(recordResults) {
-        this._currencyData.symbol = "";
+        this._currencyData.symbol.value = "";
         this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
             Test.validate(recordResults, Mojo.requireEqual.curry("symbol", key));
         });
     },
 
     test_validation_should_fail_when_empty_rate_is_specified: function(recordResults) {
-        this._currencyData.rate = "";
+        this._currencyData.rate.value = "";
         this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
             Test.validate(recordResults, Mojo.requireEqual.curry("rate", key));
         });
     },
 
     test_validation_should_fail_when_non_numeric_rate_is_specified: function(recordResults) {
-        this._currencyData.rate = "qwerty";
+        this._currencyData.rate.value = "qwerty";
         this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
             Test.validate(recordResults, Mojo.requireEqual.curry("rate", key));
         });
     },
 
     test_validation_should_fail_when_zero_rate_is_specified: function(recordResults) {
-        this._currencyData.rate = "0.0";
+        this._currencyData.rate.value = "0.0";
         this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
             Test.validate(recordResults, Mojo.requireEqual.curry("rate", key));
         });
@@ -67,7 +72,7 @@ Currencies.ValidatorTest = Class.create({
     },
 
     test_validation_should_not_request_currency_with_manager_when_empty_name_specified: function() {
-        this._currencyData.name = "";
+        this._currencyData.name.value = "";
         this._validator.validate(this._currencyData, Prototype.emptyFunction, Prototype.emptyFunction);
 
         Mojo.requireEqual(0, this._currenciesManager.getCurrencyByNameInvokedCount);

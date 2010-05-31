@@ -5,25 +5,25 @@ var TestForm = Class.create(Models.GenericForm, {
                 id: "name-id",
                 attributes: "name-attributes",
                 changeEvent: "name-changeEvent",
-                toFormData: function() { return "name-toFormData"; },
-                fromFormData: function() { return "name-fromFormData"; }
+                toFieldModel: function() { return "name-toFormData"; },
+                fromFieldModel: function() { return "name-fromFormData"; }
             },
 
             age: {
                 id: "age-id",
                 attributes: "age-attributes",
-                changeEvent: "age-changeEvent"
+                changeEvent: "age-changeEvent",
+                toFieldModel: function() { return "age-toFormData"; },
+                fromFieldModel: function() { return "age-fromFormData"; }
             },
 
             weight: {
                 id: "weight-id",
                 attributes: "weight-attributes",
-                changeEvent: "weight-changeEvent"
+                changeEvent: "weight-changeEvent",
+                toFieldModel: function() { return "weight-toFormData"; },
+                fromFieldModel: function() { return "weight-fromFormData"; }
             }
-        }, {
-            name: "",
-            age: 1,
-            weight: 1.0
         });
 
         this.updateCalls = [];
@@ -139,11 +139,7 @@ Models.GenericFormTest = Class.create({
 
         var callData = this.controller.setWidgetModelCalls[0];
         Mojo.requireEqual("name-id", callData.id);
-
-        var expectedFormData = $H(model);
-        expectedFormData.set("name", "name-toFormData");
-
-        Test.requireMapsEqual(expectedFormData, callData.model);
+        Test.requireMapsEqual("name-toFormData", callData.model);
 
         return Mojo.Test.passed;
     },
@@ -156,8 +152,11 @@ Models.GenericFormTest = Class.create({
 
         var actualModel = this.form.getModel();
 
-        var expectedModel = $H(model);
-        expectedModel.set("name", "name-fromFormData");
+        var expectedModel = {
+            name: "name-fromFormData",
+            age: "age-fromFormData",
+            weight: "weight-fromFormData"
+        };
 
         Test.requireMapsEqual(expectedModel, actualModel);
 
