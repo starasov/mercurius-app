@@ -19,5 +19,9 @@ Accounts.Factory = Class.create({
                 database,
                 new Models.ResultSetMapper(new Accounts.Mapper(Accounts.TableModel, currenciesManager)),
                 new Models.GenericManagerHelper(Accounts.TableModel));
+    },
+
+    createForm: function() {
+        return new Models.GenericForm(Accounts.Fields);
     }
 });
