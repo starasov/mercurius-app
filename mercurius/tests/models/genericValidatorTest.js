@@ -22,6 +22,12 @@ Models.GenericValidatorTest = Class.create({
                 id: "weight-id",
                 attributes: "weight-attributes",
                 changeEvent: "weight-changeEvent"
+            },
+
+            closed_flag: {
+                id: "closed-id",
+                attributes: "closed-attributes",
+                changeEvent: "closed-changeEvent"
             }
         };
 
@@ -83,53 +89,32 @@ Models.GenericValidatorTest = Class.create({
         Mojo.require(this.validateCalled);
 
         return Mojo.Test.passed;
+    },
+
+    test_validate_should_call_validate_function_for_field_with_underscores_in_name: function() {
+        this.validator._validateClosedFlag = (function(fieldData, successCallback, errorCallback) {
+            this.validateCalled = true;
+        }).bind(this);
+
+        this.validator.validate(this.fields, Prototype.emptyFunction, Prototype.emptyFunction);
+        Mojo.require(this.validateCalled);
+
+        return Mojo.Test.passed;
+    },
+
+    test_update_should_call_validation_callback_with_result_when_no_errors_found: function(recordResults) {
+        this.validator._validate = (function(fieldData, successCallback, errorCallback) {
+            successCallback();
+        }).bind(this);
+
+        this.validator.validate(this.fields, recordResults, Prototype.emptyFunction);
+    },
+
+    test_update_should_call_validation_callback_with_error_result_when_field_validation_fails: function(recordResults) {
+        this.validator._validate = (function(fieldData, successCallback, errorCallback) {
+            errorCallback();
+        }).bind(this);
+
+        this.validator.validate(this.fields, Prototype.emptyFunction, recordResults);
     }
-
-//    test_update_should_call_validation_callback_with_success_result_when_no_error_found: function() {
-//        this.form.setup(this.controller, this.validationCallback);
-//        this.validationResult = null;
-//
-//        this.form.update({});
-//
-//        Mojo.requireEqual(Models.GenericForm.ValidationSuccess, this.validationResult);
-//
-//        return Mojo.Test.passed;
-//    },
-
-//    test_update_should_call_validation_callback_with_error_result_when_field_validation_fails: function() {
-//        this.form.setup(this.controller, this.validationCallback);
-//        this.validationResult = null;
-//
-//        this.form.validateName = function(model, successCallback, errorCallback) { errorCallback(); };
-//        this.form.update({});
-//
-//        Mojo.requireEqual(Models.GenericForm.ValidationError, this.validationResult);
-//
-//        return Mojo.Test.passed;
-//    },
-
-//    test_should_call_validation_callback_with_error_result_when_form_validation_fails: function() {
-//        this.form.setup(this.controller, this.validationCallback);
-//        this.validationResult = null;
-//
-//        this.form.validate = function(model, successCallback, errorCallback) { errorCallback(); };
-//        this.form.update({});
-//
-//        Mojo.requireEqual(Models.GenericForm.ValidationError, this.validationResult);
-//
-//        return Mojo.Test.passed;
-//    },
-
-//    test_should_call_validation_callback_with_error_result_when_field_validation_errors_found: function() {
-//        this.form.setup(this.controller, this.validationCallback);
-//        this.validationResult = null;
-//
-//        this.form.validate = function(model, successCallback, errorCallback) { errorCallback(); };
-//        this.form.update({});
-//
-//        Mojo.requireEqual(Models.GenericForm.ValidationError, this.validationResult);
-//
-//        return Mojo.Test.passed;
-//    }
-    
 });
