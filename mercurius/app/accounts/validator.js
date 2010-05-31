@@ -1,34 +1,31 @@
 Accounts.Validator = Class.create(Models.GenericValidator, {
-    _validateName: function(nameFieldModel, fieldDescriptor, successCallback, errorCallback) {
-        var name = fieldDescriptor.fromFieldModel(nameFieldModel);
-
+    _validateName: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
+        var name = fieldDescriptor.fromFieldModel(fieldModel);
         if (!Models.ValidationUtils.validateNotEmpty(name)) {
-            errorCallback("name", "Currency name can't be empty.");
-        } else {
-            successCallback();
+            errorCallback("name", "Account name can't be empty.");
         }
+
+        successCallback();
     },
 
-    _validateOpeningBalance: function(symbolFieldModel, fieldDescriptor, successCallback, errorCallback) {
-        var symbol = fieldDescriptor.fromFieldModel(symbolFieldModel);
-
-        if (!Models.ValidationUtils.validateNotEmpty(symbol)) {
-            errorCallback("symbol", "Currency symbol can't be empty.");
-        } else {
-            successCallback();
+    _validateOpeningBalance: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
+        if (!Models.ValidationUtils.validateNotEmpty(fieldModel.value)) {
+            errorCallback("opening_balance", "Opening Balance can't be empty.");
         }
+
+        var openingBalance = fieldDescriptor.fromFieldModel(fieldModel);
+        if (isNaN(openingBalance)) {
+            errorCallback("opening_balance", "Opening Balance should be a valid number.");
+        }
+
+        successCallback();
     },
 
-    _validateRate: function(rateFieldModel, fieldDescriptor, successCallback, errorCallback) {
-        if (!Models.ValidationUtils.validateNotEmpty(rateFieldModel.value)) {
-            errorCallback("rate", "Currency exchange rate can't be empty.");
+    _validateCurrencyId: function(rateFieldModel, fieldDescriptor, successCallback, errorCallback) {
+        if (!Object.isNumber(rateFieldModel.value) || rateFieldModel.value == 0) {
+            errorCallback("rate", "Currency should be assigned to the account.");
         }
 
-        var rate = fieldDescriptor.fromFieldModel(rateFieldModel);
-        if (rate > 0.0) {
-            successCallback();
-        } else {
-            errorCallback("rate", "Rate should be positive number.")
-        }
+        successCallback();
     }
 });
