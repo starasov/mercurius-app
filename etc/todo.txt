@@ -62,6 +62,8 @@ General
 
 - Add custom logging facility to support per component/class/package logging configuration
 
+- Add extra models for each query type (like SELECT, DELETE, UPDATE, COUNT) which will behave like
+  separate builders for SQL query building.
 
 Currencies
 ----------
