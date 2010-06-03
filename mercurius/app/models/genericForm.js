@@ -4,6 +4,7 @@ Models.GenericForm = Class.create({
 
         this.fields = fields;
         this.stateChangedCallbacks = [];
+        this.fieldsModels = null;
     },
 
     addStateChangedCallback: function(callback) {
@@ -32,27 +33,31 @@ Models.GenericForm = Class.create({
     },
 
     update: function(model) {
-        this.modelData = this._createFormData(model);
+        this.fieldsModels = this._createFieldsModels(model);
 
         for (var fieldName in this.fields) {
             var field = this.fields[fieldName];
-            this.controller.setWidgetModel(field.id, this.modelData[fieldName]);
+            this.controller.setWidgetModel(field.id, this.fieldsModels[fieldName]);
         }
     },
 
     getModel: function() {
         var model = {};
 
-        for (var fieldName in this.modelData) {
+        for (var fieldName in this.fieldsModels) {
             var field = this.fields[fieldName];
-            var fieldModel = this.modelData[fieldName];
+            var fieldModel = this.fieldsModels[fieldName];
             model[fieldName] = field.fromFieldModel(fieldModel);
         }
 
         return model;
     },
 
-    _createFormData: function(model) {
+    getFieldsModels: function() {
+        return this.fieldsModels;
+    },
+
+    _createFieldsModels: function(model) {
         var formData = {};
 
         for (var fieldName in model) {
@@ -69,7 +74,7 @@ Models.GenericForm = Class.create({
 
     _handleStateChangedEvent: function() {
         this.stateChangedCallbacks.each(function(callback) {
-            callback(this.modelData);
+            callback(this.fieldsModels);
         }, this);
     }
 });
