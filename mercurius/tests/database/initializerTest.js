@@ -91,7 +91,7 @@ Database.InitializerTest = Class.create({
 
     test_should_fail_initialization_when_no_error_callback_specified: function() {
         Test.requireException((function() {
-            this.initializer.initialize(new MockDatabase(), Prototype.emptyFunction, null);
+            this.initializer.initializeDatabase(new MockDatabase(), Prototype.emptyFunction, null);
         }).bind(this));
         
         return Mojo.Test.passed;
@@ -100,7 +100,7 @@ Database.InitializerTest = Class.create({
 
     test_should_fail_initialization_when_no_success_callback_specified: function() {
         Test.requireException((function() {
-            this.initializer.initialize(new MockDatabase(), null, Prototype.emptyFunction);
+            this.initializer.initializeDatabase(new MockDatabase(), null, Prototype.emptyFunction);
         }).bind(this));
 
         return Mojo.Test.passed;
@@ -109,7 +109,7 @@ Database.InitializerTest = Class.create({
 
     test_should_call_error_handler_when_database_error_occurred: function() {
         this.initializer.addTableModel(this.tableModel);
-        this.initializer.initialize(this.mockDatabase, Prototype.emptyFunction,
+        this.initializer.initializeDatabase(this.mockDatabase, Prototype.emptyFunction,
                 this.mockErrorHandler.bind(this.mockErrorHandler));
 
         this.mockDatabase.callback(this.mockTransaction);
@@ -123,7 +123,7 @@ Database.InitializerTest = Class.create({
 
     test_should_call_success_handler_when_all_transactions_are_completed: function() {
         this.initializer.addTableModel(this.tableModel);
-        this.initializer.initialize(this.mockDatabase, this.mockSuccessHandler.bind(this.mockSuccessHandler),
+        this.initializer.initializeDatabase(this.mockDatabase, this.mockSuccessHandler.bind(this.mockSuccessHandler),
                 Prototype.emptyFunction);
 
 
@@ -146,7 +146,7 @@ Database.InitializerTest = Class.create({
     test_should_not_call_success_handler_when_pending_transactions_exist: function() {
         this.initializer.addTableModel(this.tableModel);
 
-        this.initializer.initialize(this.mockDatabase, this.mockSuccessHandler.bind(this.mockSuccessHandler),
+        this.initializer.initializeDatabase(this.mockDatabase, this.mockSuccessHandler.bind(this.mockSuccessHandler),
                 Prototype.emptyFunction);
 
         this.mockDatabase.callback(this.mockTransaction);
@@ -164,7 +164,7 @@ Database.InitializerTest = Class.create({
         var customInsertStatement = "INSERT INTO test (name) VALUES('name goes there'); GO;";
         this.initializer.addPostCreateSqlStatement(customInsertStatement);
 
-        this.initializer.initialize(this.mockDatabase, this.mockSuccessHandler.bind(this.mockSuccessHandler),
+        this.initializer.initializeDatabase(this.mockDatabase, this.mockSuccessHandler.bind(this.mockSuccessHandler),
                 Prototype.emptyFunction);
 
         { // DROP TABLE statement is executed here.
