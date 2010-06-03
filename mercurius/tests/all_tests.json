@@ -6,6 +6,12 @@
     },
 
     {
+        "title": "Accounts.ValidatorTest",
+        "source": "tests/accounts/validatorTest.js",
+        "testFunction": "Accounts.ValidatorTest"
+    },
+
+    {
         "title": "Currencies.FieldsTest",
         "source": "tests/currencies/fieldsTest.js",
         "testFunction": "Currencies.FieldsTest"

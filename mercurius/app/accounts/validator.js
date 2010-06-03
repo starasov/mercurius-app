@@ -1,31 +1,46 @@
+
+// ToDO :1: Add unit tests for opening balance double error callback calling.
+// ToDO :2: Update unit tests for currency id validation.
+
 Accounts.Validator = Class.create(Models.GenericValidator, {
+    log: Mojo.Log,
+
     _validateName: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
+        this.log.info("[_validateName]: %j", fieldModel);
+        
         var name = fieldDescriptor.fromFieldModel(fieldModel);
         if (!Models.ValidationUtils.validateNotEmpty(name)) {
             errorCallback("name", "Account name can't be empty.");
         }
-
-        successCallback();
+        else {
+            successCallback();
+        }
     },
 
     _validateOpeningBalance: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
         if (!Models.ValidationUtils.validateNotEmpty(fieldModel.value)) {
             errorCallback("opening_balance", "Opening Balance can't be empty.");
+            return;
         }
 
         var openingBalance = fieldDescriptor.fromFieldModel(fieldModel);
-        if (isNaN(openingBalance)) {
-            errorCallback("opening_balance", "Opening Balance should be a valid number.");
+        if (isNaN(openingBalance) || (openingBalance < 0.0)) {
+            errorCallback("opening_balance", "Opening Balance should be non negative number.");
+        } else {
+            successCallback();
         }
 
-        successCallback();
     },
 
-    _validateCurrencyId: function(rateFieldModel, fieldDescriptor, successCallback, errorCallback) {
-        if (!Object.isNumber(rateFieldModel.value) || rateFieldModel.value == 0) {
-            errorCallback("rate", "Currency should be assigned to the account.");
-        }
+    _validateCurrencyId: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
+        this.log.info("[_validateCurrencyId]: %j", fieldModel);
 
-        successCallback();
+        var currencyId = fieldModel.value
+
+        if (!Object.isNumber(fieldModel.value) || fieldModel.value == 0) {
+            errorCallback("currency_id", "Currency should be assigned to the account.");
+        } else {
+            successCallback();
+        }
     }
 });
