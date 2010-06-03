@@ -15,7 +15,7 @@ Configuration Management
     - IDE integration
     + ant integration
     + restore all previously disabled tests
-    - http://developer.palm.com/index.php?id=1827&option=com_content&view=article
+    - mojo xUnit impl: http://developer.palm.com/index.php?id=1827&option=com_content&view=article
 
 + Configure intelliarts VPN connection and add sources under VCS - added under GitHub
   repository.
@@ -60,6 +60,8 @@ General
 
 - Error handling logic and dialogs
 
+- Add custom logging facility to support per component/class/package logging configuration
+
 
 Currencies
 ----------
@@ -67,3 +69,9 @@ Currencies
 - Add home currency setting functionality
 
 - Add delete currency functionality
+
+
+Accounts
+--------
+
+- Finish validation functionality
