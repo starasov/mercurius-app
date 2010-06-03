@@ -4,15 +4,28 @@ Models.GenericValidator = Class.create({
         this.fields = fields;
     },
 
-    validate: function(formFields, successCallback, errorCallback) {
-        Mojo.require(formFields, "Passed 'formFields' parameter can't be null or undefined.");
+    validate: function(fieldsModels, successCallback, errorCallback) {
+        Mojo.require(fieldsModels, "Passed 'formFields' parameter can't be null or undefined.");
         Mojo.requireFunction(successCallback, "Passed 'successCallback' should be a function.");
         Mojo.requireFunction(errorCallback, "Passed 'errorCallback' should be a function.");
 
-        var asyncChain = new Utils.AsyncChain(successCallback, errorCallback);
+        var errorCallbackState = {called: false};
 
-        this._addFieldsValidationToChain(asyncChain, formFields);
-        this._addFormValidationToChain(asyncChain, formFields);
+        var asyncChain = new Utils.AsyncChain((function(errorCallbackState) {
+            Mojo.requireFalse(errorCallbackState.called, "Validator should not continue processing after error callback called. " +
+                "Check your successCallback/errorCallback calling! context: [#{callback}]", {callback: successCallback});
+
+            successCallback();
+        }).curry(errorCallbackState), (function(errorCallbackState, key, message) {
+            Mojo.requireFalse(errorCallbackState.called, "Validator should not continue processing after error callback called. " +
+                "Check your successCallback/errorCallback calling! #{key}: #{message}, context: [#{callback}]", {key: key, message: message, callback: errorCallback});
+
+            errorCallbackState.called = true;
+            errorCallback(key, message);
+        }).curry(errorCallbackState));
+
+        this._addFieldsValidationToChain(asyncChain, fieldsModels);
+        this._addFormValidationToChain(asyncChain, fieldsModels);
 
         Mojo.require(asyncChain.isNotEmpty(), "At least one validation method required.");
         asyncChain.call();
