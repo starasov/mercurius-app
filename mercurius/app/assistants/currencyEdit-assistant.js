@@ -71,7 +71,7 @@ CurrencyEditAssistant = Class.create({
 
     _validateAndSave: function() {
         this.spinner.show();
-        this.validator.validate(this.form.modelData, this._save.bind(this),
+        this.validator.validate(this.form.getFieldsModels(), this._save.bind(this),
                 this._handleValidationError.bind(this));
     },
 

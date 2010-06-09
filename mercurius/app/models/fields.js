@@ -37,11 +37,12 @@ Models.Fields = {
             changeEvent: Mojo.Event.propertyChanged,
 
             toFieldModel: function(value) {
-                return {value: Mojo.Format.formatNumber(value, fractionDigits || 2)};
+                var modelValue = value ? Mojo.Format.formatNumber(value, fractionDigits || 2) : null;
+                return {value: modelValue};
             },
 
             fromFieldModel: function(fieldModel) {
-                return Utils.Parsing.parseNumber(fieldModel.value);
+                return Utils.Parsing.parseDecimal(fieldModel.value);
             }
         }
     },
@@ -64,7 +65,7 @@ Models.Fields = {
             },
 
             fromFieldModel: function(fieldModel) {
-                return fieldModel.value;
+                return parseInt(fieldModel.value);
             }
         }
     },

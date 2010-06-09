@@ -6,8 +6,8 @@ Accounts.Factory = Class.create({
     createEmptyModel: function() {
         return {
             name: "",
-            opening_balance: 0.0,
-            currency_id: 0,
+            opening_balance: null,
+            currency_id: null,
             closed_flag: false
         };
     },
@@ -23,5 +23,9 @@ Accounts.Factory = Class.create({
 
     createForm: function() {
         return new Models.GenericForm(Accounts.Fields);
+    },
+
+    createValidator: function() {
+        return new Accounts.Validator(Accounts.Fields);
     }
 });

@@ -3,12 +3,12 @@ Accounts.Fields = {
             "account-name-field",
             "Name..."),
 
-    opening_balance: Models.Fields.createDecimalField(
-            "account-opening-balance-field",
-            "Opening Balance..."),
-
     currency_id: Models.Fields.createSelectorField(
             "account-currency-field",
             "Currency",
-            "currency_choices")
+            "currency_choices"),
+
+    opening_balance: Models.Fields.createDecimalField(
+            "account-opening-balance-field",
+            "Opening Balance...")
 };

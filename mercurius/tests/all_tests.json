@@ -138,9 +138,9 @@
     },
 
     {
-        "title": "Utils.ParsingTest",
-        "source": "tests/utils/parsingTest.js",
-        "testFunction": "Utils.ParsingTest"
+        "title": "Utils.ParseDecimalTest",
+        "source": "tests/utils/parseDecimalTest.js",
+        "testFunction": "Utils.ParseDecimalTest"
     },
 
     {

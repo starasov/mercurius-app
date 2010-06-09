@@ -1,4 +1,6 @@
 AccountEditAssistant = Class.create({
+    log: Mojo.Log,
+    
     initialize: function(applicationContext, accountId) {
         this.context = applicationContext;
 
@@ -55,23 +57,23 @@ AccountEditAssistant = Class.create({
     },
 
     _initialize: function(db) {
+        this.log.info("[_initialize]");
+
+        this.validator = this.accountsFactory.createValidator();
         this.accountsManager = this.accountsFactory.createManager(db);
         this.currenciesManager = this.currenciesFactory.createManager(db);
 
-        var chain = new Utils.AsyncChain(this.spinner.hide.bind(this.spinner), 
-                this._handleDatabaseError.bind(this));
+        var chain = new Utils.AsyncChain((function() {
+            this.log.info("[_initialize] - /inner/ - success");
+            this.spinner.hide(); 
+        }).bind(this), this._handleDatabaseError.bind(this));
 
         chain.add(this._loadAccount.bind(this));
         chain.add(this._loadCurrencies.bind(this));
         chain.add(this._updateForm.bind(this));
 
         chain.call();
-
-//        else {
-//            this.validator = this.factory.createNewAccountValidator(this.manager);
-//            this.form.update(this.factory.createEmptyModel());
-//            this.spinner.hide();
-//        }
+        this.log.info("[_initialize] - ok");
     },
 
     _loadAccount: function(successCallback, errorCallback) {
@@ -80,6 +82,9 @@ AccountEditAssistant = Class.create({
                 this.account = account;
                 successCallback();
             }).bind(this), errorCallback);
+        } else {
+            this.account = this.accountsFactory.createEmptyModel();
+            successCallback();
         }
     },
 
@@ -98,7 +103,7 @@ AccountEditAssistant = Class.create({
 
     _validateAndSave: function() {
         this.spinner.show();
-        this.validator.validate(this.form.modelData, this._save.bind(this),
+        this.validator.validate(this.form.getFieldsModels(), this._save.bind(this),
                 this._handleValidationError.bind(this));
     },
 

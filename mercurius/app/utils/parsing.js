@@ -1,10 +1,10 @@
 Utils.Parsing = {};
 
-Utils.Parsing.parseNumber = function(numberStr, options) {
-    Mojo.requireString(numberStr, "'str' parameter should be a string");
+Utils.Parsing.parseDecimal = function(numberStr, options) {
+    Mojo.requireString(numberStr, "'numberStr' parameter should be a string");
 
     if (this.isEmptyString(numberStr)) {
-        return Number.NaN; 
+        return Number.NaN;
     }
 
     var formatHash = Mojo.Format.getFormatHash(options && options.countryCode);
