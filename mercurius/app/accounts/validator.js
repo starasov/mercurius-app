@@ -1,7 +1,3 @@
-
-// ToDO :1: Add unit tests for opening balance double error callback calling.
-// ToDO :2: Update unit tests for currency id validation.
-
 Accounts.Validator = Class.create(Models.GenericValidator, {
     log: Mojo.Log,
 
@@ -35,10 +31,9 @@ Accounts.Validator = Class.create(Models.GenericValidator, {
     _validateCurrencyId: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
         this.log.info("[_validateCurrencyId]: %j", fieldModel);
 
-        var currencyId = fieldModel.value
-
-        if (!Object.isNumber(fieldModel.value) || fieldModel.value == 0) {
-            errorCallback("currency_id", "Currency should be assigned to the account.");
+        var currencyId = fieldDescriptor.fromFieldModel(fieldModel);
+        if (isNaN(currencyId) || currencyId == 0) {
+            errorCallback("currency", "Currency should be assigned to the account.");
         } else {
             successCallback();
         }

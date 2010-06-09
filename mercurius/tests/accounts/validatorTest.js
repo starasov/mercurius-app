@@ -3,7 +3,7 @@ Accounts.ValidatorTest = Class.create({
         this.accountFormFields = {
             name: {value: "cash"},
             opening_balance: {value: "0.0"},
-            currency_id: {value: 1}
+            currency_id: {value: "1"}
         };
 
         this.validator = new Accounts.Validator(Accounts.Fields);
@@ -50,17 +50,43 @@ Accounts.ValidatorTest = Class.create({
         this.validator.validate(this.accountFormFields, recordResults, Prototype.emptyFunction);
     },
 
+    test_should_stop_validation_of_opening_balance_when_empty_opening_balance_specified: function(recordResults) {
+        this.errorCallbackCalledCount = 0;
+        this.accountFormFields.opening_balance.value = "";
+
+        this.validator.validate(this.accountFormFields, Prototype.emptyFunction, (function(key, message) {
+            this.errorCallbackCalledCount++;
+        }).bind(this));
+
+        Mojo.requireEqual(1, this.errorCallbackCalledCount);
+        return Mojo.Test.passed;
+    },
+
     test_should_fail_validation_when_non_numeric_currency_id_specified: function(recordResults) {
         this.accountFormFields.currency_id.value = "one";
         this.validator.validate(this.accountFormFields, Prototype.emptyFunction, function(key, message) {
-            Test.validate(recordResults, Mojo.requireEqual.curry("currency_id", key));
+            Test.validate(recordResults, Mojo.requireEqual.curry("currency", key));
         });
     },
 
     test_should_fail_validation_when_zero_currency_id_specified: function(recordResults) {
-        this.accountFormFields.currency_id.value = 0;
+        this.accountFormFields.currency_id.value = "0";
         this.validator.validate(this.accountFormFields, Prototype.emptyFunction, function(key, message) {
-            Test.validate(recordResults, Mojo.requireEqual.curry("currency_id", key));
+            Test.validate(recordResults, Mojo.requireEqual.curry("currency", key));
+        });
+    },
+
+    test_should_fail_validation_when_null_currency_id_specified: function(recordResults) {
+        this.accountFormFields.currency_id.value = null;
+        this.validator.validate(this.accountFormFields, Prototype.emptyFunction, function(key, message) {
+            Test.validate(recordResults, Mojo.requireEqual.curry("currency", key));
+        });
+    },
+
+    test_should_fail_validation_when_empty_currency_id_specified: function(recordResults) {
+        this.accountFormFields.currency_id.value = "";
+        this.validator.validate(this.accountFormFields, Prototype.emptyFunction, function(key, message) {
+            Test.validate(recordResults, Mojo.requireEqual.curry("currency", key));
         });
     }
 });
