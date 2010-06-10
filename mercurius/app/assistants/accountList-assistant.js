@@ -3,6 +3,18 @@ AccountListAssistant = Class.create(BaseListAssistant, {
         $super("account", applicationContext);    
     },
 
+    activate: function($super, event) {
+        if (event) {
+            switch (event.source) {
+            case "accountEdit":
+                var expectedNewLength = this.listWidget.mojo.getLength() + event.rowsAdded;
+                this.listWidget.mojo.setLengthAndInvalidate(expectedNewLength);
+            }
+        }
+
+        $super(event);
+    },
+
     handleCommand: function(event) {
         if (event.type == Mojo.Event.command) {
             switch (event.command) {

@@ -1,15 +1,18 @@
 Models.GenericForm = Class.create({
+    log: Mojo.Log,
+    
     initialize: function(fields) {
         Mojo.require(fields, "Passed 'fields' parameter can't be null or undefined.");
 
         this.fields = fields;
         this.stateChangedCallbacks = [];
         this.fieldsModels = null;
+        this.model = null;
     },
 
     addStateChangedCallback: function(callback) {
         Mojo.requireFunction(callback, "Passed 'callback' should be a function.");
-        this.stateChangedCallbacks.push(callback)
+        this.stateChangedCallbacks.push(callback);
     },
 
     setup: function(controller) {
@@ -33,6 +36,9 @@ Models.GenericForm = Class.create({
     },
 
     update: function(model) {
+        this.log.info("[update] - model: %j", model);
+        
+        this.model = model;
         this.fieldsModels = this._createFieldsModels(model);
 
         for (var fieldName in this.fields) {
@@ -44,10 +50,16 @@ Models.GenericForm = Class.create({
     getModel: function() {
         var model = {};
 
-        for (var fieldName in this.fieldsModels) {
+        for (var fieldName in this.model) {
+            var value = this.model[fieldName];
+
             var field = this.fields[fieldName];
-            var fieldModel = this.fieldsModels[fieldName];
-            model[fieldName] = field.fromFieldModel(fieldModel);
+            if (field) {
+                var fieldModel = this.fieldsModels[fieldName];
+                value = field.fromFieldModel(fieldModel);
+            }
+
+            model[fieldName] = value;
         }
 
         return model;

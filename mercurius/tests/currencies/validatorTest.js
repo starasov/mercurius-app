@@ -61,6 +61,19 @@ Currencies.ValidatorTest = Class.create({
         });
     },
 
+    test_rate_validation_should_be_stopped_when_empty_rate_is_found: function(recordResults) {
+        this.errorCallbackCalledCount = 0;
+        this._currencyData.rate.value = "";
+
+        this._validator.validate(this._currencyData, Prototype.emptyFunction, (function(key, message) {
+            this.errorCallbackCalledCount++;
+        }).bind(this));
+
+        Mojo.requireEqual(1, this.errorCallbackCalledCount);
+
+        return Mojo.Test.passed;
+    },
+
     test_validation_should_be_succeeded_when_currency_with_specified_name_does_not_exist: function(recordResults) {
         this._currenciesManager.getCurrencyByNameResult = this._currencyData;
         this._validator.newCurrencyFlag = false;

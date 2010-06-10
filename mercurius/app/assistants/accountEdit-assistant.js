@@ -63,10 +63,8 @@ AccountEditAssistant = Class.create({
         this.accountsManager = this.accountsFactory.createManager(db);
         this.currenciesManager = this.currenciesFactory.createManager(db);
 
-        var chain = new Utils.AsyncChain((function() {
-            this.log.info("[_initialize] - /inner/ - success");
-            this.spinner.hide(); 
-        }).bind(this), this._handleDatabaseError.bind(this));
+        var chain = new Utils.AsyncChain(this.spinner.hide.bind(this.spinner),
+                this._handleDatabaseError.bind(this));
 
         chain.add(this._loadAccount.bind(this));
         chain.add(this._loadCurrencies.bind(this));
@@ -109,7 +107,8 @@ AccountEditAssistant = Class.create({
 
     _save: function() {
         var account = this.form.getModel();
-        this.currenciesManager.saveOrUpdate(account, (function(id) {
+
+        this.accountsManager.saveOrUpdate(account, (function(id) {
             this.controller.stageController.popScene({source: "accountEdit", id: id, rowsAdded: 1});
         }).bind(this), this._handleDatabaseError.bind(this));
     },

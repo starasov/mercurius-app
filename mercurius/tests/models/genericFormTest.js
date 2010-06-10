@@ -161,5 +161,25 @@ Models.GenericFormTest = Class.create({
         Test.requireMapsEqual(expectedModel, actualModel);
 
         return Mojo.Test.passed;
+    },
+
+    test_get_model_should_return_keep_all_fields_of_original_model: function() {
+        this.form.setup(this.controller);
+
+        var model = {name: "banana", age: 1, weight: 0.5, quality: 1};
+        this.form.update(model);
+
+        var actualModel = this.form.getModel();
+
+        var expectedModel = {
+            name: "name-fromFormData",
+            age: "age-fromFormData",
+            weight: "weight-fromFormData",
+            quality: 1
+        };
+
+        Test.requireMapsEqual(expectedModel, actualModel);
+
+        return Mojo.Test.passed;
     }
 });

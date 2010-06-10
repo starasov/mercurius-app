@@ -1,5 +1,5 @@
 Accounts.Validator = Class.create(Models.GenericValidator, {
-    log: Mojo.Log,
+    log: Utils.NullLog,
 
     _validateName: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
         this.log.info("[_validateName]: %j", fieldModel);

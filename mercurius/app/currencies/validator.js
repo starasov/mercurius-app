@@ -1,6 +1,3 @@
-
-// ToDO :1:  Add extra unit test for validate rate method to avoid repetitive error callback calls.
-
 Currencies.Validator = Class.create(Models.GenericValidator, {
     initialize: function($super, fields, currenciesManager, newCurrencyFlag) {
         Mojo.require(currenciesManager, "Passed 'currenciesManager' can't be null.");
@@ -44,7 +41,6 @@ Currencies.Validator = Class.create(Models.GenericValidator, {
     _validateRate: function(rateFieldModel, fieldDescriptor, successCallback, errorCallback) {
         if (!Models.ValidationUtils.validateNotEmpty(rateFieldModel.value)) {
             errorCallback("rate", "Currency exchange rate can't be empty.");
-            return;
         }
 
         var rate = fieldDescriptor.fromFieldModel(rateFieldModel);
