@@ -1,4 +1,6 @@
 Models.GenericManager = Class.create({
+    log: Mojo.Log,
+    
     /**
      * Initializes generic manager instance.
      *
