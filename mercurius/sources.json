@@ -6,6 +6,7 @@
     {"source": "app/utils/parsing.js"},
     
     {"source": "app/assistants/stage-assistant.js"},
+    {"source": "app/assistants/baseAssistant.js"},
     {"source": "app/assistants/baseListAssistant.js"},
     {"source": "app/assistants/baseViewAssistant.js"},
 

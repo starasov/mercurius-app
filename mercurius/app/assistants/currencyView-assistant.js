@@ -7,29 +7,6 @@ CurrencyViewAssistant = Class.create(BaseViewAssistant, {
         return this.context.getCurrenciesFactory().createManager(db);
     },
 
-    getCommandMenuItems: function() {
-        return [{label: "Edit", disabled: false, command: "editCurrency"}];
-    },
-
-    activate: function(event) {
-        if (event) {
-            switch (event.source) {
-            case "currencyEdit":
-                this.loadModel();
-            }
-        }
-    },
-
-    handleCommand: function(event) {
-        if (event.type == Mojo.Event.command) {
-            switch (event.command) {
-            case "editCurrency":
-                this.controller.stageController.pushScene("currencyEdit", this.context, this.modelId);
-                event.stop();
-            }
-        }
-    },
-
     updateView: function(currency) {
         this.controller.get("currency-view-title").innerHTML = currency.name;
         this.controller.get("currency-symbol").innerHTML = currency.symbol;

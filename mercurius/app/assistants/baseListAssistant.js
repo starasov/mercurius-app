@@ -1,12 +1,8 @@
-BaseListAssistant = Class.create({
-    initialize: function(name, applicationContext) {
-        Mojo.Log.info("[%s][BaseListAssistant] - begin", name);
+BaseListAssistant = Class.create(BaseAssistant, {
+    initialize: function($super, name, applicationContext) {
+        $super(name, applicationContext);
 
-        this.name = name;
-        this.context = applicationContext;
         this.manager = null;
-
-        this.spinner = new Widgets.FullScreenSpinner(this.name);
 
         this.listAttributes = {
             itemTemplate: this.name + "List/listitem",
@@ -21,23 +17,14 @@ BaseListAssistant = Class.create({
         this.itemTapHandler = this.itemTapCallback.bind(this);
 
         this.listWidgetId = this.name + "-list-widget";
-        Mojo.Log.info("[%s][BaseListAssistant] - expected list widget id: %s", name, this.listWidgetId);
-
-        Mojo.Log.info("[%s][BaseListAssistant] - end", name);
+        this.log.info("[%s][BaseListAssistant] - expected list widget id: %s", this.name, this.listWidgetId);
     },
 
-    setup: function() {
-        Mojo.Log.info("[%s][BaseListAssistant][setup] - begin", this.name);
-
-        this.controller.setupWidget(Mojo.Menu.commandMenu, undefined,
-                {items: this.getCommandMenuItems()});
+    setup: function($super) {
+        $super();
 
         this.controller.setupWidget(this.listWidgetId, this.listAttributes);
         this.listWidget = this.controller.get(this.listWidgetId);
-
-        this.spinner.setup(this.controller);
-
-        Mojo.Log.info("[%s][BaseListAssistant][setup] - end", this.name);
     },
 
     activate: function(event) {
@@ -56,10 +43,6 @@ BaseListAssistant = Class.create({
        return {};
     },
 
-    getCommandMenuItems: function() {
-        return []
-    },
-
     getManager: function(db) {
         Mojo.require(false, "Not implemented.");
     },
@@ -72,22 +55,13 @@ BaseListAssistant = Class.create({
         Mojo.require(false, "Not implemented.");
     },
 
-    databaseErrorCallback: function(transaction, error) {
-        this.spinner.hide();
-        // ToDO: add some error logic handling here.
-    },
-
     _listItemsCallback: function(list, offset, limit) {
-        Mojo.Log.info("[%s][BaseListAssistant][_listItemsCallback] - begin", this.name);
-
         if (this.manager == null) {
-            Mojo.Log.info("[%s][BaseListAssistant][_listItemsCallback] - initializing manager", this.name);
+            this.log.info("[%s][BaseListAssistant][_listItemsCallback] - initializing manager", this.name);
             this._setupManager(list, offset, limit);
         } else {
             this.listItemsCallback(list, offset, limit);
         }
-
-        Mojo.Log.info("[%s][BaseListAssistant][_listItemsCallback] - begin", this.name);
     },
 
     _setupManager: function(list, offset, limit) {
