@@ -9,6 +9,7 @@
     {"source": "app/assistants/baseAssistant.js"},
     {"source": "app/assistants/baseListAssistant.js"},
     {"source": "app/assistants/baseViewAssistant.js"},
+    {"source": "app/assistants/baseEditAssistant.js"},
 
     {
         "scenes": "sandboxView",

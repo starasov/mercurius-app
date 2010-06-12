@@ -10,10 +10,10 @@ BaseViewAssistant = Class.create(BaseAssistant, {
         this.manager = null;
 
         this.editCommandName = this.name + "Edit";
-        this.log.info("[%s][BaseViewAssistant] - this.editCommandName: %s", this.name, this.editCommandName);
+        this.log.info("[%s][BaseViewAssistant] - this.editCommandName: '%s'", this.name, this.editCommandName);
 
         this.editViewName = this.name + "Edit";
-        this.log.info("[%s][BaseViewAssistant] - this.editViewName: %s", this.name, this.editViewName);
+        this.log.info("[%s][BaseViewAssistant] - this.editViewName: '%s'", this.name, this.editViewName);
     },
 
     /** @override */

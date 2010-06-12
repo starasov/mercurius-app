@@ -1,8 +1,10 @@
-AccountEditAssistant = Class.create({
-    log: Mojo.Log,
-    
-    initialize: function(applicationContext, accountId) {
-        this.context = applicationContext;
+AccountEditAssistant = Class.create(BaseEditAssistant, {
+    /**
+     * @override
+     * @constructor
+     */
+    initialize: function($super, applicationContext, accountId) {
+        $super("account", applicationContext, accountId);
 
         this.accountsFactory = applicationContext.getAccountsFactory();
         this.currenciesFactory = applicationContext.getCurrenciesFactory();
@@ -10,82 +12,57 @@ AccountEditAssistant = Class.create({
         this.accountsManager = null;
         this.currenciesManager = null;
 
-        this.accountId = accountId;
         this.currencies = null;
-
-        this.validator = null;
-        this.form = this.accountsFactory.createForm();
-
-        this.spinner = new Widgets.FullScreenSpinner("account");
-
-        this.commandMenuModel = {
-            items: [{label: "Done", disabled: false, command: "saveAccount"}]
-        };
     },
 
-    setup: function() {
-        var title = this.accountId ? $L("Edit Account") : $L("New Account");
-        this.controller.get("account-edit-title").innerHTML = title;
-
-        this.controller.setupWidget(Mojo.Menu.commandMenu, undefined, this.commandMenuModel);
-
-        this.form.setup(this.controller);
-        this.spinner.setup(this.controller);
-
-        this.spinner.show();
-        this.context.getDatabase(this._initialize.bind(this), this._handleDatabaseError.bind(this));
+    /** @override */
+    getForm: function() {
+        return this.accountsFactory.createForm();
     },
 
-    activate: function(event) {
+    /** @override */
+    getValidator: function() {
+        return this.accountsFactory.createValidator();
     },
 
-    deactivate: function(event) {
-    },
-
-    cleanup: function(event) {
-        this.form.cleanup();
-    },
-
-    handleCommand: function(event) {
-        if (event.type == Mojo.Event.command) {
-            switch (event.command) {
-            case "saveAccount":
-                this._validateAndSave();
-                event.stop();
-            }
-        }
-    },
-
-    _initialize: function(db) {
-        this.log.info("[_initialize]");
-
-        this.validator = this.accountsFactory.createValidator();
+    /** @override */
+    initializeManagers: function(db) {
         this.accountsManager = this.accountsFactory.createManager(db);
         this.currenciesManager = this.currenciesFactory.createManager(db);
+    },
 
-        var chain = new Utils.AsyncChain(this.spinner.hide.bind(this.spinner),
-                this._handleDatabaseError.bind(this));
+    /** @override */
+    loadModel: function(successCallback, errorCallback) {
+        var chain = new Utils.AsyncChain((function() {
+            successCallback(this.account);
+        }).bind(this), errorCallback);
 
         chain.add(this._loadAccount.bind(this));
         chain.add(this._loadCurrencies.bind(this));
-        chain.add(this._updateForm.bind(this));
+        chain.add(this._createCurrencyChoices.bind(this));
 
         chain.call();
-        this.log.info("[_initialize] - ok");
     },
 
+    /** @override */
+    saveModel: function(model, successCallback, errorCallback) {
+        this.accountsManager.saveOrUpdate(model, successCallback, errorCallback);
+    },
+
+    /** @private */
     _loadAccount: function(successCallback, errorCallback) {
-        if (this.accountId) {
-            this.accountsManager.findById(this.accountId, (function(account) {
+        if (this.isNew()) {
+            this.account = this.accountsFactory.createEmptyModel();
+            successCallback();
+        } else {
+            this.accountsManager.findById(this.modelId, (function(account) {
                 this.account = account;
                 successCallback();
             }).bind(this), errorCallback);
-        } else {
-            this.account = this.accountsFactory.createEmptyModel();
-            successCallback();
         }
     },
 
+    /** @private */
     _loadCurrencies: function(successCallback, errorCallback) {
         this.currenciesManager.all({}, (function(currencies) {
             this.currencies = currencies;
@@ -93,45 +70,9 @@ AccountEditAssistant = Class.create({
         }).bind(this), errorCallback);
     },
 
-    _updateForm: function(successCallback, errorCallback) {
+    /** @private */
+    _createCurrencyChoices: function(successCallback, errorCallback) {
         this.account.currency_choices = Models.Fields.toChoices(this.currencies, "name", "id");
-        this.form.update(this.account);
         successCallback();
-    },
-
-    _validateAndSave: function() {
-        this.spinner.show();
-        this.validator.validate(this.form.getFieldsModels(), this._save.bind(this),
-                this._handleValidationError.bind(this));
-    },
-
-    _save: function() {
-        var account = this.form.getModel();
-
-        this.accountsManager.saveOrUpdate(account, (function(id) {
-            this.controller.stageController.popScene({source: "accountEdit", id: id, rowsAdded: 1});
-        }).bind(this), this._handleDatabaseError.bind(this));
-    },
-
-    _handleValidationError: function(key, message) {
-        this.spinner.hide();
-        this.controller.showAlertDialog({
-            title: "Please correct '" + key + "' field",
-            message: message,
-            choices: [
-                {label: "OK", value: "ok", type: "medium"}
-            ]
-        });
-    },
-
-    _handleDatabaseError: function(transaction, error) {
-        this.spinner.hide();
-        this.controller.showAlertDialog({
-            title: "Error",
-            message: error.message,
-            choices: [
-                {label: "OK", value: "ok", type: "medium"}
-            ]
-        });
     }
 });
