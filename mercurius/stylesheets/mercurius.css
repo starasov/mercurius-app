@@ -44,7 +44,8 @@
     background-image: url(../images/account-small.png) !important;
 }
 
-.currency-rate-text {
+.currency-rate-text,
+.account-balance-text {
     float: right;
     padding-top: 13px;
     padding-bottom: 15px;

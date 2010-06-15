@@ -41,6 +41,7 @@ Currencies.Validator = Class.create(Models.GenericValidator, {
     _validateRate: function(rateFieldModel, fieldDescriptor, successCallback, errorCallback) {
         if (!Models.ValidationUtils.validateNotEmpty(rateFieldModel.value)) {
             errorCallback("rate", "Currency exchange rate can't be empty.");
+            return;
         }
 
         var rate = fieldDescriptor.fromFieldModel(rateFieldModel);

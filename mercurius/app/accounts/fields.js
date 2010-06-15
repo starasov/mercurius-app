@@ -8,7 +8,7 @@ Accounts.Fields = {
             "Currency",
             "currency_choices"),
 
-    opening_balance: Models.Fields.createDecimalField(
+    opening_balance: Models.Fields.createCurrencyField(
             "account-opening-balance-field",
             "Opening Balance...")
 };

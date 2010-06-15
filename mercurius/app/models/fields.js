@@ -36,13 +36,57 @@ Models.Fields = {
             },
             changeEvent: Mojo.Event.propertyChanged,
 
+            toViewString: function(value) {
+                return value != null ? Mojo.Format.formatNumber(value, fractionDigits || 2) : null;
+            },
+
             toFieldModel: function(value) {
-                var modelValue = value ? Mojo.Format.formatNumber(value, fractionDigits || 2) : null;
-                return {value: modelValue};
+                return {value: this.toViewString(value)};
             },
 
             fromFieldModel: function(fieldModel) {
                 return Utils.Parsing.parseDecimal(fieldModel.value);
+            }
+        }
+    },
+
+    createCurrencyField: function(id, text) {
+        return {
+            id: id,
+            attributes: {
+                hintText: $L(text),
+                multiline: false,
+                enterSubmits: true,
+                modifierState: Mojo.Widget.numLock,
+                textCase: Mojo.Widget.steModeTitleCase,
+                autoReplace: false
+            },
+            changeEvent: Mojo.Event.propertyChanged,
+
+            toViewString: function(value, currencySymbol) {
+                if (value != null) {
+                    var formattedValue = Mojo.Format.formatNumber(value / 100.0, 2);
+
+                    if (currencySymbol) {
+                        var currencyPrepend = Mojo.Locale.formats.currencyPrepend ? currencySymbol : "";
+                        var currencyAppend = Mojo.Locale.formats.currencyAppend? currencySymbol : "";
+
+                        return currencyPrepend + formattedValue + currencyAppend;
+                    } else {
+                        return formattedValue;
+                    }
+                }
+
+                return null;
+            },
+
+            toFieldModel: function(value) {
+                return {value: this.toViewString(value)};
+            },
+
+            fromFieldModel: function(fieldModel) {
+                var parsedValue = Utils.Parsing.parseDecimal(fieldModel.value);
+                return parsedValue * 100;
             }
         }
     },

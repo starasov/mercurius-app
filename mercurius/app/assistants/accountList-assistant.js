@@ -1,6 +1,6 @@
 AccountListAssistant = Class.create(BaseListAssistant, {
     initialize: function($super, applicationContext) {
-        $super("account", applicationContext);    
+        $super("account", applicationContext);
     },
 
     activate: function($super, event) {
@@ -25,9 +25,17 @@ AccountListAssistant = Class.create(BaseListAssistant, {
         }
     },
 
+
     getFormatters: function() {
         return {
-            nameStyle: function(_, model) { return model.closed_flag ? "palm-textfield-disabled" : null; }
+            opening_balance: function(value, model) {
+                return Object.isUndefined(value) ? value :
+                        Accounts.Fields.opening_balance.toViewString(value, model.currency.symbol);
+            },
+
+            itemStyle: function(_, model) {
+                return model.closed_flag ? "palm-textfield-disabled" : null;
+            }
         };
     },
 

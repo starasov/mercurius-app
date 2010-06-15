@@ -24,9 +24,9 @@ StageAssistant = Class.create({
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(2, 'Euro', 'EUR', 1.2, 0);");
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(3, 'GB Pound', 'GPB', 1.4, 0);");
 
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(1, 'Cash', 100.0, 1, 0);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(2, 'VISA USD', 2000.0, 1, 0);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(3, 'VISA EUR', 0.0, 2, 1);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(1, 'Cash', 10000, 1, 0);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(2, 'VISA USD', 200000, 1, 0);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(3, 'VISA EUR', 0, 2, 1);");
 
         databaseService.setDatabaseInitializer(databaseInitializer);
 
