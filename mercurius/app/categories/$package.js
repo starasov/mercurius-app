@@ -1,0 +1,1 @@
+if (!Categories) var Categories = {};
