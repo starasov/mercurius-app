@@ -48,6 +48,12 @@
     },
 
     {
+        "title": "Database.TransactionTest",
+        "source": "tests/database/transactionTest.js",
+        "testFunction": "Database.TransactionTest"
+    },
+
+    {
         "title": "Database.TypesTest",
         "source": "tests/database/typesTest.js",
         "testFunction": "Database.TypesTest"
