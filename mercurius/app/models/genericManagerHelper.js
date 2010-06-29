@@ -9,11 +9,6 @@ Models.GenericManagerHelper = Class.create({
         this._tableModel = tableModel;
     },
 
-    toModelResultSet: function(sqlResultSet) {
-        Mojo.require(sqlResultSet, "'sqlResultSet' should be defined and can't be null.");
-        return new Models.AttachedResultSet(this._tableModel, sqlResultSet.rows);
-    },
-
     toCountSql: function() {
         var countContext = {};
 
