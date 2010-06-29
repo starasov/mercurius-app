@@ -71,20 +71,17 @@ Models.GenericManager = Class.create({
      * @param errorCallback - {callback} (transaction, error) a callback receives error
      * notification in case if something went wrong with insert.
      */
-    update: function(entity, successCallback, errorCallback) {
+    update: function(model, successCallback, errorCallback) {
         this._db.transaction((function(transaction) {
-            var updateContext = this._helper.toUpdateSql(entity);
-            transaction.executeSql(updateContext.sql, updateContext.params, function(tr, resultSet) {
-                successCallback(resultSet)
-            }, errorCallback);
+            this._update(model, transaction, successCallback, errorCallback);
         }).bind(this));
     },
 
-    saveOrUpdate: function(entity, successCallback, errorCallback) {
-        if (entity.id) {
-            this.update(entity, successCallback, errorCallback);
+    saveOrUpdate: function(model, successCallback, errorCallback) {
+        if (model.id) {
+            this.update(model, successCallback, errorCallback);
         } else {
-            this.save(entity, successCallback, errorCallback);
+            this.save(model, successCallback, errorCallback);
         }
     },
 
@@ -114,13 +111,9 @@ Models.GenericManager = Class.create({
      * @param errorCallback - {callback} (transaction, error) an error callback.
      */
     findById: function(id, successCallback, errorCallback) {
-        this.find({'id': id}, {}, function(resultSet) {
-            if (resultSet.length != 0) {
-                successCallback(resultSet[0]);
-            } else {
-                successCallback(null);
-            }
-        }, errorCallback)
+        this._db.transaction((function(transaction) {
+            this._findById(id, transaction, successCallback, errorCallback);
+        }).bind(this));
     },
 
     /**
@@ -149,13 +142,42 @@ Models.GenericManager = Class.create({
      */
     find: function(searchParameters, extraParameters, successCallback, errorCallback) {
         this._db.transaction((function(transaction) {
-            var selectContext = this._helper.toSelectSql(searchParameters, extraParameters);
-            transaction.executeSql(selectContext.sql, selectContext.params,
-                    this._successCallback.bind(this, successCallback, errorCallback), errorCallback);
+            this._find(searchParameters, extraParameters, transaction, successCallback, errorCallback);
         }).bind(this));
     },
 
-    _successCallback: function(innerSuccessCallback, innerErrorCallback, transaction, sqlResultSet) {
-        this._resultSetMapper.map(sqlResultSet, innerSuccessCallback, innerErrorCallback);
+    /** @protected */
+    _createTransaction: function() {
+        return new Database.Transaction(this._db);
+    },
+
+    /** @protected */
+    _update: function(model, transaction, successCallback, errorCallback) {
+        var updateContext = this._helper.toUpdateSql(model);
+        transaction.executeSql(updateContext.sql, updateContext.params, (function(transaction, resultSet) {
+            successCallback(resultSet);
+        }).bind(this), errorCallback);
+    },
+
+    /** @protected */
+    _findById: function(id, transaction, successCallback, errorCallback) {
+        this._find({id: id}, {}, transaction, function(models) {
+            if (models.length != 0) {
+                successCallback(models[0]);
+            } else {
+                successCallback(null);
+            }
+        }, errorCallback);
+    },
+
+    /** @protected */
+    _find: function(searchParameters, extraParameters, transaction, successCallback, errorCallback) {
+        var selectContext = this._helper.toSelectSql(searchParameters, extraParameters);
+        transaction.executeSql(selectContext.sql, selectContext.params,
+                this._mapSqlResultSet.bind(this, successCallback, errorCallback), errorCallback);
+    },
+
+    _mapSqlResultSet: function(clientSuccessCallback, clientErrorCallback, transaction, sqlResultSet) {
+        this._resultSetMapper.map(sqlResultSet, clientSuccessCallback, clientErrorCallback);
     }
 });
