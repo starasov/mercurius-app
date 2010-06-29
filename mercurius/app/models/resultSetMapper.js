@@ -27,9 +27,9 @@ Models.ResultSetMapper = Class.create({
     },
 
     _doMap: function(row, mappedModels, successCallback, errorCallback) {
-        this.rowMapper.mapRow(row, (function(mappedSet, innerSuccessCallback, model) {
-            mappedSet.push(model);
-            innerSuccessCallback();
+        this.rowMapper.mapRow(row, (function(mappedModels, successCallback, model) {
+            mappedModels.push(model);
+            successCallback();
         }).curry(mappedModels, successCallback), errorCallback);
     }
 });
