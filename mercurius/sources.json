@@ -44,6 +44,7 @@
     {"source": "app/database/$package.js"},
     {"source": "app/database/initializer.js"},
     {"source": "app/database/service.js"},
+    {"source": "app/database/transaction.js"},
     {"source": "app/database/types.js"},
     {"source": "app/database/versionProvider.js"},
 
@@ -65,6 +66,11 @@
     {"source": "app/accounts/tableModel.js"},
     {"source": "app/accounts/validator.js"},
 
+    {"source": "app/categories/$package.js"},
+    {"source": "app/categories/manager.js"},
+    {"source": "app/categories/tableModel.js"},
+    {"source": "app/categories/types.js"},
+
     {"source": "app/currencies/$package.js"},
     {"source": "app/currencies/factory.js"},
     {"source": "app/currencies/fields.js"},
@@ -73,6 +79,8 @@
     {"source": "app/currencies/validator.js"},
 
     {"source": "app/widgets/$package.js"},
+    {"source": "app/widgets/menu.js"},
+    {"source": "app/widgets/headerDropdown.js"},
     {"source": "app/widgets/fullScreenSpinner.js"},
 
     {"source": "app/applicationContext.js"}
