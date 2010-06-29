@@ -1,5 +1,11 @@
 if (!Test) var Test = {};
 
+Test.databaseErrorHandler = function(recordResults) {
+    return (function(recordResults, transaction, error) {
+        recordResults(error);
+    }).curry(recordResults);
+};
+
 Test.validate = function(recordResults, f) {
     Mojo.Test.validate(recordResults, f);  
 };
