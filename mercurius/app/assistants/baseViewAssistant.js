@@ -1,7 +1,9 @@
 BaseViewAssistant = Class.create(BaseAssistant, {
+    APP_MENU_DELETE_ITEM: "delete",
+
     /**
      * @override
-     * @constructor 
+     * @constructor
      */
     initialize: function($super, name, applicationContext, modelId) {
         $super(name, applicationContext);
@@ -9,8 +11,14 @@ BaseViewAssistant = Class.create(BaseAssistant, {
         this.modelId = modelId;
         this.manager = null;
 
+        this.sourceName = this.name + "View";
+        this.log.info("[%s][BaseViewAssistant] - this.sourceName: '%s'", this.name, this.sourceName);
+
         this.editCommandName = this.name + "Edit";
         this.log.info("[%s][BaseViewAssistant] - this.editCommandName: '%s'", this.name, this.editCommandName);
+
+        this.deleteCommandName = this.name + "Delete";
+        this.log.info("[%s][BaseViewAssistant] - this.deleteCommandName: '%s'", this.name, this.deleteCommandName);
 
         this.editViewName = this.name + "Edit";
         this.log.info("[%s][BaseViewAssistant] - this.editViewName: '%s'", this.name, this.editViewName);
@@ -41,13 +49,22 @@ BaseViewAssistant = Class.create(BaseAssistant, {
             case this.editCommandName:
                 this.controller.stageController.pushScene(this.editViewName, this.context, this.modelId);
                 event.stop();
+                break;
+            case this.deleteCommandName:
+                this._deleteModel();
+                break;
             }
         }
     },
 
     /** @override */
-    getCommandMenuItems: function() {
-        return [{label: "Edit", disabled: false, command: this.editCommandName}];
+    createCommandMenuItems: function(commandMenu) {
+        commandMenu.addItem("edit", {label: "Edit", disabled: false, command: this.editCommandName});
+    },
+
+    /** @override */
+    createAppMenuItems: function(appMenu) {
+        appMenu.addItem(this.APP_MENU_DELETE_ITEM, {label: "Delete", disabled: false, command: this.deleteCommandName});
     },
 
     loadModel: function() {
@@ -55,7 +72,7 @@ BaseViewAssistant = Class.create(BaseAssistant, {
     },
 
     /** @abstract */
-    getManager: function(db) {
+    createManager: function(db) {
         Mojo.require(false, "Not implemented");
     },
 
@@ -66,7 +83,7 @@ BaseViewAssistant = Class.create(BaseAssistant, {
 
     /** @private */
     _initialize: function(db) {
-        this.manager = this.getManager(db);
+        this.manager = this.createManager(db);
         this.loadModel();
     },
 
@@ -74,5 +91,12 @@ BaseViewAssistant = Class.create(BaseAssistant, {
     _updateView: function(model) {
         this.updateView(model);
         this.spinner.hide();
+    },
+
+    _deleteModel: function() {
+        this.spinner.show();
+        this.manager.deleteById(this.modelId, (function() {
+            this.controller.stageController.popScene({source: this.sourceName, rowsAdded: -1});
+        }).bind(this), this.databaseErrorCallback.bind(this))
     }
 });

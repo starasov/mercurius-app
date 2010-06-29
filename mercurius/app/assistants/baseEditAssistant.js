@@ -52,8 +52,8 @@ BaseEditAssistant = Class.create(BaseAssistant, {
     },
 
     /** @override */
-    getCommandMenuItems: function() {
-        return [{label: "Done", disabled: false, command: this.saveCommandName}];
+    createCommandMenuItems: function(commandMenu) {
+        commandMenu.addItem("done", {label: "Done", disabled: false, command: this.saveCommandName});
     },
 
     isNew: function() {

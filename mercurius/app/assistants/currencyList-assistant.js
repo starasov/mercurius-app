@@ -6,6 +6,7 @@ CurrencyListAssistant = Class.create(BaseListAssistant, {
     activate: function($super, event) {
         if (event) {
             switch (event.source) {
+            case "currencyView":
             case "currencyEdit":
                 var expectedNewLength = this.listWidget.mojo.getLength() + event.rowsAdded;
                 this.listWidget.mojo.setLengthAndInvalidate(expectedNewLength);
@@ -33,11 +34,11 @@ CurrencyListAssistant = Class.create(BaseListAssistant, {
         };
     },
 
-    getCommandMenuItems: function() {
-        return [{icon: "new", command: "addCurrency"}];
+    createCommandMenuItems: function(commandMenu) {
+        commandMenu.addItem("new", {icon: "new", command: "addCurrency"});
     },
 
-    getManager: function(db) {
+    createManager: function(db) {
         return this.context.getCurrenciesFactory().createManager(db);
     },
 

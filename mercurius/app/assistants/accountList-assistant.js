@@ -1,6 +1,13 @@
 AccountListAssistant = Class.create(BaseListAssistant, {
     initialize: function($super, applicationContext) {
         $super("account", applicationContext);
+        this.dropdown = new Widgets.HeaderDropdown("account-list-title", "account");
+    },
+
+    /** @override */
+    setup: function($super) {
+        $super();
+        this.dropdown.setup(this.controller);
     },
 
     activate: function($super, event) {
@@ -39,11 +46,11 @@ AccountListAssistant = Class.create(BaseListAssistant, {
         };
     },
 
-    getCommandMenuItems: function() {
-        return [{icon: "new", command: "addAccount"}];
+    createCommandMenuItems: function(commandMenu) {
+        commandMenu.addItem("addAccount", {icon: "new", command: "addAccount"});
     },
 
-    getManager: function(db) {
+    createManager: function(db) {
         return this.context.getAccountsFactory().createManager(db);
     },
 

@@ -1,6 +1,7 @@
 BaseAssistant = Class.create({
     log: Mojo.Log,
 
+    /** @constructor */
     initialize: function(name, applicationContext) {
         this.log.info("[%s][BaseAssistant] - begin", name);
 
@@ -9,6 +10,10 @@ BaseAssistant = Class.create({
 
         this.name = name;
         this.context = applicationContext;
+
+        this.appMenu = new Widgets.Menu(Mojo.Menu.appMenu, {});
+        this.commandMenu = new Widgets.Menu(Mojo.Menu.commandMenu, {});
+
         this.spinner = new Widgets.FullScreenSpinner(this.name);
 
         this.log.info("[%s][BaseAssistant] - end", name);
@@ -17,16 +22,21 @@ BaseAssistant = Class.create({
     setup: function() {
         this.log.info("[%s][BaseAssistant][setup] - begin", this.name);
 
-        this.controller.setupWidget(Mojo.Menu.commandMenu, undefined,
-                {items: this.getCommandMenuItems()});
+        this.createAppMenuItems(this.appMenu);
+        this.appMenu.setup(this.controller);
+
+        this.createCommandMenuItems(this.commandMenu);
+        this.commandMenu.setup(this.controller);       
 
         this.spinner.setup(this.controller);
 
         this.log.info("[%s][BaseAssistant][setup] - end", this.name);
     },
 
-    getCommandMenuItems: function() {
-        return []
+    createCommandMenuItems: function(commandMenu) {
+    },
+
+    createAppMenuItems: function(appMenu) {
     },
 
     databaseErrorCallback: function(transaction, error) {

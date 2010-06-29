@@ -1,4 +1,8 @@
 BaseListAssistant = Class.create(BaseAssistant, {
+    /**
+     * @override
+     * @constructor
+     */
     initialize: function($super, name, applicationContext) {
         $super(name, applicationContext);
 
@@ -20,6 +24,7 @@ BaseListAssistant = Class.create(BaseAssistant, {
         this.log.info("[%s][BaseListAssistant] - expected list widget id: %s", this.name, this.listWidgetId);
     },
 
+    /** @override */
     setup: function($super) {
         $super();
 
@@ -27,6 +32,7 @@ BaseListAssistant = Class.create(BaseAssistant, {
         this.listWidget = this.controller.get(this.listWidgetId);
     },
 
+    /** @override */
     activate: function(event) {
         if (!event) {
             this.listWidget.mojo.setLengthAndInvalidate(this.listWidget.mojo.getLength());
@@ -35,26 +41,32 @@ BaseListAssistant = Class.create(BaseAssistant, {
         this.controller.listen(this.listWidgetId, Mojo.Event.listTap, this.itemTapHandler);
     },
 
+    /** @override */
     deactivate: function(event) {
         this.controller.stopListening(this.listWidgetId, Mojo.Event.listTap, this.itemTapHandler);
     },
 
+    /** @abstract */
     getFormatters: function() {
        return {};
     },
 
-    getManager: function(db) {
+    /** @abstract */
+    createManager: function(db) {
         Mojo.require(false, "Not implemented.");
     },
 
+    /** @abstract */
     listItemsCallback: function(list, offset, limit) {
         Mojo.require(false, "Not implemented.");
     },
 
+    /** @abstract */
     itemTapCallback: function(event) {
         Mojo.require(false, "Not implemented.");
     },
 
+    /** @private */
     _listItemsCallback: function(list, offset, limit) {
         if (this.manager == null) {
             this.log.info("[%s][BaseListAssistant][_listItemsCallback] - initializing manager", this.name);
@@ -64,11 +76,12 @@ BaseListAssistant = Class.create(BaseAssistant, {
         }
     },
 
+    /** @private */
     _setupManager: function(list, offset, limit) {
         this.spinner.show();
 
         this.context.getDatabase((function(db) {
-            this.manager = this.getManager(db);
+            this.manager = this.createManager(db);
             this.listItemsCallback(list, offset, limit);
             this.spinner.hide();
         }).bind(this), this.databaseErrorCallback.bind(this));
