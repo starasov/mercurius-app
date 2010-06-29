@@ -6,8 +6,10 @@ Widgets.FullScreenSpinner = Class.create({
      */
     initialize: function(name) {
         Mojo.requireString(name);
+
+        this.parentId = name + "-spinner";
+
         this.model = {
-            parentId: name + "-spinner",
             spinnerContainerId: name + "-spinner-container",
             spinnerWidgetId: name + "-spinner-widget"
         };
@@ -21,7 +23,7 @@ Widgets.FullScreenSpinner = Class.create({
             object: this.model
         });
 
-        this.controller.get(this.model.parentId).update(spinnerContainerDiv);
+        this.controller.get(this.parentId).update(spinnerContainerDiv);
 
         this.spinnerModel = {spinning : true};
 
