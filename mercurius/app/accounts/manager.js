@@ -1,2 +1,1 @@
-Accounts.Manager = Class.create(Models.GenericManager, {
-});
+Accounts.Manager = Class.create(Models.GenericManager, {});
