@@ -66,6 +66,14 @@
     width: 10px;
 }
 
+.header-dropdown-popup {
+    /*float: right;*/
+	top: 38px; /*4 px from header, max height should be same dist from bot as top*/
+    /*margin-right: -12px;*/
+    /*margin-left: 40px;*/
+	right: 0;
+}
+
 .form-icon {
     width: 32px;
     height: 32px;

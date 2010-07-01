@@ -18,6 +18,8 @@ BaseListAssistant = Class.create(BaseAssistant, {
             itemsCallback: this._listItemsCallback.bind(this)
         };
 
+        this.listModel = {"items": []};
+
         this.itemTapHandler = this.itemTapCallback.bind(this);
 
         this.listWidgetId = this.name + "-list-widget";
@@ -28,7 +30,7 @@ BaseListAssistant = Class.create(BaseAssistant, {
     setup: function($super) {
         $super();
 
-        this.controller.setupWidget(this.listWidgetId, this.listAttributes);
+        this.controller.setupWidget(this.listWidgetId, this.listAttributes, this.listModel);
         this.listWidget = this.controller.get(this.listWidgetId);
     },
 
@@ -39,6 +41,10 @@ BaseListAssistant = Class.create(BaseAssistant, {
         }
 
         this.controller.listen(this.listWidgetId, Mojo.Event.listTap, this.itemTapHandler);
+    },
+
+    invalidateItems: function() {
+        this.controller.modelChanged(this.listModel);
     },
 
     /** @override */
@@ -57,7 +63,7 @@ BaseListAssistant = Class.create(BaseAssistant, {
     },
 
     /** @abstract */
-    listItemsCallback: function(list, offset, limit) {
+    listItemsCallback: function(offset, limit, successCallback, errorCallback) {
         Mojo.require(false, "Not implemented.");
     },
 
@@ -72,17 +78,20 @@ BaseListAssistant = Class.create(BaseAssistant, {
             this.log.info("[%s][BaseListAssistant][_listItemsCallback] - initializing manager", this.name);
             this._setupManager(list, offset, limit);
         } else {
-            this.listItemsCallback(list, offset, limit);
+            this.spinner.show();
+            this.listItemsCallback(offset, limit, (function(models) {
+                list.mojo.noticeUpdatedItems(offset, models);
+                this.spinner.hide();
+            }).bind(this), this.databaseErrorCallback.bind(this));
         }
     },
 
     /** @private */
     _setupManager: function(list, offset, limit) {
         this.spinner.show();
-
         this.context.getDatabase((function(db) {
             this.manager = this.createManager(db);
-            this.listItemsCallback(list, offset, limit);
+            this._listItemsCallback(list, offset, limit);
             this.spinner.hide();
         }).bind(this), this.databaseErrorCallback.bind(this));
     }

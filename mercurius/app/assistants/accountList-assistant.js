@@ -1,7 +1,24 @@
 AccountListAssistant = Class.create(BaseListAssistant, {
+    ACCOUNT_FILTERS: {
+        all: "all",
+        open: "findOpenAccounts"
+    },
+
+    /** 
+     * @constructor
+     * @override
+     */
     initialize: function($super, applicationContext) {
         $super("account", applicationContext);
-        this.dropdown = new Widgets.HeaderDropdown("account-list-title", "account");
+
+        this.dropdown = new Widgets.HeaderDropdown({
+            parentId: "account-list-title",
+            name: "account",
+            items: [{label: "All", command: "all"}, {label: $L("Open"), command: "open", chosen: true}],
+            itemSelectedHandler: this._dropdownItemSelectedHandler.bind(this)
+        });
+
+        this.filter = this.ACCOUNT_FILTERS["open"];
     },
 
     /** @override */
@@ -10,6 +27,7 @@ AccountListAssistant = Class.create(BaseListAssistant, {
         this.dropdown.setup(this.controller);
     },
 
+    /** @override */
     activate: function($super, event) {
         if (event) {
             switch (event.source) {
@@ -19,7 +37,14 @@ AccountListAssistant = Class.create(BaseListAssistant, {
             }
         }
 
+        this.dropdown.activate();
         $super(event);
+    },
+
+    /** @override */
+    deactivate: function($super, event) {
+        $super(event);
+        this.dropdown.deactivate();
     },
 
     handleCommand: function(event) {
@@ -54,13 +79,17 @@ AccountListAssistant = Class.create(BaseListAssistant, {
         return this.context.getAccountsFactory().createManager(db);
     },
 
-    listItemsCallback: function(list, offset, limit) {
-        this.manager.find({}, {limit: limit, offset: offset}, function(accounts) {
-            list.mojo.noticeUpdatedItems(offset, accounts);
-        }, this.databaseErrorCallback.bind(this));
+    listItemsCallback: function(offset, limit, successCallback, errorCallback) {
+        this.manager[this.filter]({limit: limit, offset: offset}, successCallback, errorCallback);
     },
 
     itemTapCallback: function(event) {
         this.controller.stageController.pushScene("accountView", this.context, event.item.id);
+    },
+
+    _dropdownItemSelectedHandler: function(event) {
+        this.log.info("[_dropdownItemSelectedHandler] - event: %s", event);
+        this.filter = this.ACCOUNT_FILTERS[event];
+        this.invalidateItems();
     }
 });

@@ -42,10 +42,8 @@ CurrencyListAssistant = Class.create(BaseListAssistant, {
         return this.context.getCurrenciesFactory().createManager(db);
     },
 
-    listItemsCallback: function(list, offset, limit) {
-        this.manager.find({}, {limit: limit, offset: offset}, function(accounts) {
-            list.mojo.noticeUpdatedItems(offset, accounts);
-        }, this.databaseErrorCallback.bind(this));
+    listItemsCallback: function(offset, limit, successCallback, errorCallback) {
+        this.manager.find({}, {limit: limit, offset: offset}, successCallback, errorCallback);
     },
 
     itemTapCallback: function(event) {

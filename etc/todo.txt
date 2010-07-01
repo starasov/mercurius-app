@@ -70,12 +70,12 @@ General
 Currencies
 ----------
 
-- Add home currency setting functionality
++ Add home currency setting functionality
 
-- Add delete currency functionality
++ Add basic delete currency functionality
 
 
 Accounts
 --------
 
-- Finish validation functionality
++ Finish validation functionality
