@@ -12,11 +12,6 @@
     {"source": "app/assistants/baseEditAssistant.js"},
 
     {
-        "scenes": "sandboxView",
-        "source": "app/assistants/sandboxView-assistant.js"
-    },
-        
-    {
         "scenes": "accountList",
         "source": "app/assistants/accountList-assistant.js"
     },
@@ -28,6 +23,7 @@
         "scenes": "accountEdit",
         "source": "app/assistants/accountEdit-assistant.js"
     },
+
     {
         "scenes": "currencyList",
         "source": "app/assistants/currencyList-assistant.js"
@@ -39,6 +35,11 @@
     {
         "scenes": "currencyEdit",
         "source": "app/assistants/currencyEdit-assistant.js"
+    },
+
+    {
+        "scenes": "categoryList",
+        "source": "app/assistants/categoryList-assistant.js"
     },
 
     {"source": "app/database/$package.js"},
@@ -67,6 +68,7 @@
     {"source": "app/accounts/validator.js"},
 
     {"source": "app/categories/$package.js"},
+    {"source": "app/categories/factory.js"},
     {"source": "app/categories/manager.js"},
     {"source": "app/categories/tableModel.js"},
     {"source": "app/categories/types.js"},

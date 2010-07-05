@@ -1,8 +1,9 @@
 ApplicationContext = Class.create({
-    initialize: function(databaseService, currenciesFactory, accountsFactory) {
+    initialize: function(databaseService, currenciesFactory, accountsFactory, categoriesFactory) {
         this.databaseService = databaseService;
         this.currenciesFactory = currenciesFactory;
-        this.accountsFactory = accountsFactory
+        this.accountsFactory = accountsFactory;
+        this.categoriesFactory = categoriesFactory;
     },
 
     getDatabase: function(successCallback, errorCallback) {
@@ -15,5 +16,9 @@ ApplicationContext = Class.create({
 
     getAccountsFactory: function() {
         return this.accountsFactory;
+    },
+
+    getCategoriesFactory: function() {
+        return this.categoriesFactory;
     }
 });

@@ -22,12 +22,16 @@
     margin-right: 5px;
 }
 
-.list-header-icon.currency {
-    background: url(../images/currency-small.png) center center no-repeat;
-}
-
 .list-header-icon.account {
     background: url(../images/account-small.png) center center no-repeat;
+}
+
+.list-header-icon.category {
+    background: url(../images/category-small.png) center center no-repeat;    
+}
+
+.list-header-icon.currency {
+    background: url(../images/currency-small.png) center center no-repeat;
 }
 
 .header-dropdown {

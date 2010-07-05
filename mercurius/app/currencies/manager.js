@@ -59,9 +59,3 @@ Currencies.Manager = Class.create(Models.GenericManager, {
         }, errorCallback);
     }
 });
-
-Currencies.Manager.create = function(database) {
-    return new Currencies.Manager(database,
-                new Models.ResultSetMapper(new Models.GenericMapper(Currencies.TableModel)),
-                new Models.GenericManagerHelper(Currencies.TableModel));
-};
