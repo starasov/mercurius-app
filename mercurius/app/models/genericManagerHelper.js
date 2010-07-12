@@ -127,6 +127,7 @@ Models.GenericManagerHelper = Class.create({
         findContext.sql += " FROM " + this._tableModel.Name;
 
         this._buildWhereClause(findContext, searchParams);
+        this._buildGroupByClause(findContext, extraParams);
         this._buildOrderAndLimitClause(findContext, extraParams);
 
         findContext.sql += ";";
@@ -163,12 +164,12 @@ Models.GenericManagerHelper = Class.create({
      * @private
      */
     _buildOrderAndLimitClause: function(findContext, extraParams) {
-        if (this._nonEmptyHash(extraParams)) {
+        if (extraParams) {
             findContext.sql += " ";
             
             if (extraParams.order) {
                 Mojo.require(this._tableModel.Columns[extraParams.order], "Table model should contain '" + extraParams.order + "' column.");
-                findContext.sql += "ORDER BY " + extraParams.order + ", ";
+                findContext.sql += "ORDER BY " + extraParams.order + " ";
             }
 
             if (Object.isNumber(extraParams.limit)) {
@@ -182,6 +183,15 @@ Models.GenericManagerHelper = Class.create({
             }
             
             findContext.sql = this._trimLastCommaAndSpace(findContext.sql);
+        }
+    },
+
+    _buildGroupByClause: function(findContext, extraParams) {
+        if (extraParams && extraParams.group) {
+            Mojo.require(this._tableModel.Columns[extraParams.group], "Table model should contain '" + extraParams.group + "' column.");
+            findContext.sql += " GROUP BY ";
+            findContext.sql += extraParams.group;
+            findContext.sql += " ";
         }
     },
 
