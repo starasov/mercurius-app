@@ -138,7 +138,6 @@ Models.GenericManagerHelperTest = Class.create({
         }).bind(this));
 
         return Mojo.Test.passed;
-
     },
 
     test_to_select_sql_should_include_limit_when_passed: function() {
@@ -171,8 +170,23 @@ Models.GenericManagerHelperTest = Class.create({
     test_to_select_sql_should_include_order_limit_and_offset_when_passed: function() {
         var selectContext = this._resultSetMapper.toSelectSql({id: 1}, {order: "id", limit: 10, offset: 20});
 
-        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? ORDER BY id, LIMIT ? OFFSET ?;", selectContext.sql);
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE id=? ORDER BY id LIMIT ? OFFSET ?;", selectContext.sql);
         Test.requireArraysEqual([1, 10, 20], selectContext.params);
+
+        return Mojo.Test.passed;
+    },
+
+    test_to_select_sql_should_include_group_clause_when_passed: function() {
+        var selectContext = this._resultSetMapper.toSelectSql({}, {group: "some_flag"});
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag GROUP BY some_flag;", selectContext.sql);
+
+        return Mojo.Test.passed;
+    },
+
+    test_to_select_sql_should_raise_exception_when_non_exiting_column_passed_with_group: function() {
+        Test.requireException((function() {
+            this._resultSetMapper.toSelectSql({}, {group: "gender"});
+        }).bind(this));
 
         return Mojo.Test.passed;
     }

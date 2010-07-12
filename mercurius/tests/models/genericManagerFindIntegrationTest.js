@@ -56,6 +56,13 @@ Models.GenericManagerFindIntegrationTest = Class.create(Models.BaseGenericManage
         }, Test.defaultDatabaseErrorCallback.curry(reportResults));
     },
 
+    test_should_return_ordered_entities_starting_from_specified_offset: function(reportResults) {
+        this._manager.find(null, {order: "name", limit: 3, offset: 0}, function(models) {
+            Test.validateAndContinue(reportResults, Mojo.requireEqual.curry("banana", models[0].name));
+            Test.validate(reportResults, Mojo.requireEqual.curry("kiwi", models[2].name));
+        }, Test.defaultDatabaseErrorCallback.curry(reportResults));
+    },
+
     test_should_return_no_entities_when_offset_greater_than_count_specified: function(reportResults) {
         this._manager.find(null, {limit: 3, offset: 7}, function(models) {
             Test.validate(reportResults, Mojo.requireEqual.curry(0, models.length));
