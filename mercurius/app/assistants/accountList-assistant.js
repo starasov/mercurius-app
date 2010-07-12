@@ -46,6 +46,7 @@ AccountListAssistant = Class.create(BaseListAssistant, {
     activate: function($super, event) {
         if (event) {
             switch (event.source) {
+            case "accountView":
             case "accountEdit":
                 var expectedNewLength = this.listWidget.mojo.getLength() + event.rowsAdded;
                 this.listWidget.mojo.setLengthAndInvalidate(expectedNewLength);
@@ -90,7 +91,7 @@ AccountListAssistant = Class.create(BaseListAssistant, {
     },
 
     listItemsCallback: function(offset, limit, successCallback, errorCallback) {
-        this.manager[this.filter]({limit: limit, offset: offset}, successCallback, errorCallback);
+        this.manager[this.filter]({order: "closed_flag", limit: limit, offset: offset}, successCallback, errorCallback);
     },
 
     itemTapCallback: function(event) {
