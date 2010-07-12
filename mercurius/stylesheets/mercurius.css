@@ -71,10 +71,7 @@
 }
 
 .header-dropdown-popup {
-    /*float: right;*/
 	top: 38px; /*4 px from header, max height should be same dist from bot as top*/
-    /*margin-right: -12px;*/
-    /*margin-left: 40px;*/
 	right: 0;
 }
 
@@ -115,4 +112,9 @@
     top: 11px;
     right: 11px;
     background-image: url(../images/currency-home.png);
+}
+
+.subcategory {
+    padding: 13px 14px 15px 28px;
+    margin: 0;
 }
