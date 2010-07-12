@@ -1,5 +1,5 @@
 Models.GenericForm = Class.create({
-    log: Mojo.Log,
+    log: Utils.NullLog,
     
     initialize: function(fields) {
         Mojo.require(fields, "Passed 'fields' parameter can't be null or undefined.");
