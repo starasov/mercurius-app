@@ -1,7 +1,4 @@
-var TestValidator = Class.create(Models.GenericValidator, {
-});
-
-Models.GenericValidatorTest = Class.create({
+Validation.GenericValidatorTest = Class.create({
     before: function() {
         this.fields = {
             name: {
@@ -31,14 +28,14 @@ Models.GenericValidatorTest = Class.create({
             }
         };
 
-        this.validator = new Models.GenericValidator(this.fields);
+        this.validator = new Validation.GenericValidator(this.fields);
         
         return Mojo.Test.beforeFinished;
     },
 
     test_initialize_should_fail_when_null_fields_passed: function() {
         Test.requireException((function() {
-            new Models.GenericValidator(null);
+            new Validation.GenericValidator(null);
             this.form.setup(null);
         }).bind(this));
 
@@ -81,7 +78,7 @@ Models.GenericValidatorTest = Class.create({
     },
 
     test_validate_should_call_form_validate_function_function_exists: function() {
-        this.validator._validate = (function(fieldData, successCallback, errorCallback) {
+        this.validator._validate = (function(fieldsModels, fieldsDescriptors, successCallback, errorCallback) {
             this.validateCalled = true;
         }).bind(this);
 
@@ -103,7 +100,7 @@ Models.GenericValidatorTest = Class.create({
     },
 
     test_update_should_call_validation_callback_with_result_when_no_errors_found: function(recordResults) {
-        this.validator._validate = (function(fieldData, successCallback, errorCallback) {
+        this.validator._validate = (function(fieldsModels, fieldsDescriptors, successCallback, errorCallback) {
             successCallback();
         }).bind(this);
 
@@ -111,7 +108,7 @@ Models.GenericValidatorTest = Class.create({
     },
 
     test_update_should_call_validation_callback_with_error_result_when_field_validation_fails: function(recordResults) {
-        this.validator._validate = (function(fieldData, successCallback, errorCallback) {
+        this.validator._validate = (function(fieldsModels, fieldsDescriptors, successCallback, errorCallback) {
             errorCallback();
         }).bind(this);
 

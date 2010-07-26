@@ -34,7 +34,7 @@ Models.GenericMapperTest = Class.create({
         };
 
         var mapper = new Models.GenericMapper(this.tableModel);
-        mapper.mapRow(row, function(model) {
+        mapper.mapRow(null, row, function(model) {
             Test.validateAndContinue(recordResults, Mojo.requireEqual.curry("name_value", model.name));
             Test.validate(recordResults, Mojo.requireEqual.curry(12, model.price));
         }, recordResults)

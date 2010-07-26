@@ -3,10 +3,8 @@ BaseEditAssistant = Class.create(BaseAssistant, {
      * @override
      * @constructor
      */
-    initialize: function($super, name, applicationContext, modelId) {
+    initialize: function($super, name, applicationContext) {
         $super(name, applicationContext);
-
-        this.modelId = modelId;
 
         this.form = null;
         this.validator = null;
@@ -36,6 +34,11 @@ BaseEditAssistant = Class.create(BaseAssistant, {
     },
 
     /** @override */
+    activate: function(event) {
+        this.form.activate();
+    },
+
+    /** @override */
     cleanup: function(event) {
         this.form.cleanup();
     },
@@ -56,19 +59,14 @@ BaseEditAssistant = Class.create(BaseAssistant, {
         commandMenu.addItem("done", {label: "Done", disabled: false, command: this.saveCommandName});
     },
 
-    isNew: function() {
-        return !this.modelId;
-    },
-
     validationErrorCallback: function(key, message) {
         this.spinner.hide();
-        this.controller.showAlertDialog({
-            title: "Please correct '" + key + "' field",
-            message: message,
-            choices: [
-                {label: "OK", value: "ok", type: "medium"}
-            ]
-        });
+        Validation.Dialog.showErrorDialog(this.controller, key, message);
+    },
+
+    /** @abstract */
+    isNew: function() {
+        Mojo.require(false, "Not implemented");
     },
 
     /** @abstract */
@@ -96,13 +94,17 @@ BaseEditAssistant = Class.create(BaseAssistant, {
         Mojo.require(false, "Not implemented");
     },
 
+    updateForm: function() {
+        this.loadModel(this._updateForm.bind(this), this.databaseErrorCallback.bind(this));
+    },
+
     /** @private */
     _initialize: function(db) {
         this.log.info("[%s][BaseEditAssistant][_initialize] - begin", this.name);
 
         this.initializeManagers(db);
         this.validator = this.getValidator();
-        this.loadModel(this._updateForm.bind(this), this.databaseErrorCallback.bind(this));
+        this.updateForm();
 
         this.log.info("[%s][BaseEditAssistant][_initialize] - end", this.name);
     },
@@ -124,6 +126,7 @@ BaseEditAssistant = Class.create(BaseAssistant, {
     _save: function() {
         var model = this.form.getModel();
         this.saveModel(model, (function(id) {
+            this.spinner.hide();
             this.controller.stageController.popScene({source: this.saveSourceName, id: id, rowsAdded: 1});
         }).bind(this), this.databaseErrorCallback.bind(this));
     }

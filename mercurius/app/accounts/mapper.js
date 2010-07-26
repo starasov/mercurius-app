@@ -1,12 +1,12 @@
 Accounts.Mapper = Class.create(Models.GenericMapper, {
-
     initialize: function($super, accountsTableModel, currenciesManager) {
         $super(accountsTableModel);
         this.currenciesManager = currenciesManager;
     },
 
-    mapRow: function($super, row, successCallback, errorCallback) {
-        $super(row, (function(model) {
+    mapRow: function($super, manager, row, successCallback, errorCallback) {
+        $super(manager, row, (function(model) {
+            model.value = 1;
             if (model.currency_id) {
                 this._mapCurrency(model, successCallback, errorCallback);
             } else {

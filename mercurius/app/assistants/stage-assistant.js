@@ -32,12 +32,14 @@ StageAssistant = Class.create({
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(2, 'VISA USD', 200000, 1, 0);");
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(3, 'VISA EUR', 0, 2, 1);");
 
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(1, 'Food', 2, null);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(2, 'Entertainment', 2, null);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(4, 'Salary', 1, null);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(5, 'Bonus', 1, null);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(1, 'Food', 2, 0);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(2, 'Entertainment', 2, 0);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(4, 'Salary', 1, 0);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(5, 'Bonus', 1, 0);");
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(6, 'Books', 2, 2);");
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(7, 'Cinema', 2, 2);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(8, 'Cafe', 2, 2);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(9, 'Business Trip', 1, 4);");
 
         databaseService.setDatabaseInitializer(databaseInitializer);
 

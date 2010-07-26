@@ -36,6 +36,12 @@
     },
 
     {
+        "title": "Categories.ValidatorTest",
+        "source": "tests/categories/validatorTest.js",
+        "testFunction": "Categories.ValidatorTest"
+    },
+
+    {
         "title": "Database.InitializerTest",
         "source": "tests/database/initializerTest.js",
         "testFunction": "Database.InitializerTest"
@@ -120,15 +126,15 @@
     },
 
     {
-        "title": "Models.GenericValidatorTest",
-        "source": "tests/models/genericValidatorTest.js",
-        "testFunction": "Models.GenericValidatorTest"
+        "title": "Validation.GenericValidatorTest",
+        "source": "tests/validation/genericValidatorTest.js",
+        "testFunction": "Validation.GenericValidatorTest"
     },
 
     {
-        "title": "Models.ValidationUtilsTest",
-        "source": "tests/models/validationUtilsTest.js",
-        "testFunction": "Models.ValidationUtilsTest"
+        "title": "Validation.UtilsTest",
+        "source": "tests/validation/utilsTest.js",
+        "testFunction": "Validation.UtilsTest"
     },
 
     {

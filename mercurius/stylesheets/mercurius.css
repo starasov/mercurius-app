@@ -10,6 +10,10 @@
     display: none;
 }
 
+.clear {
+    clear: both;
+}
+
 .list-header-text {
     text-align: left;
 }
@@ -89,6 +93,10 @@
     background-image: url(../images/account-small.png) !important;
 }
 
+.form-icon.category {
+    background-image: url(../images/category-small.png) !important;
+}
+
 .currency-rate-text,
 .account-balance-text {
     float: right;
@@ -97,12 +105,31 @@
     margin-right: 8px;
 }
 
-.home-currency-icon {
+.list-icon {
     float: right;
-    margin: 12px -9px 0 0;
+    margin: 8px -9px 0 0;
     width: 56px;
-    height: 26px;
+    height: 34px;
+}
+
+.inline-edit {
+    background-color: transparent;
+}
+
+.inline-edit:focus {
+    background-color: white;
+}
+
+.list-icon.currency {
     background: url(../images/currency-home.png) center center no-repeat;
+}
+
+.list-icon.parent-category-open {
+    background: url(../images/details-open-arrow.png) center center no-repeat;
+}
+
+.list-icon.parent-category-closed {
+    background: url(../images/details-closed-arrow.png) center center no-repeat;
 }
 
 .home-currency-header-icon, .closed-account-header-icon {
@@ -115,6 +142,7 @@
 }
 
 .subcategory {
-    padding: 13px 14px 15px 28px;
-    margin: 0;
+    padding-left: 14px;
+    /*padding: 13px 14px 15px 28px;*/
+    /*margin: 0;*/
 }

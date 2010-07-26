@@ -4,7 +4,7 @@ Models.GenericMapper = Class.create({
         this.tableModel = tableModel;
     },
 
-    mapRow: function(row, successCallback, errorCallback) {
+    mapRow: function(manager, row, successCallback, errorCallback) {
         var model = {};
 
         for (var column in this.tableModel.Columns) {

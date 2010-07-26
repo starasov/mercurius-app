@@ -42,6 +42,11 @@
         "source": "app/assistants/categoryList-assistant.js"
     },
 
+    {
+        "scenes": "categoryEdit",
+        "source": "app/assistants/categoryEdit-Assistant.js"
+    },
+
     {"source": "app/database/$package.js"},
     {"source": "app/database/initializer.js"},
     {"source": "app/database/service.js"},
@@ -55,9 +60,12 @@
     {"source": "app/models/genericManager.js"},
     {"source": "app/models/genericManagerHelper.js"},
     {"source": "app/models/genericMapper.js"},
-    {"source": "app/models/genericValidator.js"},
     {"source": "app/models/resultSetMapper.js"},
-    {"source": "app/models/validationUtils.js"},
+
+    {"source": "app/validation/$package.js"},
+    {"source": "app/validation/dialogs.js"},
+    {"source": "app/validation/genericValidator.js"},
+    {"source": "app/validation/utils.js"},
 
     {"source": "app/accounts/$package.js"},
     {"source": "app/accounts/factory.js"},
@@ -69,9 +77,12 @@
 
     {"source": "app/categories/$package.js"},
     {"source": "app/categories/factory.js"},
+    {"source": "app/categories/fields.js"},
     {"source": "app/categories/manager.js"},
+    {"source": "app/categories/mapper.js"},
     {"source": "app/categories/tableModel.js"},
     {"source": "app/categories/types.js"},
+    {"source": "app/categories/validator.js"},
 
     {"source": "app/currencies/$package.js"},
     {"source": "app/currencies/factory.js"},

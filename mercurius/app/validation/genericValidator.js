@@ -1,4 +1,4 @@
-Models.GenericValidator = Class.create({
+Validation.GenericValidator = Class.create({
     initialize: function(fields) {
         Mojo.require(fields, "Passed 'fields' parameter can't be null or undefined.");
         this.fields = fields;
@@ -44,7 +44,7 @@ Models.GenericValidator = Class.create({
     _addFormValidationToChain: function(asyncChain, formFields) {
         var validationFunction = this["_validate"];
         if (validationFunction) {
-            asyncChain.add(validationFunction.bind(this, formFields));
+            asyncChain.add(validationFunction.bind(this, formFields, this.fields));
         }
     },
 

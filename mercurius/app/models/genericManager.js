@@ -33,9 +33,9 @@ Models.GenericManager = Class.create({
      * @param errorCallback - {callback} (transaction, error) a callback receives error
      * notification in case if something went wrong with counts.
      */
-    count: function(successCallback, errorCallback) {
+    count: function(searchParameters, successCallback, errorCallback) {
         this._db.transaction((function(transaction) {
-            var countContext = this._helper.toCountSql();
+            var countContext = this._helper.toCountSql(searchParameters);
             transaction.executeSql(countContext.sql, countContext.params,
                     function(innerTransaction, resultSet) {
                         successCallback(resultSet.rows.item(0).count)
@@ -52,9 +52,9 @@ Models.GenericManager = Class.create({
      * @param errorCallback - {callback} (transaction, error) a callback receives error
      * notification in case if something went wrong with counts.
      */
-    save: function(entity, successCallback, errorCallback) {
+    save: function(model, successCallback, errorCallback) {
         this._db.transaction((function(transaction) {
-            var insertContext = this._helper.toInsertSql(entity);
+            var insertContext = this._helper.toInsertSql(model);
             transaction.executeSql(insertContext.sql, insertContext.params,
                     function(innerTransaction, resultSet) {
                         successCallback(resultSet.insertId)
@@ -178,6 +178,6 @@ Models.GenericManager = Class.create({
     },
 
     _mapSqlResultSet: function(clientSuccessCallback, clientErrorCallback, transaction, sqlResultSet) {
-        this._resultSetMapper.map(sqlResultSet, clientSuccessCallback, clientErrorCallback);
+        this._resultSetMapper.map(this, sqlResultSet, clientSuccessCallback, clientErrorCallback);
     }
 });

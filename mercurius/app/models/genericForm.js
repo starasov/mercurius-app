@@ -24,6 +24,12 @@ Models.GenericForm = Class.create({
         for (var fieldName in this.fields) {
             var field = this.fields[fieldName];
             this.controller.setupWidget(field.id, field.attributes, {});
+        }
+    },
+
+    activate: function() {
+        for (var fieldName in this.fields) {
+            var field = this.fields[fieldName];
             this.controller.listen(field.id, field.changeEvent, this.formWidgetslistener);
         }
     },
@@ -69,6 +75,15 @@ Models.GenericForm = Class.create({
         return this.fieldsModels;
     },
 
+    getFieldValue: function(name) {
+        var field = this.fields[name];
+        Mojo.require(field, "Field with '" + name + "' name doesn't defined in current form.");
+
+        var fieldModel = this.fieldsModels[name];
+
+        return field.fromFieldModel(fieldModel); 
+    },
+
     _createFieldsModels: function(model) {
         var formData = {};
 
@@ -86,7 +101,7 @@ Models.GenericForm = Class.create({
 
     _handleStateChangedEvent: function() {
         this.stateChangedCallbacks.each(function(callback) {
-            callback(this.fieldsModels);
+            callback(this);
         }, this);
     }
 });

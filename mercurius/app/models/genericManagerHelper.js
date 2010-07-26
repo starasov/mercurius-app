@@ -9,11 +9,15 @@ Models.GenericManagerHelper = Class.create({
         this._tableModel = tableModel;
     },
 
-    toCountSql: function() {
+    toCountSql: function(searchParams) {
         var countContext = {};
 
-        countContext.sql = "SELECT COUNT(*) as count FROM " + this._tableModel.Name + ";";
+        countContext.sql = "SELECT COUNT(*) as count FROM " + this._tableModel.Name;
         countContext.params = [];
+
+        this._buildWhereClause(countContext, searchParams);
+
+        countContext.sql = this._trimLastCommaAndSpace(countContext.sql) + ";";
 
         return countContext;
     },
@@ -138,13 +142,15 @@ Models.GenericManagerHelper = Class.create({
     _buildWhereClause: function(findContext, searchParams) {
         if (this._nonEmptyHash(searchParams)) {
             findContext.sql += " WHERE ";
+
             for (var parameter in searchParams) {
                 var columnModel = this._tableModel.Columns[parameter];
                 Mojo.require(columnModel, "Actual table model " + this._tableModel.Name + " desn't have " + parameter + " column defined.");
-                findContext.sql += parameter + "=?, ";
+                findContext.sql += parameter + "=? AND ";
                 findContext.params.push(columnModel.toSqlType(searchParams[parameter]));
             }
-            findContext.sql = this._trimLastCommaAndSpace(findContext.sql);
+
+            findContext.sql = this._trimLastString(findContext.sql, " AND ");
         }
     },
 
@@ -211,6 +217,12 @@ Models.GenericManagerHelper = Class.create({
         var index = str.lastIndexOf(", ");
         var result = (index == str.length - 2) ? str.substring(0, str.length - 2) : str;
         
+        return result.trim();
+    },
+
+    _trimLastString: function(str, substr) {
+        var index = str.lastIndexOf(substr);
+        var result = (index == str.length - substr.length) ? str.substring(0, str.length - substr.length) : str;
         return result.trim();
     },
 

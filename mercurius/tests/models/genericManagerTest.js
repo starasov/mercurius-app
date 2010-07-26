@@ -13,7 +13,7 @@ Models.GenericManagerTest = Class.create({
     },
 
     test_count_should_use_generic_mapper_to_generate_query: function() {
-        this._genericManager.count(Prototype.emptyFunction, Prototype.emptyFunction);
+        this._genericManager.count({}, Prototype.emptyFunction, Prototype.emptyFunction);
         this._db.callback(new MockTransaction());
 
         Mojo.require(this._helper.countCalled);

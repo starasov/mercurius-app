@@ -4,10 +4,16 @@ CurrencyEditAssistant = Class.create(BaseEditAssistant, {
      * @constructor
      */
     initialize: function($super, applicationContext, currencyId) {
-        $super("currency", applicationContext, currencyId);
+        $super("currency", applicationContext);
 
+        this.currencyId = currencyId;
         this.factory = applicationContext.getCurrenciesFactory();
         this.manager = null;
+    },
+
+    /** @override */
+    isNew: function() {
+        return !this.currencyId;
     },
 
     /** @override */
@@ -34,7 +40,7 @@ CurrencyEditAssistant = Class.create(BaseEditAssistant, {
         if (this.isNew()) {
             successCallback(this.factory.createEmptyModel());
         } else {
-            this.manager.findById(this.modelId, (function(currency) {
+            this.manager.findById(this.currencyId, (function(currency) {
                 successCallback(currency);
             }).bind(this), errorCallback);
         }

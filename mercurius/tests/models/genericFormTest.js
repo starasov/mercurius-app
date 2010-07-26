@@ -83,14 +83,16 @@ Models.GenericFormTest = Class.create({
         return Mojo.Test.passed;
     },
 
-    test_should_start_listening_each_widget_when_setup_method_called: function() {
+    test_should_start_listening_each_widget_when_activate_method_called: function() {
         this.form.setup(this.controller);
+        this.form.activate();
         Mojo.requireEqual(3, this.controller.listenCalls.length);
         return Mojo.Test.passed;
     },
 
     test_should_start_listening_valid_element_and_event_type_when_setup_method_called: function() {
         this.form.setup(this.controller);
+        this.form.activate();
 
         var callData = this.controller.listenCalls[0];
         Mojo.requireEqual("name-id", callData.id);
@@ -180,6 +182,28 @@ Models.GenericFormTest = Class.create({
 
         Test.requireMapsEqual(expectedModel, actualModel);
 
+        return Mojo.Test.passed;
+    },
+
+    test_get_field_value_should_return_transformed_from_field_model_value: function() {
+        this.form.setup(this.controller);
+
+        var model = {name: "banana", age: 1, weight: 0.5, quality: 1};
+        this.form.update(model);
+
+        var name = this.form.getFieldValue("name");
+        Mojo.requireEqual("name-fromFormData", name);
+
+        return Mojo.Test.passed;
+    },
+
+    test_get_field_value_should_fail_when_field_with_specified_name_does_not_exist: function() {
+        this.form.setup(this.controller);
+
+        var model = {name: "banana", age: 1, weight: 0.5, quality: 1};
+        this.form.update(model);
+        
+        Test.requireException(this.form.getFieldValue.curry("noname"));
         return Mojo.Test.passed;
     }
 });

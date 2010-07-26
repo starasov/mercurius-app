@@ -1,4 +1,4 @@
-Currencies.Validator = Class.create(Models.GenericValidator, {
+Currencies.Validator = Class.create(Validation.GenericValidator, {
     initialize: function($super, fields, currenciesManager, newCurrencyFlag) {
         Mojo.require(currenciesManager, "Passed 'currenciesManager' can't be null.");
 
@@ -11,7 +11,7 @@ Currencies.Validator = Class.create(Models.GenericValidator, {
     _validateName: function(nameFieldModel, fieldDescriptor, successCallback, errorCallback) {
         var name = fieldDescriptor.fromFieldModel(nameFieldModel);
         
-        if (!Models.ValidationUtils.validateNotEmpty(name)) {
+        if (!Validation.Utils.validateNotEmpty(name)) {
             errorCallback("name", "Currency name can't be empty.");
         } else if (this.newCurrencyFlag) {
             this.currenciesManager.getCurrencyByName(name, function(currency) {
@@ -31,7 +31,7 @@ Currencies.Validator = Class.create(Models.GenericValidator, {
     _validateSymbol: function(symbolFieldModel, fieldDescriptor, successCallback, errorCallback) {
         var symbol = fieldDescriptor.fromFieldModel(symbolFieldModel);
 
-        if (!Models.ValidationUtils.validateNotEmpty(symbol)) {
+        if (!Validation.Utils.validateNotEmpty(symbol)) {
             errorCallback("symbol", "Currency symbol can't be empty.");
         } else {
             successCallback();
@@ -39,7 +39,7 @@ Currencies.Validator = Class.create(Models.GenericValidator, {
     },
 
     _validateRate: function(rateFieldModel, fieldDescriptor, successCallback, errorCallback) {
-        if (!Models.ValidationUtils.validateNotEmpty(rateFieldModel.value)) {
+        if (!Validation.Utils.validateNotEmpty(rateFieldModel.value)) {
             errorCallback("rate", "Currency exchange rate can't be empty.");
             return;
         }

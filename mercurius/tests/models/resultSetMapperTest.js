@@ -8,7 +8,7 @@ Models.ResultSetMapperTest = Class.create({
 
     test_should_return_empty_array_when_empty_result_set_passed: function(recordResults) {
         var resultSet = {rows: []};
-        this.resultSetMapper.map(resultSet, function(models) {
+        this.resultSetMapper.map(null, resultSet, function(models) {
             Test.validate(recordResults, Mojo.requireEqual.curry(0, models.length));
         }, recordResults);
     },
@@ -23,7 +23,7 @@ Models.ResultSetMapperTest = Class.create({
             }
         };
 
-        this.resultSetMapper.map(resultSet, (function(models) {
+        this.resultSetMapper.map(null, resultSet, (function(models) {
             Test.validate(recordResults, Mojo.requireEqual.curry(3, this.mockGenericMapper.mapRowCalledNumber));
         }).bind(this), recordResults);
     }

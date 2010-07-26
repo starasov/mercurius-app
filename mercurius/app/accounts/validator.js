@@ -1,11 +1,11 @@
-Accounts.Validator = Class.create(Models.GenericValidator, {
+Accounts.Validator = Class.create(Validation.GenericValidator, {
     log: Utils.NullLog,
 
     _validateName: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
         this.log.info("[_validateName]: %j", fieldModel);
         
         var name = fieldDescriptor.fromFieldModel(fieldModel);
-        if (!Models.ValidationUtils.validateNotEmpty(name)) {
+        if (!Validation.Utils.validateNotEmpty(name)) {
             errorCallback("name", "Account name can't be empty.");
         }
         else {
@@ -14,7 +14,7 @@ Accounts.Validator = Class.create(Models.GenericValidator, {
     },
 
     _validateOpeningBalance: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
-        if (!Models.ValidationUtils.validateNotEmpty(fieldModel.value)) {
+        if (!Validation.Utils.validateNotEmpty(fieldModel.value)) {
             errorCallback("opening_balance", "Opening Balance can't be empty.");
             return;
         }

@@ -10,7 +10,7 @@ Models.GenericManagerDeleteByIdIntegrationTest = Class.create(Models.BaseGeneric
         this._manager.deleteById(1,
                 (function(rowsAffected) {
                     Test.validateAndContinue(recordResults, Mojo.requireEqual.curry(1, rowsAffected));
-                    this._manager.count(function(count) {
+                    this._manager.count({}, function(count) {
                                 Test.validate(recordResults, Mojo.requireEqual.curry(1, count));
                             }, Test.defaultDatabaseErrorCallback.curry(recordResults));
                 }).bind(this), Test.defaultDatabaseErrorCallback.curry(recordResults));

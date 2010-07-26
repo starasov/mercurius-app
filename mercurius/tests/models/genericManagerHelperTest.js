@@ -14,9 +14,15 @@ Models.GenericManagerHelperTest = Class.create({
         return Mojo.Test.beforeFinished;
     },
 
-    test_to_count_should_return_expected_query: function() {
+    test_to_count_should_return_expected_query_when_no_search_parameters_specified: function() {
         var countContext = this._resultSetMapper.toCountSql();
         Mojo.requireEqual("SELECT COUNT(*) as count FROM name_and_flag;", countContext.sql);
+        return Mojo.Test.passed;
+    },
+
+    test_to_count_should_return_expected_query_when_search_parameters_specified: function() {
+        var countContext = this._resultSetMapper.toCountSql({some_flag: true});
+        Mojo.requireEqual("SELECT COUNT(*) as count FROM name_and_flag WHERE some_flag=?;", countContext.sql);
         return Mojo.Test.passed;
     },
 
@@ -188,6 +194,12 @@ Models.GenericManagerHelperTest = Class.create({
             this._resultSetMapper.toSelectSql({}, {group: "gender"});
         }).bind(this));
 
+        return Mojo.Test.passed;
+    },
+
+    test_to_select_sql_should_group_multiple_search_parameters_with_AND_operator: function() {
+        var selectContext = this._resultSetMapper.toSelectSql({name: "Named", some_flag: true}, {});
+        Mojo.requireEqual("SELECT id, name, some_flag FROM name_and_flag WHERE name=? AND some_flag=?;", selectContext.sql);
         return Mojo.Test.passed;
     }
 });

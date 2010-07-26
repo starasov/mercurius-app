@@ -21,7 +21,7 @@ Accounts.MapperTest = Class.create({
 
     test_should_not_map_currency_model_when_no_currency_id_exists: function(recordResults) {
         this.accountRow.currency_id = null;
-        this.mapper.mapRow(this.accountRow, (function(account) {
+        this.mapper.mapRow(null,this.accountRow, (function(account) {
             Test.validate(recordResults, Mojo.requireFalse.curry(account.currency));
         }).bind(this), recordResults);
     },
@@ -29,7 +29,7 @@ Accounts.MapperTest = Class.create({
     test_should_map_currency_model_when_currency_id_exists: function(recordResults) {
         this.mockCurrenciesManager.findByIdResult = this.currency;
 
-        this.mapper.mapRow(this.accountRow, (function(account) {
+        this.mapper.mapRow(null, this.accountRow, (function(account) {
             Test.validateAndContinue(recordResults, Mojo.requireEqual.curry(1, this.mockCurrenciesManager.findByIdCalledNumber));
             Test.validate(recordResults, Mojo.requireEqual.curry(this.currency, account.currency));
         }).bind(this), recordResults);

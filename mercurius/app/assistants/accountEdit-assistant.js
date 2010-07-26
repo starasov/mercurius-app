@@ -4,8 +4,9 @@ AccountEditAssistant = Class.create(BaseEditAssistant, {
      * @constructor
      */
     initialize: function($super, applicationContext, accountId) {
-        $super("account", applicationContext, accountId);
+        $super("account", applicationContext);
 
+        this.accountId = accountId;
         this.accountsFactory = applicationContext.getAccountsFactory();
         this.currenciesFactory = applicationContext.getCurrenciesFactory();
 
@@ -13,6 +14,11 @@ AccountEditAssistant = Class.create(BaseEditAssistant, {
         this.currenciesManager = null;
 
         this.currencies = null;
+    },
+
+    /** @override */
+    isNew: function() {
+        return !this.accountId;
     },
 
     /** @override */
@@ -55,7 +61,7 @@ AccountEditAssistant = Class.create(BaseEditAssistant, {
             this.account = this.accountsFactory.createEmptyModel();
             successCallback();
         } else {
-            this.accountsManager.findById(this.modelId, (function(account) {
+            this.accountsManager.findById(this.accountId, (function(account) {
                 this.account = account;
                 successCallback();
             }).bind(this), errorCallback);

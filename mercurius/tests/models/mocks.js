@@ -31,7 +31,7 @@ var MockGenericHelper = Class.create({
 });
 
 var MockResultSetMapper = Class.create({
-    map: function(resultSet, successCallback, errorCallback) {
+    map: function(manager, resultSet, successCallback, errorCallback) {
         this.mapCalled = true;
         successCallback([]);
     }
@@ -69,7 +69,7 @@ var MockGenericMapper = Class.create({
         this.mapRowCalledNumber = 0;
     },
 
-    mapRow: function(row, successCallback, errorCallback) {
+    mapRow: function(manager, row, successCallback, errorCallback) {
         this.mapRowCalledNumber += 1;
 
         if (this.shouldCallSuccessCallback) {
@@ -84,10 +84,16 @@ var MockGenericManager = Class.create({
     initialize: function() {
         this.findByIdResult = null;
         this.findByIdCalledNumber = 0;
+        this.findResults = []
     },
 
     findById: function(id, successCallback, errorCallback) {
         this.findByIdCalledNumber += 1;
         successCallback(this.findByIdResult);
+    },
+
+    find: function(searchParameters, extraParameters, successCallback, errorCallback) {
+        successCallback(this.findResults);
+
     }
 });

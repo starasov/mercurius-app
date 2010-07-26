@@ -34,7 +34,7 @@ AccountListAssistant = Class.create(BaseListAssistant, {
     /** @override */
     setup: function($super) {
         this.listAttributes.dividerFunction = (function(account) {
-            return this.dividerFunction(account) }).bind(this);
+            return this.dividerFunction(account); }).bind(this);
         this.listAttributes.dividerTemplate = "accountList/divider";
 
         $super();
@@ -58,9 +58,9 @@ AccountListAssistant = Class.create(BaseListAssistant, {
     },
 
     /** @override */
-    deactivate: function($super, event) {
+    cleanup: function($super, event) {
         $super(event);
-        this.dropdown.deactivate();
+        this.dropdown.cleanup();
     },
 
     handleCommand: function(event) {
@@ -86,8 +86,8 @@ AccountListAssistant = Class.create(BaseListAssistant, {
         commandMenu.addItem("addAccount", {icon: "new", command: "addAccount"});
     },
 
-    createManager: function(db) {
-        return this.context.getAccountsFactory().createManager(db);
+    initializeFromDatabase: function(db) {
+        this.manager = this.context.getAccountsFactory().createManager(db);
     },
 
     listItemsCallback: function(offset, limit, successCallback, errorCallback) {

@@ -38,8 +38,8 @@ CurrencyListAssistant = Class.create(BaseListAssistant, {
         commandMenu.addItem("new", {icon: "new", command: "addCurrency"});
     },
 
-    createManager: function(db) {
-        return this.context.getCurrenciesFactory().createManager(db);
+    initializeFromDatabase: function(db) {
+        this.manager = this.context.getCurrenciesFactory().createManager(db);
     },
 
     listItemsCallback: function(offset, limit, successCallback, errorCallback) {

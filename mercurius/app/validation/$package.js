@@ -1,0 +1,1 @@
+if (!Validation) var Validation = {};

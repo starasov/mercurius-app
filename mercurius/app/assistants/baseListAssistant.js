@@ -6,7 +6,7 @@ BaseListAssistant = Class.create(BaseAssistant, {
     initialize: function($super, name, applicationContext) {
         $super(name, applicationContext);
 
-        this.manager = null;
+        this.isInitialized = false;
 
         this.listAttributes = {
             itemTemplate: this.name + "List/listitem",
@@ -18,7 +18,7 @@ BaseListAssistant = Class.create(BaseAssistant, {
             itemsCallback: this._listItemsCallback.bind(this)
         };
 
-        this.listModel = {"items": []};
+        this.listModel = {items: []};
 
         this.itemTapHandler = this.itemTapCallback.bind(this);
 
@@ -43,23 +43,23 @@ BaseListAssistant = Class.create(BaseAssistant, {
         this.controller.listen(this.listWidgetId, Mojo.Event.listTap, this.itemTapHandler);
     },
 
+    /** @override */
+    cleanup: function(event) {
+        this.controller.stopListening(this.listWidgetId, Mojo.Event.listTap, this.itemTapHandler);
+    },
+
     invalidateItems: function() {
         this.controller.modelChanged(this.listModel);
     },
 
-    /** @override */
-    deactivate: function(event) {
-        this.controller.stopListening(this.listWidgetId, Mojo.Event.listTap, this.itemTapHandler);
+    /** @abstract */
+    initializeFromDatabase: function(db) {
+        Mojo.require(false, "Not implemented.");
     },
 
     /** @abstract */
     getFormatters: function() {
        return {};
-    },
-
-    /** @abstract */
-    createManager: function(db) {
-        Mojo.require(false, "Not implemented.");
     },
 
     /** @abstract */
@@ -74,7 +74,7 @@ BaseListAssistant = Class.create(BaseAssistant, {
 
     /** @private */
     _listItemsCallback: function(list, offset, limit) {
-        if (this.manager == null) {
+        if (!this.isInitialized) {
             this.log.info("[%s][BaseListAssistant][_listItemsCallback] - initializing manager", this.name);
             this._setupManager(list, offset, limit);
         } else {
@@ -90,7 +90,8 @@ BaseListAssistant = Class.create(BaseAssistant, {
     _setupManager: function(list, offset, limit) {
         this.spinner.show();
         this.context.getDatabase((function(db) {
-            this.manager = this.createManager(db);
+            this.initializeFromDatabase(db);
+            this.isInitialized = true;
             this._listItemsCallback(list, offset, limit);
             this.spinner.hide();
         }).bind(this), this.databaseErrorCallback.bind(this));
