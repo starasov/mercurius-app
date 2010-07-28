@@ -44,7 +44,7 @@ BaseListAssistant = Class.create(BaseAssistant, {
     },
 
     /** @override */
-    cleanup: function(event) {
+    deactivate: function(event) {
         this.controller.stopListening(this.listWidgetId, Mojo.Event.listTap, this.itemTapHandler);
     },
 

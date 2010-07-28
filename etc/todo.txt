@@ -67,6 +67,10 @@ General
 
 - Create main app screen.
 
+- Handle deactivate method in assistants instead of cleanup to unregister listeners.
+
+- Add delete confirmation dialog for view assistants.
+
 Currencies
 ----------
 

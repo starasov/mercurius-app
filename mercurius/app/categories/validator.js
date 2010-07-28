@@ -1,7 +1,8 @@
 Categories.Validator = Class.create(Validation.GenericValidator, {
-    initialize: function($super, categoriesManager, fields) {
+    initialize: function($super, categoriesManager, categoryId, fields) {
         $super(fields);
         this.categoriesManager = categoriesManager;
+        this.categoryId = categoryId;
     },
 
     _validateName: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
@@ -21,8 +22,9 @@ Categories.Validator = Class.create(Validation.GenericValidator, {
 
     _validateNameAvailability: function(name, parentId, successCallback, errorCallback) {
         var searchParams = {name: name, parent_id: parentId};
-        this.categoriesManager.find(searchParams, {}, function(categories) {
-            if (categories.length) {
+
+        this.categoriesManager.find(searchParams, {}, (function(categories) {
+            if (categories.length && categories[0].id != this.categoryId) {
                 if (parentId) {
                     errorCallback("name", "Subcategory with specified name alredy exists.");
                 } else {
@@ -31,8 +33,7 @@ Categories.Validator = Class.create(Validation.GenericValidator, {
             } else {
                 successCallback();
             }
-        }, function(transaction, error) {
-            Mojo.Log.error("[validateNameAvailability] - error: %o", error.message);
+        }).bind(this), function(transaction, error) {
             errorCallback("_all", "Failed to read categories data.");
         });
     }

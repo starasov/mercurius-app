@@ -19,11 +19,7 @@ Currencies.Factory = Class.create({
         return new Models.GenericForm(Currencies.Fields);
     },
 
-    createNewCurrencyValidator: function(currenciesManager) {
-        return new Currencies.Validator(Currencies.Fields, currenciesManager, true);
-    },
-
-    createEditCurrencyValidator: function(currenciesManager) {
-        return new Currencies.Validator(Currencies.Fields, currenciesManager, false);
+    createValidator: function(currenciesManager, currencyId) {
+        return new Currencies.Validator(Currencies.Fields, currenciesManager, currencyId);
     }
 });

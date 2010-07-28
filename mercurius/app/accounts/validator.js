@@ -2,8 +2,6 @@ Accounts.Validator = Class.create(Validation.GenericValidator, {
     log: Utils.NullLog,
 
     _validateName: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
-        this.log.info("[_validateName]: %j", fieldModel);
-        
         var name = fieldDescriptor.fromFieldModel(fieldModel);
         if (!Validation.Utils.validateNotEmpty(name)) {
             errorCallback("name", "Account name can't be empty.");
@@ -21,7 +19,7 @@ Accounts.Validator = Class.create(Validation.GenericValidator, {
 
         var openingBalance = fieldDescriptor.fromFieldModel(fieldModel);
         if (isNaN(openingBalance) || (openingBalance < 0.0)) {
-            errorCallback("opening_balance", "Opening Balance should be non negative number.");
+            errorCallback("opening_balance", "Opening Balance should be positive number.");
         } else {
             successCallback();
         }
@@ -29,8 +27,6 @@ Accounts.Validator = Class.create(Validation.GenericValidator, {
     },
 
     _validateCurrencyId: function(fieldModel, fieldDescriptor, successCallback, errorCallback) {
-        this.log.info("[_validateCurrencyId]: %j", fieldModel);
-
         var currencyId = fieldDescriptor.fromFieldModel(fieldModel);
         if (isNaN(currencyId) || currencyId == 0) {
             errorCallback("currency", "Currency should be assigned to the account.");

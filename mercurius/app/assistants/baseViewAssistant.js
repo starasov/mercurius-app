@@ -47,11 +47,12 @@ BaseViewAssistant = Class.create(BaseAssistant, {
         if (event.type == Mojo.Event.command) {
             switch (event.command) {
             case this.editCommandName:
-                this.controller.stageController.pushScene(this.editViewName, this.context, this.modelId);
+                this.editModel();
                 event.stop();
                 break;
             case this.deleteCommandName:
-                this._deleteModel();
+                this.deleteModel();
+                event.stop();
                 break;
             }
         }
@@ -67,10 +68,6 @@ BaseViewAssistant = Class.create(BaseAssistant, {
         appMenu.addItem(this.APP_MENU_DELETE_ITEM, {label: "Delete", disabled: false, command: this.deleteCommandName});
     },
 
-    loadModel: function() {
-        this.manager.findById(this.modelId, this._updateView.bind(this), this.databaseErrorCallback.bind(this));
-    },
-
     /** @abstract */
     createManager: function(db) {
         Mojo.require(false, "Not implemented");
@@ -79,6 +76,27 @@ BaseViewAssistant = Class.create(BaseAssistant, {
     /** @abstract */
     updateView: function(model) {
         Mojo.require(false, "Not implemented");
+    },
+
+    prepareModel: function(model, successCallback, errorCallback) {
+        successCallback();
+    },
+
+    loadModel: function() {
+        this._loadModel((function(model) {
+            this.prepareModel(model, this._updateView.bind(this, model), this.databaseErrorCallback.bind(this));
+        }).bind(this), this.databaseErrorCallback.bind(this));
+    },
+
+    deleteModel: function() {
+        this.spinner.show();
+        this.manager.deleteById(this.modelId, (function() {
+            this.controller.stageController.popScene({source: this.sourceName, rowsAdded: -1});
+        }).bind(this), this.databaseErrorCallback.bind(this))
+    },
+
+    editModel: function() {
+        this.controller.stageController.pushScene(this.editViewName, this.context, this.modelId);
     },
 
     /** @private */
@@ -93,10 +111,8 @@ BaseViewAssistant = Class.create(BaseAssistant, {
         this.spinner.hide();
     },
 
-    _deleteModel: function() {
-        this.spinner.show();
-        this.manager.deleteById(this.modelId, (function() {
-            this.controller.stageController.popScene({source: this.sourceName, rowsAdded: -1});
-        }).bind(this), this.databaseErrorCallback.bind(this))
+    /** @private */
+    _loadModel: function(successCallback, errorCallback) {
+        this.manager.findById(this.modelId, successCallback, errorCallback);
     }
 });

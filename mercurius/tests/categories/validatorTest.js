@@ -7,7 +7,7 @@ Categories.ValidatorTest = Class.create({
         };
 
         this.manager = new MockGenericManager();
-        this.validator = new Categories.Validator(this.manager, Categories.Fields);
+        this.validator = new Categories.Validator(this.manager, 1, Categories.Fields);
 
         return Mojo.Test.beforeFinished;
     },
@@ -28,11 +28,18 @@ Categories.ValidatorTest = Class.create({
     },
 
     test_should_fail_validation_when_category_with_specified_name_already_exists: function(recordResults) {
-        this.manager.findResults = [{/* assume that we find one*/}];
+        this.manager.findResults = [{id: 2}];
         this.validator.validate(this.categoryFormFields, function() {
-            recordResults("Validation should fail for empty category name.");
+            recordResults("Validation should fail for duplicated category name.");
         }, function(key, message) {
             Test.validate(recordResults, Mojo.requireEqual.curry("name", key));
+        });
+    },
+
+    test_should_pass_validation_when_category_was_editing_and_name_was_not_changed: function(recordResults) {
+        this.manager.findResults = [{id: 1}];
+        this.validator.validate(this.categoryFormFields, recordResults, function(key, message) {
+            recordResults("Validation should pass for '" + key + "' field.");
         });
     }
 });

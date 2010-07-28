@@ -1,11 +1,11 @@
 Currencies.Validator = Class.create(Validation.GenericValidator, {
-    initialize: function($super, fields, currenciesManager, newCurrencyFlag) {
+    initialize: function($super, fields, currenciesManager, currencyId) {
         Mojo.require(currenciesManager, "Passed 'currenciesManager' can't be null.");
 
         $super(fields);
 
         this.currenciesManager = currenciesManager;
-        this.newCurrencyFlag = newCurrencyFlag;
+        this.currencyId = currencyId;
     },
 
     _validateName: function(nameFieldModel, fieldDescriptor, successCallback, errorCallback) {
@@ -13,18 +13,16 @@ Currencies.Validator = Class.create(Validation.GenericValidator, {
         
         if (!Validation.Utils.validateNotEmpty(name)) {
             errorCallback("name", "Currency name can't be empty.");
-        } else if (this.newCurrencyFlag) {
-            this.currenciesManager.getCurrencyByName(name, function(currency) {
-                if (currency != null) {
+        } else {
+            this.currenciesManager.getCurrencyByName(name, (function(currency) {
+                if (currency && currency.id != this.currencyId) {
                     errorCallback("name", "Currency with specified name already exists.");
                 } else {
                     successCallback();
                 }
-            }, function(transaction, error) {
+            }).bind(this), function(transaction, error) {
                 errorCallback("_all", "Failed to read currencies data.");
             });
-        } else {
-            successCallback();            
         }
     },
 

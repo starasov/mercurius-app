@@ -47,7 +47,7 @@ Widgets.HeaderDropdown = Class.create({
         this.controller.get(this.viewModel.dropdownId).observe(Mojo.Event.tap, this.dropdownTapHandler);
     },
 
-    cleanup: function() {
+    deactivate: function() {
         this.controller.get(this.viewModel.dropdownId).stopObserving(Mojo.Event.tap, this.dropdownTapHandler);
     },
 

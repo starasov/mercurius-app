@@ -101,18 +101,18 @@ Models.GenericFormTest = Class.create({
         return Mojo.Test.passed;
     },
 
-    test_cleanup_should_stop_event_listening_for_each_previously_setup_widget: function() {
+    test_deactivate_should_stop_event_listening_for_each_previously_setup_widget: function() {
         this.form.setup(this.controller);
-        this.form.cleanup();
+        this.form.deactivate();
 
         Mojo.requireEqual(3, this.controller.stopListeningCalls.length);
 
         return Mojo.Test.passed;
     },
 
-    test_should_pass_valid_data_to_stop_listening_method_when_cleanup_called: function() {
+    test_should_pass_valid_data_to_stop_listening_method_when_deactivate_called: function() {
         this.form.setup(this.controller);
-        this.form.cleanup();
+        this.form.deactivate();
 
         var callData = this.controller.stopListeningCalls[0];
         Mojo.requireEqual("name-id", callData.id);

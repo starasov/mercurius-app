@@ -23,11 +23,7 @@ CurrencyEditAssistant = Class.create(BaseEditAssistant, {
 
     /** @override */
     getValidator: function() {
-        if (this.isNew()) {
-            return this.factory.createNewCurrencyValidator(this.manager);
-        } else {
-            return this.factory.createEditCurrencyValidator(this.manager);
-        }
+        return this.factory.createValidator(this.manager, this.currencyId);
     },
 
     /** @override */

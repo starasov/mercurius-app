@@ -46,7 +46,9 @@ CategoryListAssistant = Class.create(BaseListAssistant, {
         if (event) {
             switch (event.source) {
             case "categoryEdit":
+            case "categoryView":
                 this.invalidateItems();
+                break;
             }
         }
 
@@ -60,7 +62,7 @@ CategoryListAssistant = Class.create(BaseListAssistant, {
     deactivate: function($super, event) {
         $super(event);
 
-        this.dropdown.cleanup();
+        this.dropdown.deactivate();
         this.controller.stopListening("category-list-widget", Mojo.Event.listAdd, this.categoryAddHandler);
     },
 
@@ -71,7 +73,7 @@ CategoryListAssistant = Class.create(BaseListAssistant, {
 
     /** @override */
     listItemsCallback: function(offset, limit, successCallback, errorCallback) {
-        this.manager.findTopCategoriesByType(this.categoryType, {limit: limit, offset: offset}, successCallback, errorCallback);
+        this.manager.findTopCategoriesByType(this.categoryType, {order: "name", limit: limit, offset: offset}, successCallback, errorCallback);
     },
 
     /** @override */
@@ -83,6 +85,8 @@ CategoryListAssistant = Class.create(BaseListAssistant, {
             var drawers = this.controller.document.getElementsByName("subcategoryListDrawer");
             drawers[event.index].mojo.toggleState();
             break;
+        default:
+            this.controller.stageController.pushScene("categoryView", this.context, event.item.id);
         }
     },
 
@@ -108,7 +112,7 @@ CategoryListAssistant = Class.create(BaseListAssistant, {
         var parent_id = parseInt(list.getAttribute("x-parent-id"));
 
         this.spinner.show();
-        this.manager.findChildCategories(parent_id, {limit: limit, offset: offset}, (function(models) {
+        this.manager.findChildCategories(parent_id, {order: "name", limit: limit, offset: offset}, (function(models) {
             this.controller.setupWidget("childrenField", {modelProperty: "name"});
             list.mojo.noticeUpdatedItems(offset, models);
             this.spinner.hide();

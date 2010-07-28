@@ -58,9 +58,9 @@ AccountListAssistant = Class.create(BaseListAssistant, {
     },
 
     /** @override */
-    cleanup: function($super, event) {
+    deactivate: function($super, event) {
         $super(event);
-        this.dropdown.cleanup();
+        this.dropdown.deactivate();
     },
 
     handleCommand: function(event) {

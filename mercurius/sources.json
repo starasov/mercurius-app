@@ -43,6 +43,11 @@
     },
 
     {
+        "scenes": "categoryView",
+        "source": "app/assistants/categoryView-assistant.js"
+    },
+
+    {
         "scenes": "categoryEdit",
         "source": "app/assistants/categoryEdit-Assistant.js"
     },
@@ -79,7 +84,6 @@
     {"source": "app/categories/factory.js"},
     {"source": "app/categories/fields.js"},
     {"source": "app/categories/manager.js"},
-    {"source": "app/categories/mapper.js"},
     {"source": "app/categories/tableModel.js"},
     {"source": "app/categories/types.js"},
     {"source": "app/categories/validator.js"},

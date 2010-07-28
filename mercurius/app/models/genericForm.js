@@ -34,7 +34,7 @@ Models.GenericForm = Class.create({
         }
     },
 
-    cleanup: function() {
+    deactivate: function() {
         for (var fieldName in this.fields) {
             var field = this.fields[fieldName];
             this.controller.stopListening(field.id, field.changeEvent, this.formWidgetslistener);

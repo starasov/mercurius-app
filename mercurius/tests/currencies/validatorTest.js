@@ -1,7 +1,7 @@
 Currencies.ValidatorTest = Class.create({
     before: function() {
         this._currenciesManager = new Currencies.MockManager();
-        this._validator = new Currencies.Validator(Currencies.Fields, this._currenciesManager, true);
+        this._validator = new Currencies.Validator(Currencies.Fields, this._currenciesManager, 1);
 
         this._currencyData = {
             name: {value: "USD"},
@@ -27,7 +27,7 @@ Currencies.ValidatorTest = Class.create({
     },
 
     test_validation_should_fail_when_currency_with_specified_name_already_exists: function(recordResults) {
-        this._currenciesManager.getCurrencyByNameResult = this._currencyData;
+        this._currenciesManager.getCurrencyByNameResult = {id: 2};
         this._validator.validate(this._currencyData, Prototype.emptyFunction, function(key, message) {
             Test.validate(recordResults, Mojo.requireEqual.curry("name", key));
         });
@@ -75,9 +75,15 @@ Currencies.ValidatorTest = Class.create({
     },
 
     test_validation_should_be_succeeded_when_currency_with_specified_name_does_not_exist: function(recordResults) {
-        this._currenciesManager.getCurrencyByNameResult = this._currencyData;
-        this._validator.newCurrencyFlag = false;
+        this._currenciesManager.getCurrencyByNameResult = null;
         this._validator.validate(this._currencyData, recordResults, Prototype.emptyFunction);
+    },
+
+    test_validation_should_be_succeeded_when_currency_was_editing_and_name_was_not_changed: function(recordResults) {
+        this._currenciesManager.getCurrencyByNameResult = {id: 1};
+        this._validator.validate(this._currencyData, recordResults, function(key, message) {
+            recordResults("Validation should pass for '" + key + "' field: " + message);
+        });
     },
 
     test_validation_should_be_succeeded_when_currency_editing_and_name_was_not_changed: function(recordResults) {

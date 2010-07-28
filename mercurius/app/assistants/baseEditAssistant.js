@@ -39,8 +39,8 @@ BaseEditAssistant = Class.create(BaseAssistant, {
     },
 
     /** @override */
-    cleanup: function(event) {
-        this.form.cleanup();
+    deactivate: function(event) {
+        this.form.deactivate();
     },
 
     /** @override */

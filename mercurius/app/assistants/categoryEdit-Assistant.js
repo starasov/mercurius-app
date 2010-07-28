@@ -28,7 +28,7 @@ CategoryEditAssistant = Class.create(BaseEditAssistant, {
 
     /** @override */
     getValidator: function() {
-        return this.factory.createValidator(this.manager);
+        return this.factory.createValidator(this.manager, this.category.id);
     },
 
     /** @override */
