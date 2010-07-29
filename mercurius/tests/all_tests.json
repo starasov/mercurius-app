@@ -36,6 +36,12 @@
     },
 
     {
+        "title": "Categories.ManagerFindIntegrationTest",
+        "source": "tests/categories/managerFindIntegrationTest.js",
+        "testFunction": "Categories.ManagerFindIntegrationTest"
+    },
+
+    {
         "title": "Categories.ValidatorTest",
         "source": "tests/categories/validatorTest.js",
         "testFunction": "Categories.ValidatorTest"
