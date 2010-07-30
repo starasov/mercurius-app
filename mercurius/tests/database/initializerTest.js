@@ -23,7 +23,6 @@ Database.InitializerTest = Class.create({
         return Mojo.Test.beforeFinished;
     },
 
-
     test_should_create_table_sql_for_model: function() {
         var testTableModel = {
             Name: "test",
@@ -41,7 +40,6 @@ Database.InitializerTest = Class.create({
         return Mojo.Test.passed;
     },
 
-
     test_should_generate_valid_drop_table_sql_for_model: function() {
         this.initializer.addTableModel(this.tableModel);
         var sql = this.initializer._generateDropTableModelsSql();
@@ -49,7 +47,6 @@ Database.InitializerTest = Class.create({
 
         return Mojo.Test.passed;
     },
-
 
     test_should_create_table_sql_for_model_with_nullable_fields: function() {
         var testTableModel = {
@@ -65,7 +62,6 @@ Database.InitializerTest = Class.create({
         return Mojo.Test.passed;
     },
 
-
     test_should_create_table_sql_for_model_with_not_nullable_fields: function() {
         var testTableModel = {
             Name: "test",
@@ -80,14 +76,12 @@ Database.InitializerTest = Class.create({
         return Mojo.Test.passed;
     },
 
-
     test_should_order_table_columns_in_same_to_declaration_order: function() {
         var sql = this.initializer._generateCreateTableModelSql(this.tableModel);
         Mojo.requireEqual("CREATE TABLE test(id INTEGER PRIMARY KEY NOT NULL, name TEXT NULL); GO;", sql);
 
         return Mojo.Test.passed;
     },
-
 
     test_should_fail_initialization_when_no_error_callback_specified: function() {
         Test.requireException((function() {
@@ -97,7 +91,6 @@ Database.InitializerTest = Class.create({
         return Mojo.Test.passed;
     },
 
-
     test_should_fail_initialization_when_no_success_callback_specified: function() {
         Test.requireException((function() {
             this.initializer.initializeDatabase(new MockDatabase(), null, Prototype.emptyFunction);
@@ -105,7 +98,6 @@ Database.InitializerTest = Class.create({
 
         return Mojo.Test.passed;
     },
-
 
     test_should_call_error_handler_when_database_error_occurred: function() {
         this.initializer.addTableModel(this.tableModel);
@@ -120,25 +112,20 @@ Database.InitializerTest = Class.create({
         return Mojo.Test.passed;
     },
 
-
     test_should_call_success_handler_when_all_transactions_are_completed: function() {
         this.initializer.addTableModel(this.tableModel);
         this.initializer.initializeDatabase(this.mockDatabase, this.mockSuccessHandler.bind(this.mockSuccessHandler),
                 Prototype.emptyFunction);
 
+        this.mockDatabase.callback(this.mockTransaction);
+        
+        // DROP TABLE statement is executed here.
+        this.mockTransaction.successHandler(this.mockTransaction, {});
 
-        { // DROP TABLE statement is executed here.
-            this.mockDatabase.callback(this.mockTransaction);
-            this.mockTransaction.successHandler(this.mockTransaction, {});
-        }
-
-        { // CREATE TABLE statement is executed here.
-            this.mockDatabase.callback(this.mockTransaction);
-            this.mockTransaction.successHandler(this.mockTransaction, {});
-        }
+        // CREATE TABLE statement is executed here.
+        this.mockTransaction.successHandler(this.mockTransaction, {});
 
         Mojo.require(this.mockSuccessHandler.invoked);
-
         return Mojo.Test.passed;
     },
 
@@ -167,19 +154,18 @@ Database.InitializerTest = Class.create({
         this.initializer.initializeDatabase(this.mockDatabase, this.mockSuccessHandler.bind(this.mockSuccessHandler),
                 Prototype.emptyFunction);
 
-        { // DROP TABLE statement is executed here.
-            this.mockDatabase.callback(this.mockTransaction);
-            this.mockTransaction.successHandler(this.mockTransaction, {});
-        }
-
-        { // CREATE TABLE statement is executed here.
-            this.mockDatabase.callback(this.mockTransaction);
-            this.mockTransaction.successHandler(this.mockTransaction, {});
-        }
-
         this.mockDatabase.callback(this.mockTransaction);
-        Mojo.requireEqual(customInsertStatement, this.mockTransaction.sql);
 
+        // DROP TABLE statement is executed here.
+        this.mockTransaction.successHandler(this.mockTransaction, {});
+
+        // CREATE TABLE statement is executed here.
+        this.mockTransaction.successHandler(this.mockTransaction, {});
+
+        // Post create INSERT statement is executed here.
+        this.mockTransaction.successHandler(this.mockTransaction, {});
+
+        Mojo.requireEqual(customInsertStatement, this.mockTransaction.sql);
         return Mojo.Test.passed;
     }
 });

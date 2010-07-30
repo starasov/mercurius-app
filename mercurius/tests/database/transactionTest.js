@@ -20,7 +20,7 @@ Database.TransactionTest = Class.create({
     },
 
     test_should_not_be_able_add_command_when_not_in_new_state: function() {
-        this.transaction.addCommand("1", this.errorCommand);
+        this.transaction.addCommand(this.errorCommand);
         this.transaction.execute(Prototype.emptyFunction, Prototype.emptyFunction);
         this.db.callback();
 
@@ -31,7 +31,7 @@ Database.TransactionTest = Class.create({
     },
 
     test_should_execute_error_callback_when_execution_failed: function(recordResults) {
-        this.transaction.addCommand("1", this.errorCommand);
+        this.transaction.addCommand(this.errorCommand);
         this.transaction.execute(Prototype.emptyFunction, function(transaction, error) {
             recordResults();
         });
@@ -39,7 +39,7 @@ Database.TransactionTest = Class.create({
     },
 
     test_should_switch_into_failed_state_when_execution_failed: function() {
-        this.transaction.addCommand("1", this.errorCommand);
+        this.transaction.addCommand(this.errorCommand);
         this.transaction.execute(Prototype.emptyFunction, Prototype.emptyFunction);
         this.db.callback();
 
@@ -49,7 +49,7 @@ Database.TransactionTest = Class.create({
     },
 
     test_should_execute_success_callback_when_execution_completed: function(recordResults) {
-        this.transaction.addCommand("1", this.successCommand.curry({}));
+        this.transaction.addCommand(this.successCommand.curry({}));
 
         this.transaction.execute(function(resultSet) {
             recordResults();
@@ -59,9 +59,9 @@ Database.TransactionTest = Class.create({
     },
 
     test_should_propagate_all_results_when_execution_completed: function(recordResults) {
-        this.transaction.addCommand("1", this.successCommand.curry("1"));
-        this.transaction.addCommand("2", this.successCommand.curry("2"));
-        this.transaction.addCommand("3", this.successCommand.curry("3"));
+        this.transaction.addCommand(this.successCommand.curry("1"), function(context, result) { context["1"] = result; });
+        this.transaction.addCommand(this.successCommand.curry("2"), function(context, result) { context["2"] = result; });
+        this.transaction.addCommand(this.successCommand.curry("3"), function(context, result) { context["3"] = result; });
 
         this.transaction.execute(function(results) {
             Test.validate(recordResults, Test.requireMapsEqual.curry({1: "1", 2: "2", 3: "3"}, results));
@@ -71,7 +71,7 @@ Database.TransactionTest = Class.create({
     },
 
     test_should_switch_into_completed_state_when_execution_finished: function() {
-        this.transaction.addCommand("1", this.successCommand.curry({}));
+        this.transaction.addCommand(this.successCommand.curry({}));
         this.transaction.execute(Prototype.emptyFunction, Prototype.emptyFunction);
         this.db.callback();
 

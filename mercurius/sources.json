@@ -95,6 +95,10 @@
     {"source": "app/currencies/tableModel.js"},
     {"source": "app/currencies/validator.js"},
 
+    {"source": "app/transactions/$package.js"},
+    {"source": "app/transactions/manager.js"},
+    {"source": "app/transactions/tableModel.js"},
+
     {"source": "app/widgets/$package.js"},
     {"source": "app/widgets/menu.js"},
     {"source": "app/widgets/headerDropdown.js"},

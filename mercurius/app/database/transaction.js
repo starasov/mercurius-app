@@ -14,15 +14,14 @@ Database.Transaction = Class.create({
         this.db = db;
         this.commands = [];
         this.state = Database.TransactionState.New;
-        this.executionResults = {};
+        this.executionContext = {};
     },
 
-    addCommand: function(name, command) {
-        Mojo.require(name, "'name' parameter can't be null.");
+    addCommand: function(command, commandExecutedCallback) {
         Mojo.require(command, "'command' parameter can't be null.");
         Mojo.requireEqual(Database.TransactionState.New, this.state);
 
-        this.commands.push({name: name, command: command});
+        this.commands.push({command: command, callback: commandExecutedCallback});
     },
 
     execute: function(successCallback, errorCallback) {
@@ -36,29 +35,35 @@ Database.Transaction = Class.create({
     _executeWithTransaction: function(clientSuccessCallback, clientErrorCallback, transaction) {
         var asyncChain = new Utils.AsyncChain((function() {
             this.state = Database.TransactionState.Completed;
-            clientSuccessCallback(this.executionResults);
+            clientSuccessCallback(this.executionContext);
         }).bind(this), this._errorCallback.bind(this, clientErrorCallback));
 
         for (var i = 0; i < this.commands.length; i++) {
-            var commandName = this.commands[i].name;
             var command = this.commands[i].command;
+            var commandExecutedCallback = this.commands[i].callback;
 
-            asyncChain.add(this._createCommandChunk(commandName, command, transaction));
+            asyncChain.add(this._createCommandChunk(command, commandExecutedCallback, transaction));
         }
 
         asyncChain.call();
     },
 
     /** @private */
-    _createCommandChunk: function(commandName, command, transaction) {
-        return (function(command, transaction, successCallback, errorCallback) {
-            command(transaction, this._successCallback.bind(this, commandName, successCallback), errorCallback, this.executionResults);
-        }).bind(this, command, transaction);
+    _createCommandChunk: function(command, commandExecutedCallback, transaction) {
+        return (function(successCallback, errorCallback) {
+            command(transaction,
+                    this._successCallback.bind(this, commandExecutedCallback, successCallback),
+                    errorCallback,
+                    this.executionContext);
+        }).bind(this);
     },
 
     /** @private */
-    _successCallback: function(commandName, chainSuccessCallback, result) {
-        this.executionResults[commandName] = result;
+    _successCallback: function(commandExecutedCallback, chainSuccessCallback, result) {
+        if (commandExecutedCallback) {
+            commandExecutedCallback(this.executionContext, result);
+        }
+
         chainSuccessCallback();
     },
 

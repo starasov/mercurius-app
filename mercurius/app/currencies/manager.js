@@ -18,11 +18,16 @@ Currencies.Manager = Class.create(Models.GenericManager, {
     setHomeCurrency: function(currencyId, successCallback, errorCallback) {
         var transaction = this._createTransaction();
 
-        transaction.addCommand("new_home_currency", this._findById.bind(this, currencyId));
-        transaction.addCommand("old_home_currency", this._getHomeCurrency.bind(this));
+        transaction.addCommand(this._findById.bind(this, currencyId), function(context, currency) {
+            context.new_home_currency = currency;
+        });
 
-        transaction.addCommand("update_new", (function(transaction, successCallback, errorCallback, executionResults) {
-            var new_home_currency = executionResults.new_home_currency;
+        transaction.addCommand(this._getHomeCurrency.bind(this), function(context, currency) {
+            context.old_home_currency = currency;
+        });
+
+        transaction.addCommand((function(transaction, successCallback, errorCallback, context) {
+            var new_home_currency = context.new_home_currency;
             if (new_home_currency) {
                 new_home_currency.home_flag = true;
                 new_home_currency.rate = 1.0;
@@ -33,8 +38,8 @@ Currencies.Manager = Class.create(Models.GenericManager, {
             }
         }).bind(this));
 
-        transaction.addCommand("update_old", (function(transaction, successCallback, errorCallback, executionResults) {
-            var old_home_currency = executionResults.old_home_currency;
+        transaction.addCommand((function(transaction, successCallback, errorCallback, context) {
+            var old_home_currency = context.old_home_currency;
             if (old_home_currency){
                 old_home_currency.home_flag = false;
                 this._update(old_home_currency, transaction, successCallback, errorCallback);
@@ -43,8 +48,8 @@ Currencies.Manager = Class.create(Models.GenericManager, {
             }
         }).bind(this));
 
-        transaction.execute(function(executionResults) {
-            successCallback(executionResults.new_home_currency);
+        transaction.execute(function(context) {
+            successCallback(context.new_home_currency);
         }, errorCallback);
     },
 

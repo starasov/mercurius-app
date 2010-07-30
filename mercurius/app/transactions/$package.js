@@ -1,0 +1,1 @@
+if (!Transactions) var Transactions = {};

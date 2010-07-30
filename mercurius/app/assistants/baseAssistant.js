@@ -43,10 +43,10 @@ BaseAssistant = Class.create({
         this.spinner.hide();
 
         // ToDO: add some error logic handling here.
-
+        var message = error ? error.message : "Unknown error occured!";
         this.controller.showAlertDialog({
             title: "Error",
-            message: error.message,
+            message: message,
             choices: [
                 {label: "OK", value: "ok", type: "medium"}
             ]

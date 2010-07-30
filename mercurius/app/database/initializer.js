@@ -3,8 +3,6 @@ Database.Initializer = Class.create({
     
     initialize: function() {
         this._tableModels = [];
-        this._pendingTransactions = 0;
-        this._lastTransactionResult = "success";
         this._postCreateStatements = [];
     },
 
@@ -17,29 +15,20 @@ Database.Initializer = Class.create({
         this._postCreateStatements.push(statement);
     },
 
-    initializeDatabase: function(db, successHandler, errorHandler) {
-        this.log.info("[DatabaseInitializer.initialize] - begin");
-
-        Mojo.requireFunction(successHandler, "[Database.Initializer.initialize] - 'successHandler' parameter should be a function.");
-        Mojo.requireFunction(errorHandler, "[Database.Initializer.initialize] - 'errorHandler' parameter should be a function.");
+    initializeDatabase: function(db, successCallback, errorCallback) {
+        Mojo.requireFunction(successCallback, "[Database.Initializer.initialize] - 'successCallback' parameter should be a function.");
+        Mojo.requireFunction(errorCallback, "[Database.Initializer.initialize] - 'errorCallback' parameter should be a function.");
 
         var statements = this._generateDropTableModelsSql().concat(this._generateCreateTableModelsSql());
         statements = statements.concat(this._postCreateStatements);
 
-        this._pendingTransactions = statements.length;
-        this.log.info("[DatabaseInitializer.initialize] - this.pendingTransactions: %s", this._pendingTransactions);
+        var transaction = new Database.Transaction(db);
 
         for (var i =  0; i < statements.length; i++) {
-            this.log.info("[DatabaseInitializer.initialize] - is about to execute (inner): %s", statements[i]);
-
-            var sql = statements[i];
-            db.transaction((function(sql, transaction) {
-                this.log.info("[DatabaseInitializer.initialize] - is about to execute (outer): %s", sql);
-                this._executeSql(transaction, sql, successHandler, errorHandler);
-            }).bind(this, sql));
+            transaction.addCommand(this._executeSql.bind(this, statements[i]));
         }
 
-        this.log.info("[DatabaseInitializer.initialize] - end");
+        transaction.execute(successCallback, errorCallback);
     },
 
     _generateDropTableModelsSql: function() {
@@ -82,33 +71,9 @@ Database.Initializer = Class.create({
         return createTableSql;
     },
 
-    _executeSql: function(transaction, sql, successHandler, errorHandler) {
-        if (this._lastTransactionResult != "error") {
-            transaction.executeSql(sql, [],
-                    (function(transaction, result) {
-                        this._executeSqlSuccessHandler(transaction, result, successHandler);
-                    }).bind(this),
-                    (function(transaction, result) {
-                        this._executeSqlErrorHandler(transaction, result, errorHandler);
-                    }).bind(this)
-            );
-        }
-    },
-
-    _executeSqlSuccessHandler: function(transaction, result, clientSuccessHandler) {
-        this.log.info("[DatabaseInitializer.executeSqlSuccessHandler] - begin");
-        this.log.info("[DatabaseInitializer.executeSqlSuccessHandler] - pending transactions %s", this._pendingTransactions);
-
-        this._pendingTransactions--;
-        if (this._pendingTransactions == 0) {
-            this.log.info("[DatabaseInitializer.executeSqlSuccessHandler] - calling success callback");
-            clientSuccessHandler();
-        }
-    },
-
-    _executeSqlErrorHandler: function(transaction, result, clientErrorHandler) {
-        this._lastTransactionResult = "error";
-        clientErrorHandler(result);
+    _executeSql: function(sql, transaction, successHandler, errorHandler) {
+        Mojo.Log.info("[Database.Initializer._executeSql] - sql: %s", sql);
+        transaction.executeSql(sql, [], successHandler, errorHandler);
     }
 });
 

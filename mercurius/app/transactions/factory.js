@@ -1,0 +1,2 @@
+Transactions.Factory = Class.create({
+});

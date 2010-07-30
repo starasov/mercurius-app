@@ -23,6 +23,7 @@ StageAssistant = Class.create({
         databaseInitializer.addTableModel(Accounts.TableModel);
         databaseInitializer.addTableModel(Currencies.TableModel);
         databaseInitializer.addTableModel(Categories.TableModel);
+        databaseInitializer.addTableModel(Transactions.TableModel);
 
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(1, 'US Dollar', '$', 11223344.0, 1);");
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(2, 'Euro', 'EUR', 1.2, 0);");
@@ -40,6 +41,9 @@ StageAssistant = Class.create({
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(7, 'Cinema', 2, 2);");
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(8, 'Cafe', 2, 2);");
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(9, 'Business Trip', 1, 4);");
+
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO transactions VALUES(1, 2000, 1, 1, 1);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO transactions VALUES(2, 10000, 1, 2, 4);");
 
         databaseService.setDatabaseInitializer(databaseInitializer);
 
