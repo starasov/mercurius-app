@@ -1,4 +1,4 @@
-Models.Fields = {
+Forms.Fields = {
     createTextField: function(id, text, maxLength) {
         return {
             id: id,

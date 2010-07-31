@@ -16,7 +16,7 @@ Currencies.Factory = Class.create({
     },
 
     createForm: function() {
-        return new Models.GenericForm(Currencies.Fields);
+        return new Forms.GenericForm(Currencies.Fields);
     },
 
     createValidator: function(currenciesManager, currencyId) {

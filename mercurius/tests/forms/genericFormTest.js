@@ -1,4 +1,4 @@
-var TestForm = Class.create(Models.GenericForm, {
+TestForm = Class.create(Forms.GenericForm, {
     initialize: function($super) {
         $super({
             name: {
@@ -35,7 +35,7 @@ var TestForm = Class.create(Models.GenericForm, {
     }
 });
 
-Models.GenericFormTest = Class.create({
+Forms.GenericFormTest = Class.create({
     before: function() {
         this.form = new TestForm();
         this.controller = new MockController();
@@ -52,7 +52,7 @@ Models.GenericFormTest = Class.create({
 
     test_initialize_should_fail_when_null_fields_passed: function() {
         Test.requireException((function() {
-            new Models.GenericForm(null, {});
+            new Forms.GenericForm(null, {});
         }).bind(this));
 
         return Mojo.Test.passed;

@@ -79,10 +79,7 @@ Database.Service = Class.create({
     },
 
     handleDatabaseCreation: function(clientSuccessHandler, clientErrorHandler) {
-        this._databaseInitializer.initializeDatabase(this._db,
-                (function() { clientSuccessHandler(this._db); }).bind(this),
-                clientErrorHandler
-        );
+        this._databaseInitializer.initializeDatabase(this._db, clientSuccessHandler.curry(this._db), clientErrorHandler);
     },
 
     handleDatabaseUpdate: function() {

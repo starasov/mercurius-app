@@ -78,9 +78,15 @@
     },
 
     {
-        "title": "Models.FieldsTest",
-        "source": "tests/models/fieldsTest.js",
-        "testFunction": "Models.FieldsTest"
+        "title": "Forms.FieldsTest",
+        "source": "tests/forms/fieldsTest.js",
+        "testFunction": "Forms.FieldsTest"
+    },
+
+    {
+        "title": "Forms.GenericFormTest",
+        "source": "tests/forms/genericFormTest.js",
+        "testFunction": "Forms.GenericFormTest"
     },
 
     {
@@ -123,12 +129,6 @@
         "title": "Models.ResultSetMapperTest",
         "source": "tests/models/resultSetMapperTest.js",
         "testFunction": "Models.ResultSetMapperTest"
-    },
-
-    {
-        "title": "Models.GenericFormTest",
-        "source": "tests/models/genericFormTest.js",
-        "testFunction": "Models.GenericFormTest"
     },
 
     {

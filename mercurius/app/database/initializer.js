@@ -72,7 +72,6 @@ Database.Initializer = Class.create({
     },
 
     _executeSql: function(sql, transaction, successHandler, errorHandler) {
-        Mojo.Log.info("[Database.Initializer._executeSql] - sql: %s", sql);
         transaction.executeSql(sql, [], successHandler, errorHandler);
     }
 });

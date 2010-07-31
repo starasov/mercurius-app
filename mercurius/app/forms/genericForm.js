@@ -1,4 +1,4 @@
-Models.GenericForm = Class.create({
+Forms.GenericForm = Class.create({
     log: Utils.NullLog,
     
     initialize: function(fields) {

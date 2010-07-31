@@ -78,7 +78,7 @@ AccountEditAssistant = Class.create(BaseEditAssistant, {
 
     /** @private */
     _createCurrencyChoices: function(successCallback, errorCallback) {
-        this.account.currency_choices = Models.Fields.toChoices(this.currencies, "name", "id");
+        this.account.currency_choices = Forms.Fields.toChoices(this.currencies, "name", "id");
         successCallback();
     }
 });

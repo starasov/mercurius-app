@@ -1,14 +1,14 @@
 Categories.Fields = {
-    name: Models.Fields.createTextField(
+    name: Forms.Fields.createTextField(
             "category-name-field",
             "Name..."),
 
-    parent_id: Models.Fields.createSelectorField(
+    parent_id: Forms.Fields.createSelectorField(
             "category-parent-field",
             "Parent",
             "parent_choices"),
 
-    type: Models.Fields.createSelectorField(
+    type: Forms.Fields.createSelectorField(
             "category-type-field",
             "Type",
             "type_choices")

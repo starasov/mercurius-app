@@ -61,6 +61,6 @@ CategoryEditAssistant = Class.create(BaseEditAssistant, {
 
     /** @private */
     _createParentChoices: function(parentCategories) {
-        return [{label: "[No Parent]", value: 0}].concat(Models.Fields.toChoices(parentCategories, "name", "id"));
+        return [{label: "[No Parent]", value: 0}].concat(Forms.Fields.toChoices(parentCategories, "name", "id"));
     }
 });

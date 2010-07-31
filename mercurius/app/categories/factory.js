@@ -1,6 +1,6 @@
 Categories.Factory = Class.create({
     createForm: function() {
-        return new Models.GenericForm(Categories.Fields);
+        return new Forms.GenericForm(Categories.Fields);
     },
 
     createValidator: function(categoriesManager, initialCategory) {

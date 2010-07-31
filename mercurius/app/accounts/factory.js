@@ -22,7 +22,7 @@ Accounts.Factory = Class.create({
     },
 
     createForm: function() {
-        return new Models.GenericForm(Accounts.Fields);
+        return new Forms.GenericForm(Accounts.Fields);
     },
 
     createValidator: function() {

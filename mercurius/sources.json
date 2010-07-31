@@ -59,9 +59,11 @@
     {"source": "app/database/types.js"},
     {"source": "app/database/versionProvider.js"},
 
+    {"source": "app/forms/$package.js"},
+    {"source": "app/forms/fields.js"},
+    {"source": "app/forms/genericForm.js"},
+
     {"source": "app/models/$package.js"},
-    {"source": "app/models/fields.js"},
-    {"source": "app/models/genericForm.js"},
     {"source": "app/models/genericManager.js"},
     {"source": "app/models/genericManagerHelper.js"},
     {"source": "app/models/genericMapper.js"},

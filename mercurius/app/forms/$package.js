@@ -1,0 +1,1 @@
+if (!Forms) var Forms = {};
