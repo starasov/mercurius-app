@@ -41,7 +41,6 @@ Database.Types.PrimaryKey = Class.create(Database.Types.BaseType, {
     }
 });
 
-
 /**
  * Integer type.
  */
@@ -52,7 +51,6 @@ Database.Types.Integer = Class.create(Database.Types.BaseType, {
         $super(nullable);
     }
 });
-
 
 /**
  * String type.

@@ -48,9 +48,33 @@
     },
 
     {
+        "title": "Database.CountStatementTest",
+        "source": "tests/database/countStatementTest.js",
+        "testFunction": "Database.CountStatementTest"
+    },
+
+    {
+        "title": "Database.DeleteStatementTest",
+        "source": "tests/database/deleteStatementTest.js",
+        "testFunction": "Database.DeleteStatementTest"
+    },
+
+    {
         "title": "Database.InitializerTest",
         "source": "tests/database/initializerTest.js",
         "testFunction": "Database.InitializerTest"
+    },
+
+    {
+        "title": "Database.InsertStatementTest",
+        "source": "tests/database/insertStatementTest.js",
+        "testFunction": "Database.InsertStatementTest"
+    },
+
+    {
+        "title": "Database.SelectStatementTest",
+        "source": "tests/database/selectStatementTest.js",
+        "testFunction": "Database.SelectStatementTest"
     },
 
     {
@@ -69,6 +93,12 @@
         "title": "Database.TypesTest",
         "source": "tests/database/typesTest.js",
         "testFunction": "Database.TypesTest"
+    },
+
+    {
+        "title": "Database.UpdateStatementTest",
+        "source": "tests/database/updateStatementTest.js",
+        "testFunction": "Database.UpdateStatementTest"
     },
 
     {
@@ -111,12 +141,6 @@
         "title": "Models.GenericManagerTest",
         "source": "tests/models/genericManagerTest.js",
         "testFunction": "Models.GenericManagerTest"
-    },
-
-    {
-        "title": "Models.GenericManagerHelperTest",
-        "source": "tests/models/genericManagerHelperTest.js",
-        "testFunction": "Models.GenericManagerHelperTest"
     },
 
     {
@@ -169,6 +193,7 @@
 
     {"source": "tests/utils.js"},
     {"source": "tests/database/mocks.js"},
+    {"source": "tests/database/baseStatementTest.js"},
 
     {"source": "tests/currencies/baseManagerIntegrationTest.js"},
     {"source": "tests/currencies/mocks.js"},

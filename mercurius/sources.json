@@ -4,7 +4,8 @@
     {"source": "app/utils/jsonResourceReader.js"},
     {"source": "app/utils/nullLog.js"},
     {"source": "app/utils/parsing.js"},
-    
+    {"source": "app/utils/stringUtils.js"},
+
     {"source": "app/assistants/stage-assistant.js"},
     {"source": "app/assistants/baseAssistant.js"},
     {"source": "app/assistants/baseListAssistant.js"},
@@ -54,9 +55,15 @@
 
     {"source": "app/database/$package.js"},
     {"source": "app/database/initializer.js"},
+    {"source": "app/database/baseLookupStatement.js"},
+    {"source": "app/database/countStatement.js"},
+    {"source": "app/database/deleteStatement.js"},
+    {"source": "app/database/insertStatement.js"},
+    {"source": "app/database/selectStatement.js"},
     {"source": "app/database/service.js"},
     {"source": "app/database/transaction.js"},
     {"source": "app/database/types.js"},
+    {"source": "app/database/updateStatement.js"},
     {"source": "app/database/versionProvider.js"},
 
     {"source": "app/forms/$package.js"},
