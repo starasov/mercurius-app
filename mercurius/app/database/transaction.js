@@ -22,6 +22,8 @@ Database.Transaction = Class.create({
         Mojo.requireEqual(Database.TransactionState.New, this.state);
 
         this.commands.push({command: command, callback: commandExecutedCallback});
+
+        return this;
     },
 
     execute: function(successCallback, errorCallback) {

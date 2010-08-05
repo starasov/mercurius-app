@@ -50,7 +50,7 @@ Database.SelectStatement = Class.create(Database.BaseLookupStatement, {
         var columns = [];
 
         for (var columnName in this.tableModel.Columns) {
-            columns.push(columnName);
+            columns.push(this._toSelectColumnName(this.tableModel, columnName));
         }
 
         return columns;
@@ -81,7 +81,7 @@ Database.SelectStatement = Class.create(Database.BaseLookupStatement, {
 
             if (extraParams.order) {
                 Mojo.require(this.tableModel.Columns[extraParams.order], "Table model should contain '" + extraParams.order + "' column.");
-                findContext.sql += "ORDER BY " + extraParams.order + " ";
+                findContext.sql += "ORDER BY " + this._toFullColumnName(extraParams.order) + " ";
             }
 
             if (Object.isNumber(extraParams.limit)) {
@@ -103,8 +103,13 @@ Database.SelectStatement = Class.create(Database.BaseLookupStatement, {
         if (extraParams && extraParams.group) {
             Mojo.require(this.tableModel.Columns[extraParams.group], "Table model should contain '" + extraParams.group + "' column.");
             findContext.sql += " GROUP BY ";
-            findContext.sql += extraParams.group;
+            findContext.sql += this._toFullColumnName(extraParams.group);
             findContext.sql += " ";
         }
+    },
+
+    /** @protected */
+    _toSelectColumnName: function(tableModel, column, asColumn) {
+        return tableModel.Name + "." + column + " AS " + (asColumn || column);
     }
 });

@@ -77,7 +77,7 @@ AccountListAssistant = Class.create(BaseListAssistant, {
         return {
             opening_balance: function(value, model) {
                 return Object.isUndefined(value) ? value :
-                        Accounts.Fields.opening_balance.toViewString(value, model.currency.symbol);
+                        Accounts.Fields.opening_balance.toViewString(value, model.currency_symbol);
             }
         };
     },

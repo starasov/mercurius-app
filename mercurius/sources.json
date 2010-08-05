@@ -85,7 +85,7 @@
     {"source": "app/accounts/factory.js"},
     {"source": "app/accounts/fields.js"},
     {"source": "app/accounts/manager.js"},
-    {"source": "app/accounts/mapper.js"},
+    {"source": "app/accounts/selectStatement.js"},
     {"source": "app/accounts/tableModel.js"},
     {"source": "app/accounts/validator.js"},
 

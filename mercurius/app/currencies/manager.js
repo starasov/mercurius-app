@@ -1,6 +1,6 @@
 Currencies.Manager = Class.create(Models.GenericManager, {
     getHomeCurrency: function(successCallback, errorCallback) {
-        this._db.transaction((function(transaction) {
+        this.db.transaction((function(transaction) {
             this._getHomeCurrency(transaction, successCallback, errorCallback);
         }).bind(this));
     },

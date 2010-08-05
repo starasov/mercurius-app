@@ -12,7 +12,7 @@ Database.BaseLookupStatement = Class.create({
             for (var parameter in searchParams) {
                 var columnModel = this.tableModel.Columns[parameter];
                 Mojo.require(columnModel, "Actual table model " + this.tableModel.Name + " desn't have " + parameter + " column defined.");
-                findContext.sql += parameter + "=? AND ";
+                findContext.sql += this._toFullColumnName(parameter) + "=? AND ";
                 findContext.params.push(columnModel.toSqlType(searchParams[parameter]));
             }
 
@@ -23,5 +23,10 @@ Database.BaseLookupStatement = Class.create({
     /** @protected */
     _nonEmptyHash: function(hash) {
         return Object.keys(hash).length > 0;
+    },
+
+    /** @protected */
+    _toFullColumnName: function(column) {
+        return this.tableModel.Name + "." + column;
     }
 });

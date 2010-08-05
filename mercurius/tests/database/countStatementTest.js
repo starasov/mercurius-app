@@ -14,7 +14,7 @@ Database.CountStatementTest = Class.create(Database.BaseStatementTest, {
 
     test_to_count_should_return_expected_query_when_search_parameters_specified: function() {
         var countContext = this.statement.toCountSql({some_flag: true});
-        Mojo.requireEqual("SELECT COUNT(*) as count FROM name_and_flag WHERE some_flag=?;", countContext.sql);
+        Mojo.requireEqual("SELECT COUNT(*) as count FROM name_and_flag WHERE name_and_flag.some_flag=?;", countContext.sql);
         return Mojo.Test.passed;
     }
 });

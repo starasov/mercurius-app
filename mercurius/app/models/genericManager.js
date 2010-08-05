@@ -13,16 +13,16 @@ Models.GenericManager = Class.create({
      * @param resultSetMapper - {Database.ResultSetMapper} a sql result set mapper
      *                          for particular model.
      */
-    initialize: function(db, resultSetMapper, helper) {
+    initialize: function(db, tableModel, resultSetMapper) {
         Mojo.require(db, "Database should be defined and can't be null.");
+        Mojo.require(tableModel, "Table model should be defined and can't be null.");
         Mojo.require(resultSetMapper, "Result Set Mapper should be defined and can't be null.");
-        Mojo.require(helper, "Helper should be defined and can't be null.");
 
-        this._db = db;
-        this._resultSetMapper = resultSetMapper;
-        this._helper = helper;
+
+        this.db = db;
+        this.tableModel = tableModel;
+        this.resultSetMapper = resultSetMapper;
     },
-
 
     /**
      * Retrieves actual records count in the table.
@@ -34,8 +34,8 @@ Models.GenericManager = Class.create({
      * notification in case if something went wrong with counts.
      */
     count: function(searchParameters, successCallback, errorCallback) {
-        this._db.transaction((function(transaction) {
-            var countContext = this._helper.toCountSql(searchParameters);
+        this.db.transaction((function(transaction) {
+            var countContext = this._createCountStatement().toCountSql(searchParameters);
             transaction.executeSql(countContext.sql, countContext.params,
                     function(innerTransaction, resultSet) {
                         successCallback(resultSet.rows.item(0).count)
@@ -53,8 +53,8 @@ Models.GenericManager = Class.create({
      * notification in case if something went wrong with counts.
      */
     save: function(model, successCallback, errorCallback) {
-        this._db.transaction((function(transaction) {
-            var insertContext = this._helper.toInsertSql(model);
+        this.db.transaction((function(transaction) {
+            var insertContext = this._createInsertStatement().toInsertSql(model);
             transaction.executeSql(insertContext.sql, insertContext.params,
                     function(innerTransaction, resultSet) {
                         successCallback(resultSet.insertId)
@@ -72,7 +72,7 @@ Models.GenericManager = Class.create({
      * notification in case if something went wrong with insert.
      */
     update: function(model, successCallback, errorCallback) {
-        this._db.transaction((function(transaction) {
+        this.db.transaction((function(transaction) {
             this._update(model, transaction, successCallback, errorCallback);
         }).bind(this));
     },
@@ -95,8 +95,8 @@ Models.GenericManager = Class.create({
     deleteById: function(id, successCallback, errorCallback) {
         Mojo.requireNumber(id, "id parameter should be a number.");
 
-        this._db.transaction((function(transaction) {
-            var deleteContext = this._helper.toDeleteSql(id);
+        this.db.transaction((function(transaction) {
+            var deleteContext = this._createDeleteStatement().toDeleteSql(id);
             transaction.executeSql(deleteContext.sql, deleteContext.params, function(innerTransaction, resultSet) {
                 successCallback(resultSet.rowsAffected);
             }, errorCallback);
@@ -111,7 +111,7 @@ Models.GenericManager = Class.create({
      * @param errorCallback - {callback} (transaction, error) an error callback.
      */
     findById: function(id, successCallback, errorCallback) {
-        this._db.transaction((function(transaction) {
+        this.db.transaction((function(transaction) {
             this._findById(id, transaction, successCallback, errorCallback);
         }).bind(this));
     },
@@ -141,19 +141,44 @@ Models.GenericManager = Class.create({
      * @param errorCallback - {callback} (transaction, error) an error callback.
      */
     find: function(searchParameters, extraParameters, successCallback, errorCallback) {
-        this._db.transaction((function(transaction) {
+        this.db.transaction((function(transaction) {
             this._find(searchParameters, extraParameters, transaction, successCallback, errorCallback);
         }).bind(this));
     },
 
     /** @protected */
+    _createCountStatement: function() {
+        return new Database.CountStatement(this.tableModel);
+    },
+
+    /** @protected */
+    _createInsertStatement: function() {
+        return new Database.InsertStatement(this.tableModel);
+    },
+
+    /** @protected */
+    _createUpdateStatement: function() {
+        return new Database.UpdateStatement(this.tableModel);
+    },
+
+    /** @protected */
+    _createDeleteStatement: function() {
+        return new Database.DeleteStatement(this.tableModel);
+    },
+
+    /** @protected */
+    _createSelectStatement: function() {
+        return new Database.SelectStatement(this.tableModel);
+    },
+
+    /** @protected */
     _createTransaction: function() {
-        return new Database.Transaction(this._db);
+        return new Database.Transaction(this.db);
     },
 
     /** @protected */
     _update: function(model, transaction, successCallback, errorCallback) {
-        var updateContext = this._helper.toUpdateSql(model);
+        var updateContext = this._createUpdateStatement().toUpdateSql(model);
         transaction.executeSql(updateContext.sql, updateContext.params, (function(transaction, resultSet) {
             successCallback(resultSet);
         }).bind(this), errorCallback);
@@ -162,7 +187,7 @@ Models.GenericManager = Class.create({
     /** @protected */
     _findById: function(id, transaction, successCallback, errorCallback) {
         this._find({id: id}, {}, transaction, function(models) {
-            if (models.length != 0) {
+            if (models.length > 0) {
                 successCallback(models[0]);
             } else {
                 successCallback(null);
@@ -172,12 +197,14 @@ Models.GenericManager = Class.create({
 
     /** @protected */
     _find: function(searchParameters, extraParameters, transaction, successCallback, errorCallback) {
-        var selectContext = this._helper.toSelectSql(searchParameters, extraParameters);
+        var selectContext = this._createSelectStatement().toSelectSql(searchParameters, extraParameters);
+        Mojo.Log.info("[_find] - sql: %s", selectContext.sql);
         transaction.executeSql(selectContext.sql, selectContext.params,
                 this._mapSqlResultSet.bind(this, successCallback, errorCallback), errorCallback);
     },
 
+    /** @private */
     _mapSqlResultSet: function(clientSuccessCallback, clientErrorCallback, transaction, sqlResultSet) {
-        this._resultSetMapper.map(this, sqlResultSet, clientSuccessCallback, clientErrorCallback);
+        this.resultSetMapper.map(sqlResultSet, clientSuccessCallback, clientErrorCallback);
     }
 });

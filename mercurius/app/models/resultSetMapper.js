@@ -4,7 +4,7 @@ Models.ResultSetMapper = Class.create({
         this.rowMapper = rowMapper;
     },
 
-    map: function(manager, resultSet, successCallback, errorCallback) {
+    map: function(resultSet, successCallback, errorCallback) {
         var rows = resultSet.rows;
 
         if (!rows || rows.length == 0) {
@@ -20,14 +20,14 @@ Models.ResultSetMapper = Class.create({
 
         for (var i = 0; i < rows.length; i++) {
             var row = rows.item(i);
-            chain.add(this._doMap.bind(this, manager, row, mappedModels));
+            chain.add(this._doMap.bind(this, row, mappedModels));
         }
 
         chain.call();
     },
 
-    _doMap: function(manager, row, mappedModels, successCallback, errorCallback) {
-        this.rowMapper.mapRow(manager, row, (function(mappedModels, successCallback, model) {
+    _doMap: function(row, mappedModels, successCallback, errorCallback) {
+        this.rowMapper.mapRow(row, (function(mappedModels, successCallback, model) {
             mappedModels.push(model);
             successCallback();
         }).curry(mappedModels, successCallback), errorCallback);

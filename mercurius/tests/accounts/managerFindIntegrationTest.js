@@ -1,7 +1,7 @@
 Accounts.ManagerFindIntegrationTest = Class.create(Models.BaseManagerIntegrationTest, {
     before: function($super, completionCallback) {
         $super((function() {
-            this._accountsManager = new Accounts.Factory(new Currencies.Factory()).createManager(this._db);
+            this._accountsManager = new Accounts.Factory().createManager(this._db);
             completionCallback();
         }).bind(this));
     },
@@ -23,9 +23,11 @@ Accounts.ManagerFindIntegrationTest = Class.create(Models.BaseManagerIntegration
 
     test_should_correctly_load_account_with_currency_when_exists: function(recordResults) {
         this._accountsManager.findById(1, function(account) {
-            Test.validateAndContinue(recordResults, Mojo.requireEqual.curry(1, account.currency.id));
-            Test.validate(recordResults, Mojo.requireEqual.curry("US Dollar", account.currency.name));
-        }, recordResults);
+            Test.validateAndContinue(recordResults, Mojo.requireEqual.curry("US Dollar", account.currency_name));
+            Test.validate(recordResults, Mojo.requireEqual.curry("$", account.currency_symbol));
+        }, function(transaction, error) {
+            recordResults(error.message);
+        });
     },
 
     test_find_open_accounts_should_correctly_filter_opened_accounts_when_found: function(recordResults) {

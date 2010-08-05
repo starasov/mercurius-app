@@ -34,9 +34,31 @@ Models.GenericMapperTest = Class.create({
         };
 
         var mapper = new Models.GenericMapper(this.tableModel);
-        mapper.mapRow(null, row, function(model) {
+        mapper.mapRow(row, function(model) {
             Test.validateAndContinue(recordResults, Mojo.requireEqual.curry("name_value", model.name));
             Test.validate(recordResults, Mojo.requireEqual.curry(12, model.price));
         }, recordResults)
+    },
+
+    test_mapper_should_correctly_map_foreign_columns_when_exist: function(recordResults) {
+        this.tableModel.ForeignColumns = {
+            foreign_name: function() {
+                return {
+                    fromSqlType: function(value) {
+                        return "foreign_name";
+                    }
+                }
+            }
+        };
+
+        var row = {
+            foreign_name: "name"
+        };
+
+        var mapper = new Models.GenericMapper(this.tableModel);
+        mapper.mapRow(row, function(model) {
+            Test.validate(recordResults, Mojo.requireEqual.curry("foreign_name", model.foreign_name));
+        }, recordResults)
+
     }
 });

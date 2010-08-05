@@ -1,8 +1,8 @@
 [
     {
-        "title": "Accounts.MapperTest",
-        "source": "tests/accounts/mapperTest.js",
-        "testFunction": "Accounts.MapperTest"
+        "title": "Accounts.SelectStatementTest",
+        "source": "tests/accounts/selectStatementTest.js",
+        "testFunction": "Accounts.SelectStatementTest"
     },
 
     {

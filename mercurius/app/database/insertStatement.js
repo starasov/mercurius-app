@@ -4,9 +4,9 @@ Database.InsertStatement = Class.create({
         this.tableModel = tableModel;
     },
 
-    toInsertSql: function(entity) {
-        Mojo.require(entity, "'entity' to insert should be defined and can't be null.");
-        Mojo.require(entity.id == null || Object.isUndefined(entity.id), "Can't insert entity - entity has id value specified: id=" + entity.id);
+    toInsertSql: function(model) {
+        Mojo.require(model, "'model' to insert should be defined and can't be null.");
+        Mojo.require(model.id == null || Object.isUndefined(model.id), "Can't insert entity - entity has id value specified: id=" + model.id);
 
         var insertContext = {};
         insertContext.sql = "INSERT INTO " + this.tableModel.Name + " (";
@@ -22,7 +22,7 @@ Database.InsertStatement = Class.create({
         insertContext.sql += ") VALUES(";
 
         for (column in this.tableModel.Columns) {
-            var value = Object.isUndefined(entity[column]) ? null : entity[column];
+            var value = Object.isUndefined(model[column]) ? null : model[column];
             var columnModel = this.tableModel.Columns[column];
 
             if (column != "id") {

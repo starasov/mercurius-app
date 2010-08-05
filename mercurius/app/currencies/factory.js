@@ -11,8 +11,8 @@ Currencies.Factory = Class.create({
     createManager: function(database) {
         return new Currencies.Manager(
                 database,
-                new Models.ResultSetMapper(new Models.GenericMapper(Currencies.TableModel)),
-                new Models.GenericManagerHelper(Currencies.TableModel));
+                Currencies.TableModel,
+                new Models.ResultSetMapper(new Models.GenericMapper(Currencies.TableModel)));
     },
 
     createForm: function() {
