@@ -1,7 +1,8 @@
 StageAssistant = Class.create({
     setup: function() {
         this.context = this._createApplicationContext();
-        this.controller.pushScene("accountList", this.context);
+//        this.controller.pushScene("accountList", this.context);
+        this.controller.pushScene("transactionList", this.context);
 //        this.controller.pushScene("currencyList", this.context);
 //        this.controller.pushScene("categoryList", this.context);
     },
@@ -11,8 +12,9 @@ StageAssistant = Class.create({
         var currenciesFactory = new Currencies.Factory();
         var accountsFactory = new Accounts.Factory();
         var categoriesFactory = new Categories.Factory();
+        var transactionsFactory = new Transactions.Factory();
 
-        return new ApplicationContext(databaseService, currenciesFactory, accountsFactory, categoriesFactory);
+        return new ApplicationContext(databaseService, currenciesFactory, accountsFactory, categoriesFactory, transactionsFactory);
     },
 
     _createDatabaseService: function() {

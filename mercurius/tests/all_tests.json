@@ -156,6 +156,12 @@
     },
 
     {
+        "title": "Transactions.SelectStatementTest",
+        "source": "tests/transactions/selectStatementTest.js",
+        "testFunction": "Transactions.SelectStatementTest"
+    },
+
+    {
         "title": "Validation.GenericValidatorTest",
         "source": "tests/validation/genericValidatorTest.js",
         "testFunction": "Validation.GenericValidatorTest"

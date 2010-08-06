@@ -53,6 +53,11 @@
         "source": "app/assistants/categoryEdit-Assistant.js"
     },
 
+    {
+        "scenes": "transactionList",
+        "source": "app/assistants/transactionList-assistant.js"
+    },
+
     {"source": "app/database/$package.js"},
     {"source": "app/database/initializer.js"},
     {"source": "app/database/baseLookupStatement.js"},
@@ -105,7 +110,9 @@
     {"source": "app/currencies/validator.js"},
 
     {"source": "app/transactions/$package.js"},
+    {"source": "app/transactions/factory.js"},
     {"source": "app/transactions/manager.js"},
+    {"source": "app/transactions/selectStatement.js"},
     {"source": "app/transactions/tableModel.js"},
 
     {"source": "app/widgets/$package.js"},

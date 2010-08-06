@@ -1,4 +1,6 @@
 Models.GenericMapper = Class.create({
+    log: Utils.NullLog,
+
     initialize: function(tableModel) {
         Mojo.require(tableModel, "Table model should be defined and can't be null.");
         this.tableModel = tableModel;
@@ -9,6 +11,8 @@ Models.GenericMapper = Class.create({
 
         this._mapOriginColumns(row, model);
         this._mapForeignColumns(row, model);
+
+        this.log.info("[Models.GenericMapper.mapRow] - mapped model: %j", model);
         
         successCallback(model);
     },

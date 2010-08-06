@@ -1,5 +1,5 @@
 Models.GenericManager = Class.create({
-    log: Mojo.Log,
+    log: Utils.NullLog,
     
     /**
      * Initializes generic manager instance.
@@ -198,7 +198,9 @@ Models.GenericManager = Class.create({
     /** @protected */
     _find: function(searchParameters, extraParameters, transaction, successCallback, errorCallback) {
         var selectContext = this._createSelectStatement().toSelectSql(searchParameters, extraParameters);
-        Mojo.Log.info("[_find] - sql: %s", selectContext.sql);
+
+        this.log.info("[Models.GenericManager._find] - sql: %s", selectContext.sql);
+
         transaction.executeSql(selectContext.sql, selectContext.params,
                 this._mapSqlResultSet.bind(this, successCallback, errorCallback), errorCallback);
     },
