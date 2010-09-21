@@ -51,6 +51,12 @@ Widgets.HeaderDropdown = Class.create({
         this.controller.get(this.viewModel.dropdownId).stopObserving(Mojo.Event.tap, this.dropdownTapHandler);
     },
 
+    setItems: function(items) {
+        Mojo.require(items);
+        this.model.items = items;
+        this._updateTitle();
+    },
+
     _handleTap: function(event) {
         this.controller.popupSubmenu({
             onChoose: this._handleItemChosen.bind(this),

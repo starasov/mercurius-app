@@ -1,6 +1,7 @@
 [
     {"source": "app/utils/$package.js"},
     {"source": "app/utils/asyncChain.js"},
+    {"source": "app/utils/formatting.js"},
     {"source": "app/utils/jsonResourceReader.js"},
     {"source": "app/utils/nullLog.js"},
     {"source": "app/utils/parsing.js"},
@@ -11,6 +12,12 @@
     {"source": "app/assistants/baseListAssistant.js"},
     {"source": "app/assistants/baseViewAssistant.js"},
     {"source": "app/assistants/baseEditAssistant.js"},
+    {"source": "app/assistants/baseCategoryListAssistant.js"},
+
+    {
+        "scenes": "testsRunner",
+        "source": "app/assistants/testsRunner-assistant.js"
+    },
 
     {
         "scenes": "accountList",
@@ -44,6 +51,11 @@
     },
 
     {
+        "scenes": "categoryPickerList",
+        "source": "app/assistants/categoryPickerList-assistant.js"
+    },
+
+    {
         "scenes": "categoryView",
         "source": "app/assistants/categoryView-assistant.js"
     },
@@ -56,6 +68,16 @@
     {
         "scenes": "transactionList",
         "source": "app/assistants/transactionList-assistant.js"
+    },
+
+    {
+        "scenes": "transactionView",
+        "source": "app/assistants/transactionView-assistant.js"
+    },
+
+    {
+        "scenes": "transactionEdit",
+        "source": "app/assistants/transactionEdit-assistant.js"
     },
 
     {"source": "app/database/$package.js"},
@@ -111,11 +133,15 @@
 
     {"source": "app/transactions/$package.js"},
     {"source": "app/transactions/factory.js"},
+    {"source": "app/transactions/fields.js"},
     {"source": "app/transactions/manager.js"},
     {"source": "app/transactions/selectStatement.js"},
     {"source": "app/transactions/tableModel.js"},
+    {"source": "app/transactions/types.js"},
+    {"source": "app/transactions/validator.js"},
 
     {"source": "app/widgets/$package.js"},
+    {"source": "app/widgets/categoryPicker.js"},
     {"source": "app/widgets/menu.js"},
     {"source": "app/widgets/headerDropdown.js"},
     {"source": "app/widgets/fullScreenSpinner.js"},

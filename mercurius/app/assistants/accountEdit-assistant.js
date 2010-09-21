@@ -13,6 +13,7 @@ AccountEditAssistant = Class.create(BaseEditAssistant, {
         this.accountsManager = null;
         this.currenciesManager = null;
 
+        this.account = null;
         this.currencies = null;
     },
 

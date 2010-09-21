@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<project name="mercurius-ut-publisher" default="all">
+    <target name="all" depends="build-jar"/>
+
+    <!-- Build output specific properties -->
+    <property name="src.dir" location="${basedir}/src"/>
+    <property name="lib.dir" location="${basedir}/lib"/>
+    <property name="build.dir" location="${basedir}/build"/>
+    <property name="dist.dir" location="${basedir}/dist"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="clean"
+            description="Perform cleanup of the directory with previously assembled app.">
+        <delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
+
+        <delete dir="${dist.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <target name="compile" depends="clean">
+        <javac srcdir="${src.dir}"
+               destdir="${build.dir}"
+               excludes="mercurius/ut/test/**"
+               classpathref="classpath" />
+    </target>
+
+    <target name="build-jar" depends="compile">
+        <jar destfile="${dist.dir}/ut-publisher.jar" basedir="${build.dir}"/>    
+    </target>
+</project>

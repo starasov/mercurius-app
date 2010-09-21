@@ -7,23 +7,35 @@
     <property file="local.properties"/>
 
     <!-- Build output specific properties -->
-    <property name="src.dir" value="${basedir}/mercurius"/>
-    <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="src.dir" location="${basedir}/mercurius"/>
+    <property name="dist.dir" location="${basedir}/dist"/>
+
+    <property name="tests.log.file" location="${basedir}/tests.log"/>
 
     <property name="app.id" value="com.mercurius"/>
     <property name="app.version" value="1.0.0"/>
     <property name="ipk.file" value="${dist.dir}/${app.id}_${app.version}_all.ipk"/>
 
     <!-- Mojo SDK specific properties -->
-    <property name="mojo.jars.path" value="${mojo.sdk.path}/share/jars"/>
-    <property name="mojo.emulator.images.path" value="${mojo.sdk.path}/share/emulator/images"/>
-    <property name="mojo.tools.jar.file" value="${mojo.jars.path}/webos-tools.jar"/>
-    <property name="mojo.emulator.jar.file" value="${mojo.jars.path}/webos-emulator.jar"/>
+    <property name="mojo.jars.path" location="${mojo.sdk.path}/share/jars"/>
+    <property name="mojo.emulator.images.path" location="${mojo.sdk.path}/share/emulator/images"/>
+    <property name="mojo.tools.jar.file" location="${mojo.jars.path}/webos-tools.jar"/>
+    <property name="mojo.emulator.jar.file" location="${mojo.jars.path}/webos-emulator.jar"/>
+
+    <path id="classpath">
+        <fileset dir="${basedir}/mercurius-ut-publisher/lib">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${basedir}/mercurius-ut-publisher/dist">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
 
     <target name="clean"
             description="Perform cleanup of the directory with previously assembled app.">
         <delete dir="${dist.dir}"/>
         <mkdir dir="${dist.dir}"/>
+        <delete file="${tests.log.file}" failonerror="false"/>
     </target>
 
     <target name="package-app" depends="clean"
@@ -62,11 +74,38 @@
         </java>
     </target>
 
-    <target name="run-unit-tests" depends="install-app"
+    <target name="check-tests-server">
+        <condition property="tests.server.started">
+            <socket server="127.0.0.1" port="8080"/>
+        </condition>
+    </target>
+
+    <target name="run-tests-server" depends="check-tests-server" unless="tests.server.started">
+        <java classname="mercurius.ut.Main" fork="true" spawn="true">
+            <arg line="${src.dir} ${basedir}/tests.log"/>
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+        </java>
+
+        <waitfor maxwait="30" maxwaitunit="second" checkevery="500">
+             <socket server="127.0.0.1" port="8080"/>
+        </waitfor>
+    </target>
+
+    <target name="run-tests" depends="run-tests-server, install-app"
             description="Request emulator to launch application in test running mode.">
         <antcall target="-call-webos-tools">
-            <param name="webos.tools.args" value="palm-launch -p '{mojoTest:true}' ${app.id}"/>
+            <param name="webos.tools.args" value="palm-launch -p '{mercuriusRunTests:true, host:${host.ip}}' ${app.id}"/>
         </antcall>
+
+        <echo>Waiting for unit test results to be published ${tests.log.file}</echo>
+        <waitfor maxwait="30" maxwaitunit="second">
+            <available file="${tests.log.file}"/>
+        </waitfor>
+
+        <loadfile property="test.results" srcfile="${tests.log.file}"/>
+        <echo>${test.results}</echo>
     </target>
 
     <target name="follow-log"

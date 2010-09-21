@@ -10,6 +10,10 @@ Accounts.SelectStatement = Class.create(Database.SelectStatement, {
         ]);
     },
 
+//    SELECT a.id, a.name, t.sum FROM accounts a
+//        LEFT JOIN (SELECT account_id, SUM(amount) AS sum FROM transactions GROUP BY account_id) t
+//          ON a.id = t.account_id
+
     /**
      * @protected
      * @override
@@ -17,6 +21,6 @@ Accounts.SelectStatement = Class.create(Database.SelectStatement, {
     _buildJoinClause: function(findContext, extraParams) {
         var currencies = Currencies.TableModel.Name;
         var accounts = Accounts.TableModel.Name; 
-        findContext.sql += " LEFT JOIN " + currencies + " ON " + accounts + ".currency_id = " + currencies + ".id" ; 
+        findContext.sql += " LEFT JOIN " + currencies + " ON " + accounts + ".currency_id = " + currencies + ".id" ;
     }
 });

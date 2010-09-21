@@ -7,6 +7,10 @@ Accounts.SelectStatementTest = Class.create({
     test_should_correctly_build_join_clause: function() {
         var context = this.statement.toSelectSql({}, {});
 
+        Accounts.SelectStatementTest.name = "Accounts.SelectStatementTest";
+        Mojo.Log.info("[name]: %s", Accounts.SelectStatementTest.name);
+        Mojo.Log.info("[name]: %s", this.name);
+
         Mojo.requireEqual(
                 "SELECT accounts.id AS id, accounts.name AS name, accounts.opening_balance AS opening_balance, " +
                        "accounts.currency_id AS currency_id, accounts.closed_flag AS closed_flag, " +
@@ -17,3 +21,5 @@ Accounts.SelectStatementTest = Class.create({
         return Mojo.Test.passed;
     }
 });
+
+Accounts.SelectStatementTest.prototype.name = "Accounts.SelectStatementTest";

@@ -1,10 +1,26 @@
 StageAssistant = Class.create({
     setup: function() {
+        var params = Mojo.getLaunchParameters();
+        if (params["mercuriusRunTests"]) {
+            this._setupTests(params)
+        } else {
+            this._setup();
+        }
+    },
+
+    _setup: function() {
         this.context = this._createApplicationContext();
-//        this.controller.pushScene("accountList", this.context);
-        this.controller.pushScene("transactionList", this.context);
+        this.controller.pushScene("accountList", this.context);
+//        this.controller.pushScene("transactionList", this.context);
 //        this.controller.pushScene("currencyList", this.context);
 //        this.controller.pushScene("categoryList", this.context);
+//        this.controller.pushScene("categoryPickerList", this.context);
+    },
+
+    _setupTests: function(launchParams) {
+        var publishingUrl = ["http://", launchParams["host"], ":8080/publish_results/"].join("");
+        Mojo.Log.info("[StageAssistant._setupTests] - %s", publishingUrl);
+        this.controller.pushScene("testsRunner", publishingUrl);
     },
 
     _createApplicationContext: function() {
@@ -44,8 +60,8 @@ StageAssistant = Class.create({
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(8, 'Cafe', 2, 2);");
         databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(9, 'Business Trip', 1, 4);");
 
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO transactions VALUES(1, 2000, 1, 1, 1);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO transactions VALUES(2, 10000, 1, 2, 4);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO transactions VALUES(1, 2, 2000, 1, 1, 1);");
+        databaseInitializer.addPostCreateSqlStatement("INSERT INTO transactions VALUES(2, 1, 10000, 1, 2, 4);");
 
         databaseService.setDatabaseInitializer(databaseInitializer);
 

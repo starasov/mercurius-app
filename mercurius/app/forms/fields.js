@@ -64,20 +64,7 @@ Forms.Fields = {
             changeEvent: Mojo.Event.propertyChanged,
 
             toViewString: function(value, currencySymbol) {
-                if (value != null) {
-                    var formattedValue = Mojo.Format.formatNumber(value / 100.0, 2);
-
-                    if (currencySymbol) {
-                        var currencyPrepend = Mojo.Locale.formats.currencyPrepend ? currencySymbol : "";
-                        var currencyAppend = Mojo.Locale.formats.currencyAppend? currencySymbol : "";
-
-                        return currencyPrepend + formattedValue + currencyAppend;
-                    } else {
-                        return formattedValue;
-                    }
-                }
-
-                return null;
+                return Utils.Formatting.formatCurrency(value, currencySymbol);
             },
 
             toFieldModel: function(value) {
@@ -110,6 +97,33 @@ Forms.Fields = {
 
             fromFieldModel: function(fieldModel) {
                 return parseInt(fieldModel.value);
+            }
+        }
+    },
+
+    createDateField: function(id, label) {
+        return {
+            id: id,
+
+            attributes: {
+                label: $L(label),
+                labelPlacement: Mojo.Widget.labelPlacementRight,
+                modelProperty: 'date'
+            },
+
+            defaultFieldModel: {
+                date: new Date()
+            },
+
+            changeEvent: Mojo.Event.propertyChanged,
+
+            toFieldModel: function(value) {
+                var date = value ? new Date(value) : null;
+                return {date: date};
+            },
+
+            fromFieldModel: function(fieldModel) {
+                return fieldModel.date.getTime();
             }
         }
     },

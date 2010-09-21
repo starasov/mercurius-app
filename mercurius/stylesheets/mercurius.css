@@ -101,7 +101,12 @@
     background-image: url(../images/category-small.png) !important;
 }
 
+.form-icon.transaction {
+    background-image: url(../images/transaction-small.png) !important;
+}
+
 .currency-rate-text,
+.transaction-amount-text,
 .account-balance-text {
     float: right;
     padding-top: 13px;
@@ -136,7 +141,12 @@
     background: url(../images/details-closed-arrow.png) center center no-repeat;
 }
 
-.home-currency-header-icon, .closed-account-header-icon {
+.list-icon.category-picker {
+    background: url(../images/search.png) center center no-repeat;
+}
+
+.home-currency-header-icon,
+.closed-account-header-icon {
     width: 32px;
     height: 32px;
     position: absolute;
@@ -145,8 +155,18 @@
     background-image: url(../images/currency-home.png);
 }
 
+.transaction-label {
+    padding: 6px 14px 0 14px;
+}
+
 .subcategory {
     padding-left: 14px;
-    /*padding: 13px 14px 15px 28px;*/
-    /*margin: 0;*/
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
 }

@@ -23,7 +23,7 @@ Forms.GenericForm = Class.create({
 
         for (var fieldName in this.fields) {
             var field = this.fields[fieldName];
-            this.controller.setupWidget(field.id, field.attributes, {});
+            this.controller.setupWidget(field.id, field.attributes, field.defaultFieldModel || {});
         }
     },
 

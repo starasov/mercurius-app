@@ -13,6 +13,7 @@ TestForm = Class.create(Forms.GenericForm, {
                 id: "age-id",
                 attributes: "age-attributes",
                 changeEvent: "age-changeEvent",
+                defaultFieldModel: {text: "16"},
                 toFieldModel: function() { return "age-toFormData"; },
                 fromFieldModel: function() { return "age-fromFormData"; }
             },
@@ -79,6 +80,15 @@ Forms.GenericFormTest = Class.create({
         Mojo.requireEqual("name-id", callData.id);
         Mojo.requireEqual("name-attributes", callData.attributes);
         Test.requireMapsEqual({}, callData.model);
+
+        return Mojo.Test.passed;
+    },
+
+    test_should_setup_widgets_with_default_field_model_when_exists: function() {
+        this.form.setup(this.controller);
+
+        var callData = this.controller.setupWidgetCalls[1];
+        Test.requireMapsEqual({text: "16"}, callData.model);
 
         return Mojo.Test.passed;
     },

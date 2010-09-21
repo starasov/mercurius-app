@@ -25,7 +25,7 @@ Configuration Management
     * it seems http get could be helpful here.
 
 + Check where DB can be located in the emulator file system.
-    * use winscp: root/root
+    * use winscp: locahost:5522 root/root
 
 + Download latest mojo sdk (1.4)
 

@@ -44,3 +44,5 @@ Accounts.ManagerFindIntegrationTest = Class.create(Models.BaseManagerIntegration
         }).bind(this), recordResults);
     }
 });
+
+Accounts.ManagerFindIntegrationTest.name = "Accounts.ManagerFindIntegrationTest";

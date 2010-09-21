@@ -64,7 +64,7 @@ Database.Service = Class.create({
         return this._db != null;
     },
 
-    processSuccessOpen: function processSuccessOpen(successHandler, errorHandler) {
+    processSuccessOpen: function(successHandler, errorHandler) {
         this.log.info("[DbService.processSuccessOpen] - end");
 
         if (this._versionProvider.hasCurrentVersion() && this._version != this._versionProvider.getCurrentVersion()) {
