@@ -10,7 +10,7 @@ StageAssistant = Class.create({
 
     _setup: function() {
         this.context = this._createApplicationContext();
-        this.controller.pushScene("accountList", this.context);
+        this.controller.pushScene("mainView", this.context);
 //        this.controller.pushScene("transactionList", this.context);
 //        this.controller.pushScene("currencyList", this.context);
 //        this.controller.pushScene("categoryList", this.context);

@@ -15,6 +15,11 @@
     {"source": "app/assistants/baseCategoryListAssistant.js"},
 
     {
+        "scenes": "mainView",
+        "source": "app/assistants/mainView-assistant.js"
+    },
+
+    {
         "scenes": "testsRunner",
         "source": "app/assistants/testsRunner-assistant.js"
     },
