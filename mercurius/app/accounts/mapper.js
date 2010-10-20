@@ -65,17 +65,18 @@ Accounts.Mapper._updateSql =
 Accounts.Mapper._deleteSql =
         "DELETE FROM accounts WHERE id=?;";
 
-Accounts.Mapper._findByIdSql =
-        "SELECT a.id, a.name, a.opening_balance, a.currency_id, a.closed_flag, c.name as currency_name FROM accounts a " +
-        "LEFT JOIN currencies c ON c.id = a.currency_id " +
-        "WHERE a.id=?;";
-
 Accounts.Mapper._findAllSql =
         "SELECT id, name, opening_balance, currency_id, closed_flag FROM accounts ORDER BY closed_flag, name LIMIT ? OFFSET ?;";
 
-Accounts.Mapper._findWithBalanceTemplate =
-        "SELECT a.id, a.name, a.opening_balance, a.currency_id, a.closed_flag, c.symbol as currency_symbol, t.transactions_balance FROM accounts a " +
+Accounts.Mapper._baseFindWithBalanceSql =
+        "SELECT a.id, a.name, a.opening_balance, a.currency_id, a.closed_flag, c.symbol as currency_symbol, c.name as currency_name, t.transactions_balance FROM accounts a " +
         "LEFT JOIN (SELECT account_id, SUM(amount) AS transactions_balance FROM transactions GROUP BY account_id) t ON a.id = t.account_id " +
-        "LEFT JOIN currencies c ON c.id = a.currency_id " +
-        "#{where} ORDER BY a.closed_flag, a.name LIMIT ? OFFSET ?;";
+        "LEFT JOIN currencies c ON c.id = a.currency_id ";
+
+Accounts.Mapper._findByIdSql =
+        Accounts.Mapper._baseFindWithBalanceSql + "WHERE a.id=?;";
+
+Accounts.Mapper._findWithBalanceTemplate =
+        Accounts.Mapper._baseFindWithBalanceSql + "#{where} ORDER BY a.closed_flag, a.name LIMIT ? OFFSET ?;";
+
 

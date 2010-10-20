@@ -11,6 +11,7 @@ AccountViewAssistant = Class.create(BaseViewAssistant, {
     updateView: function(account) {
         this.controller.get("account-view-title").innerHTML = account.name;
         this.controller.get("account-opening-balance").innerHTML = this.openingBalanceModel.toViewString(account.opening_balance);
+        this.controller.get("account-current-balance").innerHTML = this.openingBalanceModel.toViewString(account.balance);
         this.controller.get("account-currency-name").innerHTML = account.currency_name;
 
         if (account.closed_flag) {
