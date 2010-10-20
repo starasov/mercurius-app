@@ -80,7 +80,7 @@ BaseEditAssistant = Class.create(BaseAssistant, {
     },
 
     /** @abstract */
-    initializeManagers: function(db) {
+    initializeMappers: function(db) {
         Mojo.require(false, "Not implemented");
     },
 
@@ -102,7 +102,7 @@ BaseEditAssistant = Class.create(BaseAssistant, {
     _initialize: function(db) {
         this.log.info("[%s][BaseEditAssistant][_initialize] - begin", this.name);
 
-        this.initializeManagers(db);
+        this.initializeMappers(db);
         this.validator = this.getValidator();
         this.updateForm();
 

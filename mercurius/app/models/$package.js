@@ -1,1 +1,0 @@
-if (!Models) var Models = {};

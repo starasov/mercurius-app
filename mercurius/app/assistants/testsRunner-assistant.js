@@ -4,50 +4,7 @@ TestsRunnerAssistant = Class.create({
     },
 
     _getAllTests: function() {
-        return [
-            {title: "Accounts.ManagerFindIntegrationTest", source: "tests/accounts/managerFindIntegrationTest.js", test: Accounts.ManagerFindIntegrationTest},
-            {title: "Accounts.SelectStatementTest", source: "tests/accounts/selectStatementTest.js", test: Accounts.SelectStatementTest},
-            {title: "Accounts.ValidatorTest", source: "tests/accounts/validatorTest.js", test: Accounts.ValidatorTest},
-
-            {title: "Currencies.FieldsTest", source: "tests/currencies/fieldsTest.js", test: Currencies.FieldsTest},
-            {title: "Currencies.ManagerHomeCurrencyIntergrationTest", source: "tests/currencies/managerHomeCurrencyIntergrationTest.js", test: Currencies.ManagerHomeCurrencyIntergrationTest},
-            {title: "Currencies.ManagerGetCurrencyByNameIntergrationTest", source: "tests/currencies/managerGetCurrencyByNameIntergrationTest.js", test: Currencies.ManagerGetCurrencyByNameIntergrationTest},
-            {title: "Currencies.ValidatorTest", source: "tests/currencies/validatorTest.js", test: Currencies.ValidatorTest},
-
-            {title: "Categories.ManagerFindIntegrationTest", source: "tests/categories/managerFindIntegrationTest.js", test: Categories.ManagerFindIntegrationTest},
-            {title: "Categories.ValidatorTest", source: "tests/categories/validatorTest.js", test: Categories.ValidatorTest},
-
-            {title: "Database.CountStatementTest", source: "tests/database/countStatementTest.js", test: Database.CountStatementTest},
-            {title: "Database.DeleteStatementTest", source: "tests/database/deleteStatementTest.js", test: Database.DeleteStatementTest},
-            {title: "Database.InitializerTest", source: "tests/database/initializerTest.js", test: Database.InitializerTest},
-            {title: "Database.InsertStatementTest", source: "tests/database/insertStatementTest.js", test: Database.InsertStatementTest},
-            {title: "Database.SelectStatementTest", source: "tests/database/selectStatementTest.js", test: Database.SelectStatementTest},
-            {title: "Database.ServiceIntegrationTest", source: "tests/database/serviceIntegrationTest.js", test: Database.ServiceIntegrationTest},
-            {title: "Database.TransactionTest", source: "tests/database/transactionTest.js", test: Database.TransactionTest},
-            {title: "Database.TypesTest", source: "tests/database/typesTest.js", test: Database.TypesTest},
-            {title: "Database.UpdateStatementTest", source: "tests/database/updateStatementTest.js", test: Database.UpdateStatementTest},
-            {title: "Database.VersionProviderTest", source: "tests/database/versionProviderTest.js", test: Database.VersionProviderTest},
-
-            {title: "Forms.FieldsTest", source: "tests/forms/fieldsTest.js", test: Forms.FieldsTest},
-            {title: "Forms.GenericFormTest", source: "tests/forms/genericFormTest.js", test: Forms.GenericFormTest},
-
-            {title: "Models.GenericManagerCountIntegrationTest", source: "tests/models/genericManagerCountIntegrationTest.js", test: Models.GenericManagerCountIntegrationTest},
-            {title: "Models.GenericManagerDeleteByIdIntegrationTest", source: "tests/models/genericManagerDeleteByIdIntergationTest.js", test: Models.GenericManagerDeleteByIdIntegrationTest},
-            {title: "Models.GenericManagerFindIntegrationTest", source: "tests/models/genericManagerFindIntegrationTest.js", test: Models.GenericManagerFindIntegrationTest},
-            {title: "Models.GenericManagerTest", source: "tests/models/genericManagerTest.js", test: Models.GenericManagerTest},
-            {title: "Models.GenericMapperTest", source: "tests/models/genericMapperTest.js", test: Models.GenericMapperTest},
-            {title: "Models.ResultSetMapperTest", source: "tests/models/resultSetMapperTest.js", test: Models.ResultSetMapperTest},
-
-            {title: "Transactions.SelectStatementTest", source: "tests/transactions/selectStatementTest.js", test: Transactions.SelectStatementTest},
-            {title: "Transactions.ValidatorTest", source: "tests/transactions/validatorTest.js", test: Transactions.ValidatorTest},
-
-            {title: "Validation.GenericValidatorTest", source: "tests/validation/genericValidatorTest.js", test: Validation.GenericValidatorTest},
-            {title: "Validation.UtilsTest", source: "tests/validation/utilsTest.js", test: Validation.UtilsTest},
-
-            {title: "Utils.JsonResourceReaderIntegrationTest", source: "tests/utils/jsonResourceReaderIntegrationTest.js", test: Utils.JsonResourceReaderIntegrationTest},
-            {title: "Utils.AsyncChainTest", source: "tests/utils/asyncChainTest.js", test: Utils.AsyncChainTest},
-            {title: "Utils.ParseDecimalTest", source: "tests/utils/parseDecimalTest.js", test: Utils.ParseDecimalTest}
-        ]
+        return AllTests();
     },
 
     setup: function() {
@@ -83,7 +40,12 @@ TestsRunnerAssistant = Class.create({
                     Mojo.Log.info("[TestAssistant._loadTestSources] - loaded: '%s'", testSpec.source);
                 });
 
-                Mojo.loadScriptWithCallback(testSpec.source, loadCallback);
+                try {
+                    Mojo.loadScriptWithCallback(testSpec.source, loadCallback);
+                } catch(e) {
+                    Mojo.Log.error("[TestsRunnerAssistant] - failed to load test source %s (%s)", testSpec.source, e);
+                }
+
             } else {
                 Mojo.Log.error("[TestAssistant._loadTestSources] - invalid test spec: %j", testSpec)
             }
@@ -120,8 +82,6 @@ TestsRunnerAssistant = Class.create({
         return runner;
     },
     _publishResults: function(results) {
-        Mojo.Log.info("[_publishResults] - results: %j", this.runner.results);
-
         this.statusField.innerHTML = "Publishing results...";
 
         this._updateView();

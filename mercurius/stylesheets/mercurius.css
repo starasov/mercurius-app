@@ -145,6 +145,11 @@
     background: url(../images/search.png) center center no-repeat;
 }
 
+.list-icon.clear-category {
+    background: url(../images/clear.png) center center no-repeat;
+    margin: 8px -18px 0 0;
+}
+
 .home-currency-header-icon,
 .closed-account-header-icon {
     width: 32px;

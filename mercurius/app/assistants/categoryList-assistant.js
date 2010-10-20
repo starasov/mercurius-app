@@ -14,6 +14,8 @@ CategoryListAssistant = Class.create(BaseCategoryListAssistant, {
 
     /** @override */
     activate: function($super, event) {
+        Mojo.Log.info("event: %j", event);
+
         if (event) {
             switch (event.source) {
             case "categoryEdit":

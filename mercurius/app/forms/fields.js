@@ -46,6 +46,10 @@ Forms.Fields = {
 
             fromFieldModel: function(fieldModel) {
                 return Utils.Parsing.parseDecimal(fieldModel.value);
+            },
+
+            updateFieldModel: function(fieldModel, value) {
+                fieldModel.value = this.toViewString(value); 
             }
         }
     },
@@ -74,6 +78,10 @@ Forms.Fields = {
             fromFieldModel: function(fieldModel) {
                 var parsedValue = Utils.Parsing.parseDecimal(fieldModel.value);
                 return parsedValue * 100;
+            },
+
+            updateFieldModel: function(fieldModel, value) {
+                fieldModel.value = this.toViewString(value);
             }
         }
     },

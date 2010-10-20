@@ -9,8 +9,8 @@ CategoryViewAssistant = Class.create(BaseViewAssistant, {
     },
 
     /** @override */
-    createManager: function(db) {
-        return this.context.getCategoriesFactory().createManager(db);
+    createMapper: function(db) {
+        return this.context.getCategoriesFactory().createMapper(db);
     },
 
     /** @override */

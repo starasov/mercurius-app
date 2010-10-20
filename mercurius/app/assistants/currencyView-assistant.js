@@ -32,8 +32,8 @@ CurrencyViewAssistant = Class.create(BaseViewAssistant, {
     },
 
     /** @override */
-    createManager: function(db) {
-        return this.context.getCurrenciesFactory().createManager(db);
+    createMapper: function(db) {
+        return this.context.getCurrenciesFactory().createMapper(db);
     },
 
     /** @override */
@@ -56,6 +56,6 @@ CurrencyViewAssistant = Class.create(BaseViewAssistant, {
     },
 
     _setHomeHomeCurrency: function() {
-        this.manager.setHomeCurrency(this.modelId, this.loadModel.bind(this), this.databaseErrorCallback.bind(this));
+        this.mapper.setHomeCurrency(this.modelId, this.loadModel.bind(this), this.databaseErrorCallback.bind(this));
     }
 });

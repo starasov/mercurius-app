@@ -3,8 +3,8 @@ TransactionViewAssistant = Class.create(BaseViewAssistant, {
         $super("transaction", applicationContext, transactionId);
     },
 
-    createManager: function(db) {
-        return this.context.getTransactionsFactory().createManager(db);
+    createMapper: function(db) {
+        return this.context.getTransactionsFactory().createMapper(db);
     },
 
     updateView: function(transaction) {

@@ -69,7 +69,7 @@ BaseViewAssistant = Class.create(BaseAssistant, {
     },
 
     /** @abstract */
-    createManager: function(db) {
+    createMapper: function(db) {
         Mojo.require(false, "Not implemented");
     },
 
@@ -90,7 +90,7 @@ BaseViewAssistant = Class.create(BaseAssistant, {
 
     deleteModel: function() {
         this.spinner.show();
-        this.manager.deleteById(this.modelId, (function() {
+        this.mapper.deleteById(this.modelId, (function() {
             this.controller.stageController.popScene({source: this.sourceName, rowsAdded: -1});
         }).bind(this), this.databaseErrorCallback.bind(this))
     },
@@ -101,7 +101,7 @@ BaseViewAssistant = Class.create(BaseAssistant, {
 
     /** @private */
     _initialize: function(db) {
-        this.manager = this.createManager(db);
+        this.mapper = this.createMapper(db);
         this.loadModel();
     },
 
@@ -113,6 +113,6 @@ BaseViewAssistant = Class.create(BaseAssistant, {
 
     /** @private */
     _loadModel: function(successCallback, errorCallback) {
-        this.manager.findById(this.modelId, successCallback, errorCallback);
+        this.mapper.findById(this.modelId, successCallback, errorCallback);
     }
 });

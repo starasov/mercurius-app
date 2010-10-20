@@ -11,10 +11,6 @@ StageAssistant = Class.create({
     _setup: function() {
         this.context = this._createApplicationContext();
         this.controller.pushScene("mainView", this.context);
-//        this.controller.pushScene("transactionList", this.context);
-//        this.controller.pushScene("currencyList", this.context);
-//        this.controller.pushScene("categoryList", this.context);
-//        this.controller.pushScene("categoryPickerList", this.context);
     },
 
     _setupTests: function(launchParams) {
@@ -35,36 +31,26 @@ StageAssistant = Class.create({
 
     _createDatabaseService: function() {
         var databaseService = new Database.Service("mercurius", "1.0", "Mercurius Database", 200000);
+
         databaseService.setVersionProvider(new Database.VersionProvider("mercurius"));
-
-        var databaseInitializer = new Database.Initializer();
-        databaseInitializer.addTableModel(Accounts.TableModel);
-        databaseInitializer.addTableModel(Currencies.TableModel);
-        databaseInitializer.addTableModel(Categories.TableModel);
-        databaseInitializer.addTableModel(Transactions.TableModel);
-
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(1, 'US Dollar', '$', 11223344.0, 1);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(2, 'Euro', 'EUR', 1.2, 0);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO currencies VALUES(3, 'GB Pound', 'GPB', 1.4, 0);");
-
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(1, 'Cash', 10000, 1, 0);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(2, 'VISA USD', 200000, 1, 0);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO accounts VALUES(3, 'VISA EUR', 0, 2, 1);");
-
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(1, 'Food', 2, 0);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(2, 'Entertainment', 2, 0);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(4, 'Salary', 1, 0);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(5, 'Bonus', 1, 0);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(6, 'Books', 2, 2);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(7, 'Cinema', 2, 2);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(8, 'Cafe', 2, 2);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO categories VALUES(9, 'Business Trip', 1, 4);");
-
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO transactions VALUES(1, 2, 2000, 1, 1, 1);");
-        databaseInitializer.addPostCreateSqlStatement("INSERT INTO transactions VALUES(2, 1, 10000, 1, 2, 4);");
-
-        databaseService.setDatabaseInitializer(databaseInitializer);
+        databaseService.setDatabaseInitializer(this._createDatabaseInitializer());
 
         return databaseService;
+    },
+
+    _createDatabaseInitializer: function() {
+        var databaseInitializer = new Database.Initializer(new Utils.JsonResourceReader());
+
+        databaseInitializer.addScript(this._getResourcePath("database/accounts.json"));
+        databaseInitializer.addScript(this._getResourcePath("database/accounts_initial.json"));
+        databaseInitializer.addScript(this._getResourcePath("database/categories.json"));
+        databaseInitializer.addScript(this._getResourcePath("database/currencies.json"));
+        databaseInitializer.addScript(this._getResourcePath("database/transactions.json"));
+
+        return databaseInitializer;
+    },
+
+    _getResourcePath: function(path) {
+        return [Mojo.appPath, "resources/", path].join("");
     }
 });

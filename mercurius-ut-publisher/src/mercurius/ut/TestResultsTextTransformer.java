@@ -88,7 +88,9 @@ public class TestResultsTextTransformer {
             for (Result result : failedTests) {
                 File source = new File(projectBasePath, result.getSource());
                 builder.append("---------------------------------------\n");
-                builder.append(String.format("%s.%s: %s%n    %s:1%n%n", result.getSuite(), result.getMethod(), result.getMessage(), source));
+                builder.append(String.format("%s.%s%n", result.getSuite(), result.getMethod()));
+                builder.append(String.format("    %s%n", result.getMessage()));
+                builder.append(String.format("    %s%n%n", source));
             }
     }
 }

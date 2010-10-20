@@ -2,3 +2,5 @@ dist
 *.iml
 *.ipr
 *.iws
+*.ids
+tests.log

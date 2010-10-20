@@ -8,8 +8,7 @@ CurrencyListAssistant = Class.create(BaseListAssistant, {
             switch (event.source) {
             case "currencyView":
             case "currencyEdit":
-                var expectedNewLength = this.listWidget.mojo.getLength() + event.rowsAdded;
-                this.listWidget.mojo.setLengthAndInvalidate(expectedNewLength);
+                this.invalidateItems();
             }
         }
         
@@ -39,11 +38,11 @@ CurrencyListAssistant = Class.create(BaseListAssistant, {
     },
 
     initializeFromDatabase: function(db) {
-        this.manager = this.context.getCurrenciesFactory().createManager(db);
+        this.mapper = this.context.getCurrenciesFactory().createMapper(db);
     },
 
     listItemsCallback: function(offset, limit, successCallback, errorCallback) {
-        this.manager.find({}, {limit: limit, offset: offset}, successCallback, errorCallback);
+        this.mapper.findAll(limit, offset, successCallback, errorCallback);
     },
 
     itemTapCallback: function(event) {

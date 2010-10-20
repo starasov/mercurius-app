@@ -2,10 +2,14 @@ if (!Test) var Test = {};
 
 Test.databaseErrorHandler = function(recordResults) {
     return (function(recordResults, transaction, error) {
-        recordResults(error);
+        recordResults(error.message);
     }).curry(recordResults);
 };
 
+/**
+ * @param {Function} recordResults
+ * @param {Function} f
+ */
 Test.validate = function(recordResults, f) {
     Mojo.Test.validate(recordResults, f);  
 };
@@ -73,5 +77,5 @@ Test.requireNumbersEqual = function(number1, number2, eps) {
     Mojo.requireNumber(number2, "Passed 'number2' argument should be a number.");
 
     var absoluteDiff = Math.abs(number1 - number2);
-    Mojo.require(absoluteDiff < (eps || 1e-6));
+    Mojo.require(absoluteDiff < (eps || 1e-6), "'" + number1 + "' was expected, but get '" + number2 + "'");
 };

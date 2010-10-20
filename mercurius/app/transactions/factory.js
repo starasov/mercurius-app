@@ -1,19 +1,16 @@
 Transactions.Factory = Class.create({
     createEmptyModel: function() {
         return {
-            type: Transactions.Type.EXPENSE,
             amount: null,
             date: (new Date()).getTime(),
             account_id: null,
-            category_id: null
+            category_id: null,
+            transactions_balance: null
         };
     },
 
-    createManager: function(database) {
-        return new Transactions.Manager(
-                database,
-                Transactions.TableModel,
-                new Models.ResultSetMapper(new Models.GenericMapper(Transactions.TableModel)));
+    createMapper: function(db) {
+        return new Transactions.Mapper(db);
     },
 
     createForm: function() {

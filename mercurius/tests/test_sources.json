@@ -1,12 +1,16 @@
 [
+    {"source": "tests/database/baseMapperTest.js"},
+    {"source": "tests/baseDatabaseTest.js"},
+
+    {"source": "tests/mocks.js"},
     {"source": "tests/utils.js"},
-    {"source": "tests/database/mocks.js"},
-    {"source": "tests/database/baseStatementTest.js"},
 
-    {"source": "tests/currencies/baseManagerIntegrationTest.js"},
-    {"source": "tests/currencies/mocks.js"},
-
-    {"source": "tests/models/baseGenericManagerIntegrationTest.js"},
-    {"source": "tests/models/baseManagerIntegrationTest.js"},
-    {"source": "tests/models/mocks.js"}
+    {"source": "tests/allTests.js"},
+    {"source": "tests/accounts/allTests.js"},
+    {"source": "tests/categories/allTests.js"},
+    {"source": "tests/currencies/allTests.js"},
+    {"source": "tests/database/allTests.js"},
+    {"source": "tests/forms/allTests.js"},
+    {"source": "tests/transactions/allTests.js"},
+    {"source": "tests/utils/allTests.js"}
 ]

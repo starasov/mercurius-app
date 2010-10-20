@@ -7,10 +7,7 @@ Categories.Factory = Class.create({
         return new Categories.Validator(categoriesManager, initialCategory, Categories.Fields);
     },
 
-    createManager: function(database) {
-        return new Categories.Manager(
-                database,
-                Categories.TableModel,
-                new Models.ResultSetMapper(new Models.GenericMapper(Categories.TableModel)));
+    createMapper: function(db) {
+        return new Categories.Mapper(db);
     }
 });

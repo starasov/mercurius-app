@@ -80,8 +80,17 @@ Forms.GenericForm = Class.create({
         Mojo.require(field, "Field with '" + name + "' name doesn't defined in current form.");
 
         var fieldModel = this.fieldsModels[name];
-
         return field.fromFieldModel(fieldModel); 
+    },
+
+    setFieldValue: function(name, value) {
+        var field = this.fields[name];
+        Mojo.require(field, "Field with '" + name + "' name doesn't defined in current form.");
+
+        var fieldModel = this.fieldsModels[name];
+        field.updateFieldModel(fieldModel, value);
+
+        this.controller.modelChanged(fieldModel, this);
     },
 
     _createFieldsModels: function(model) {

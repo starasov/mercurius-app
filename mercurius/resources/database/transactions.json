@@ -1,0 +1,13 @@
+{
+    "createStatements": [
+        "DROP TABLE IF EXISTS transactions;",
+        "CREATE TABLE transactions(id INTEGER PRIMARY KEY, amount INTEGER NOT NULL, date INTEGER NOT NULL, account_id INTEGER NOT NULL, category_id INTEGER NULL);"
+    ],
+
+    "initialData": [
+        "INSERT INTO transactions VALUES(1, -2000, 1, 1, 1);",
+        "INSERT INTO transactions VALUES(2, 1000, 1, 1, NULL);",
+        "INSERT INTO transactions VALUES(3, -500, 1, 1, NULL);",
+        "INSERT INTO transactions VALUES(4, 10000, 1, 2, 4);"
+    ]
+}

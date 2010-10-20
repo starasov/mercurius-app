@@ -10,7 +10,7 @@ Database.ServiceIntegrationTest = Class.create({
         this.databaseVersionProvider = new Database.VersionProvider(this.name);
         this.databaseVersionProvider.cleanupCurrentVersion();
 
-        this.databaseInitializer = new Database.Initializer();
+        this.databaseInitializer = new Database.Initializer(new Utils.JsonResourceReader());
 
         this.databaseService = new Database.Service(this.name, this.version, this.displayName, this.size);
         this.databaseService.setVersionProvider(this.databaseVersionProvider);
@@ -31,18 +31,10 @@ Database.ServiceIntegrationTest = Class.create({
     },
 
     test_should_create_and_initialize_new_database_when_no_database_exists: function(recordResults) {
-        var testTableModel = {
-            Name: "test",
-            Columns: {
-                id: new Database.Types.PrimaryKey()
-            }
-        };
-
-        this.databaseInitializer.addTableModel(testTableModel);
-
+        this.databaseInitializer.addScript(Mojo.appPath + "tests/resources/database/sample_currencies_no_initial_data.json");
         this.databaseService.open(
                 (function(databaseService) { recordResults(Mojo.Test.passed); }).bind(this),
-                (function(databaseService, result) { recordResults(result); }).bind(this)
+                (function(databaseService, result) { recordResults(result.message); }).bind(this)
         );
     }
 });

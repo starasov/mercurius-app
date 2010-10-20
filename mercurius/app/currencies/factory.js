@@ -8,18 +8,15 @@ Currencies.Factory = Class.create({
         };
     },
 
-    createManager: function(database) {
-        return new Currencies.Manager(
-                database,
-                Currencies.TableModel,
-                new Models.ResultSetMapper(new Models.GenericMapper(Currencies.TableModel)));
+    createMapper: function(db) {
+        return new Currencies.Mapper(db);
     },
 
     createForm: function() {
         return new Forms.GenericForm(Currencies.Fields);
     },
 
-    createValidator: function(currenciesManager, currencyId) {
-        return new Currencies.Validator(Currencies.Fields, currenciesManager, currencyId);
+    createValidator: function(mapper, currencyId) {
+        return new Currencies.Validator(Currencies.Fields, mapper, currencyId);
     }
 });

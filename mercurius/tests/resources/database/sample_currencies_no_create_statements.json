@@ -1,0 +1,7 @@
+{
+    "initialData": [
+        "INSERT INTO currencies(1, 'US Dollar', '$', 1.0, 1);",
+        "INSERT INTO currencies(2, 'GB Pound', 'gbp', 1.5, 0);",
+        "INSERT INTO currencies(3, 'Euro', 'eur', 1.2, 0);"
+    ]
+}

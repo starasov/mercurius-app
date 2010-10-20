@@ -1,10 +1,10 @@
 Currencies.Validator = Class.create(Validation.GenericValidator, {
-    initialize: function($super, fields, currenciesManager, currencyId) {
-        Mojo.require(currenciesManager, "Passed 'currenciesManager' can't be null.");
+    initialize: function($super, fields, mapper, currencyId) {
+        Mojo.require(mapper, "Passed 'mapper' can't be null.");
 
         $super(fields);
 
-        this.currenciesManager = currenciesManager;
+        this.mapper = mapper;
         this.currencyId = currencyId;
     },
 
@@ -14,7 +14,7 @@ Currencies.Validator = Class.create(Validation.GenericValidator, {
         if (!Validation.Utils.validateNotEmpty(name)) {
             errorCallback("name", "Currency name can't be empty.");
         } else {
-            this.currenciesManager.getCurrencyByName(name, (function(currency) {
+            this.mapper.getCurrencyByName(name, (function(currency) {
                 if (currency && currency.id != this.currencyId) {
                     errorCallback("name", "Currency with specified name already exists.");
                 } else {

@@ -1,8 +1,11 @@
 Utils.Parsing = {};
 
 Utils.Parsing.parseDecimal = function(numberStr, options) {
+    if (Object.isUndefined(numberStr) || numberStr == null) {
+        return Number.NaN;
+    }
+    
     Mojo.requireString(numberStr, "'numberStr' parameter should be a string");
-
     if (this.isEmptyString(numberStr)) {
         return Number.NaN;
     }

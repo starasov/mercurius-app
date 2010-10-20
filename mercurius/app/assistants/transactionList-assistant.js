@@ -10,7 +10,7 @@ TransactionListAssistant = Class.create(BaseListAssistant, {
             itemSelectedHandler: this._dropdownItemSelectedHandler.bind(this)
         });
 
-        this.searchParameters = {};
+        this.finder = null;
     },
 
     /** @override */
@@ -67,17 +67,18 @@ TransactionListAssistant = Class.create(BaseListAssistant, {
     },
 
     initializeFromDatabase: function(db) {
-        this.transactionsManager = this.context.getTransactionsFactory().createManager(db);
+        this.mapper = this.context.getTransactionsFactory().createMapper(db);
 
-        this.accountsManager = this.context.getAccountsFactory().createManager(db);
-        this.accountsManager.all({}, (function(accounts) {
+        this.accountsMapper = this.context.getAccountsFactory().createMapper(db);
+        this.accountsMapper.findAll(Database.NO_LIMIT, 0, (function(accounts) {
             var items = this._createDropdownItems(accounts);
             this.dropdown.setItems(items);
         }).bind(this), this.databaseErrorCallback.bind(this));
     },
 
     listItemsCallback: function(offset, limit, successCallback, errorCallback) {
-        this.transactionsManager.find(this.searchParameters, {limit: limit, offset: offset}, successCallback, errorCallback);
+        var finder = this._getFinder();
+        finder(limit, offset, successCallback, errorCallback);
     },
 
     itemTapCallback: function(event) {
@@ -94,10 +95,14 @@ TransactionListAssistant = Class.create(BaseListAssistant, {
         return items;
     },
 
-    _dropdownItemSelectedHandler: function(event) {
-        this.log.info("[_dropdownItemSelectedHandler] - event: %s", event);
+    _getFinder: function() {
+        return this.finder || this.mapper.findAll.bind(this.mapper);
+    },
 
-        this.searchParameters = (event == "all") ? {} : {account_id: event};
+    _dropdownItemSelectedHandler: function(event) {
+        this.finder = (event == "all") ?
+                this.mapper.findAll.bind(this.mapper) : this.mapper.findForAccount.bind(this.mapper, event);
+        
         this.invalidateItems();
     }
 });

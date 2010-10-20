@@ -1,0 +1,6 @@
+{
+    "createStatements": [
+        "DROP TABLE IF EXISTS currencies;",
+        "CREATE TABLE currencies(id INTEGER PRIMARY KEY, name TEXT NOT NULL, symbol TEXT NOT NULL, rate REAL NOT NULL, home_flag INTEGER NOT NULL);"
+    ]
+}

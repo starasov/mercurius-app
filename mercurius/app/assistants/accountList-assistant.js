@@ -1,14 +1,14 @@
 AccountListAssistant = Class.create(BaseListAssistant, {
     ACCOUNT_FILTERS: {
         all: {
-            query: "all",
+            query: "findAllWithBalance",
             divider: function(account) {
                 return account.closed_flag ? "Closed" : "Open";
             }
         },
 
         open: {
-            query: "findOpenAccounts",
+            query: "findOpenWithBalance",
             divider: Prototype.emptyFunction
         }
     },
@@ -75,7 +75,7 @@ AccountListAssistant = Class.create(BaseListAssistant, {
 
     getFormatters: function() {
         return {
-            opening_balance: function(value, model) {
+            balance: function(value, model) {
                 return Object.isUndefined(value) ? value :
                         Accounts.Fields.opening_balance.toViewString(value, model.currency_symbol);
             }
@@ -87,11 +87,11 @@ AccountListAssistant = Class.create(BaseListAssistant, {
     },
 
     initializeFromDatabase: function(db) {
-        this.manager = this.context.getAccountsFactory().createManager(db);
+        this.mapper = this.context.getAccountsFactory().createMapper(db);
     },
 
     listItemsCallback: function(offset, limit, successCallback, errorCallback) {
-        this.manager[this.filter]({order: "closed_flag", limit: limit, offset: offset}, successCallback, errorCallback);
+        this.mapper[this.filter](limit, offset, successCallback, errorCallback);
     },
 
     itemTapCallback: function(event) {

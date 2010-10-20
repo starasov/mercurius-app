@@ -6,11 +6,6 @@ Transactions.Fields = {
             "Account",
             "account_choices"),
 
-    type: Forms.Fields.createSelectorField(
-            "transaction-type-field",
-            "Type",
-            "type_choices"),
-
     amount: Forms.Fields.createCurrencyField("transaction-amount-field", "Amount..."),
 
     category_id: {

@@ -4,8 +4,8 @@ AccountViewAssistant = Class.create(BaseViewAssistant, {
         this.openingBalanceModel = Accounts.Fields.opening_balance;
     },
 
-    createManager: function(db) {
-        return this.context.getAccountsFactory().createManager(db);
+    createMapper: function(db) {
+        return this.context.getAccountsFactory().createMapper(db);
     },
 
     updateView: function(account) {

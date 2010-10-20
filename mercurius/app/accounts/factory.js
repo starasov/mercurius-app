@@ -4,15 +4,13 @@ Accounts.Factory = Class.create({
             name: "",
             opening_balance: null,
             currency_id: null,
-            closed_flag: false
+            closed_flag: false,
+            currency_symbol: null
         };
     },
 
-    createManager: function(database) {
-        return new Accounts.Manager(
-                database,
-                Accounts.TableModel,
-                new Models.ResultSetMapper(new Models.GenericMapper(Accounts.TableModel)));
+    createMapper: function(db) {
+        return new Accounts.Mapper(db);
     },
 
     createForm: function() {

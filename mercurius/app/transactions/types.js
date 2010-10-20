@@ -1,1 +1,0 @@
-Transactions.Type = Categories.Type;

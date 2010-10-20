@@ -8,7 +8,7 @@ CurrencyEditAssistant = Class.create(BaseEditAssistant, {
 
         this.currencyId = currencyId;
         this.factory = applicationContext.getCurrenciesFactory();
-        this.manager = null;
+        this.mapper = null;
     },
 
     /** @override */
@@ -23,12 +23,12 @@ CurrencyEditAssistant = Class.create(BaseEditAssistant, {
 
     /** @override */
     getValidator: function() {
-        return this.factory.createValidator(this.manager, this.currencyId);
+        return this.factory.createValidator(this.mapper, this.currencyId);
     },
 
     /** @override */
-    initializeManagers: function(db) {
-        this.manager = this.factory.createManager(db);
+    initializeMappers: function(db) {
+        this.mapper = this.factory.createMapper(db);
     },
 
     /** @override */
@@ -36,7 +36,7 @@ CurrencyEditAssistant = Class.create(BaseEditAssistant, {
         if (this.isNew()) {
             successCallback(this.factory.createEmptyModel());
         } else {
-            this.manager.findById(this.currencyId, (function(currency) {
+            this.mapper.findById(this.currencyId, (function(currency) {
                 successCallback(currency);
             }).bind(this), errorCallback);
         }
@@ -44,6 +44,6 @@ CurrencyEditAssistant = Class.create(BaseEditAssistant, {
 
     /** @override */
     saveModel: function(model, successCallback, errorCallback) {
-        this.manager.saveOrUpdate(model, successCallback, errorCallback);
+        this.mapper.saveOrUpdate(model, successCallback, errorCallback);
     }
 });

@@ -8,7 +8,7 @@ CategoryEditAssistant = Class.create(BaseEditAssistant, {
 
         this.category = category;
         this.factory = applicationContext.getCategoriesFactory();
-        this.manager = null;
+        this.mapper = null;
     },
 
     setup: function($super) {
@@ -28,17 +28,17 @@ CategoryEditAssistant = Class.create(BaseEditAssistant, {
 
     /** @override */
     getValidator: function() {
-        return this.factory.createValidator(this.manager, this.category.id);
+        return this.factory.createValidator(this.mapper, this.category.id);
     },
 
     /** @override */
-    initializeManagers: function(db) {
-        this.manager = this.factory.createManager(db);
+    initializeMappers: function(db) {
+        this.mapper = this.factory.createMapper(db);
     },
 
     /** @override */
     loadModel: function(successCallback, errorCallback) {
-        this.manager.findTopCategoriesByType(this.category.type, {}, (function(categories) {
+        this.mapper.findTopCategoriesByType(this.category.type, Database.NO_LIMIT, 0, (function(categories) {
             this.category.parent_choices = this._createParentChoices(categories);
             this.category.type_choices = Categories.Type.toChoices();
             successCallback(this.category);
@@ -47,7 +47,7 @@ CategoryEditAssistant = Class.create(BaseEditAssistant, {
 
     /** @override */
     saveModel: function(model, successCallback, errorCallback) {
-        this.manager.saveOrUpdate(model, successCallback, errorCallback);
+        this.mapper.saveOrUpdate(model, successCallback, errorCallback);
     },
 
     _categoryModelChangedHandler: function(form) {

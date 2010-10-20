@@ -1,7 +1,7 @@
 Categories.Validator = Class.create(Validation.GenericValidator, {
-    initialize: function($super, categoriesManager, categoryId, fields) {
+    initialize: function($super, categoriesMapper, categoryId, fields) {
         $super(fields);
-        this.categoriesManager = categoriesManager;
+        this.categoriesMapper = categoriesMapper;
         this.categoryId = categoryId;
     },
 
@@ -21,9 +21,7 @@ Categories.Validator = Class.create(Validation.GenericValidator, {
     },
 
     _validateNameAvailability: function(name, parentId, successCallback, errorCallback) {
-        var searchParams = {name: name, parent_id: parentId};
-
-        this.categoriesManager.find(searchParams, {}, (function(categories) {
+        this.categoriesMapper.findByNameAndParent(name, parentId, (function(categories) {
             if (categories.length && categories[0].id != this.categoryId) {
                 if (parentId) {
                     errorCallback("name", "Subcategory with specified name alredy exists.");

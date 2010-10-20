@@ -1,15 +1,17 @@
-Categories.ValidatorTest = Class.create({
-    before: function() {
-        this.categoryFormFields = {
-            name: {value: "test"},
-            parent_id: {value: "1"},
-            type: {value: "1"}
-        };
+Categories.ValidatorTest = Class.create(BaseDatabaseTest, {
+    before: function($super, completionCallback) {
+        $super((function() {
+            this.categoryFormFields = {
+                name: {value: "test"},
+                parent_id: {value: "1"},
+                type: {value: "1"}
+            };
 
-        this.manager = new MockGenericManager();
-        this.validator = new Categories.Validator(this.manager, 1, Categories.Fields);
+            this.mapper = new Categories.Mapper(this.db);
+            this.validator = new Categories.Validator(this.mapper, 2, Categories.Fields);
 
-        return Mojo.Test.beforeFinished;
+            completionCallback();
+        }).bind(this));
     },
 
     test_should_pass_validation_when_all_fields_correctly_filled: function(recordResults) {
@@ -28,7 +30,9 @@ Categories.ValidatorTest = Class.create({
     },
 
     test_should_fail_validation_when_category_with_specified_name_already_exists: function(recordResults) {
-        this.manager.findResults = [{id: 2}];
+        this.categoryFormFields.name.value = "Food";
+        this.categoryFormFields.parent_id.value = "0";
+
         this.validator.validate(this.categoryFormFields, function() {
             recordResults("Validation should fail for duplicated category name.");
         }, function(key, message) {
@@ -37,9 +41,14 @@ Categories.ValidatorTest = Class.create({
     },
 
     test_should_pass_validation_when_category_was_editing_and_name_was_not_changed: function(recordResults) {
-        this.manager.findResults = [{id: 1}];
         this.validator.validate(this.categoryFormFields, recordResults, function(key, message) {
             recordResults("Validation should pass for '" + key + "' field.");
         });
+    },
+
+    getFixtures: function() {
+        return [
+            Mojo.appPath + "resources/database/categories.json"
+        ];
     }
 });

@@ -10,8 +10,8 @@ AccountEditAssistant = Class.create(BaseEditAssistant, {
         this.accountsFactory = applicationContext.getAccountsFactory();
         this.currenciesFactory = applicationContext.getCurrenciesFactory();
 
-        this.accountsManager = null;
-        this.currenciesManager = null;
+        this.accountsMapper = null;
+        this.currenciesMapper = null;
 
         this.account = null;
         this.currencies = null;
@@ -33,9 +33,9 @@ AccountEditAssistant = Class.create(BaseEditAssistant, {
     },
 
     /** @override */
-    initializeManagers: function(db) {
-        this.accountsManager = this.accountsFactory.createManager(db);
-        this.currenciesManager = this.currenciesFactory.createManager(db);
+    initializeMappers: function(db) {
+        this.accountsMapper = this.accountsFactory.createMapper(db);
+        this.currenciesMapper = this.currenciesFactory.createMapper(db);
     },
 
     /** @override */
@@ -53,7 +53,7 @@ AccountEditAssistant = Class.create(BaseEditAssistant, {
 
     /** @override */
     saveModel: function(model, successCallback, errorCallback) {
-        this.accountsManager.saveOrUpdate(model, successCallback, errorCallback);
+        this.accountsMapper.saveOrUpdate(model, successCallback, errorCallback);
     },
 
     /** @private */
@@ -62,7 +62,7 @@ AccountEditAssistant = Class.create(BaseEditAssistant, {
             this.account = this.accountsFactory.createEmptyModel();
             successCallback();
         } else {
-            this.accountsManager.findById(this.accountId, (function(account) {
+            this.accountsMapper.findById(this.accountId, (function(account) {
                 this.account = account;
                 successCallback();
             }).bind(this), errorCallback);
@@ -71,7 +71,7 @@ AccountEditAssistant = Class.create(BaseEditAssistant, {
 
     /** @private */
     _loadCurrencies: function(successCallback, errorCallback) {
-        this.currenciesManager.all({}, (function(currencies) {
+        this.currenciesMapper.findAll(Database.NO_LIMIT, 0, (function(currencies) {
             this.currencies = currencies;
             successCallback();
         }).bind(this), errorCallback);

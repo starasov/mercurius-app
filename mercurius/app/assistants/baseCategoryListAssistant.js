@@ -50,12 +50,12 @@ BaseCategoryListAssistant = Class.create(BaseListAssistant, {
 
     /** @override */
     initializeFromDatabase: function(db) {
-        this.manager = this.context.getCategoriesFactory().createManager(db);
+        this.mapper = this.context.getCategoriesFactory().createMapper(db);
     },
 
     /** @override */
     listItemsCallback: function(offset, limit, successCallback, errorCallback) {
-        this.manager.findTopCategoriesByType(this.categoryType, {order: "name", limit: limit, offset: offset}, successCallback, errorCallback);
+        this.mapper.findTopCategoriesByType(this.categoryType, limit, offset, successCallback, errorCallback);
     },
 
     /** @override */
@@ -99,7 +99,7 @@ BaseCategoryListAssistant = Class.create(BaseListAssistant, {
         var parent_id = parseInt(list.getAttribute("x-parent-id"));
 
         this.spinner.show();
-        this.manager.findChildCategories(parent_id, {order: "name", limit: limit, offset: offset}, (function(models) {
+        this.mapper.findChildCategories(parent_id, limit, offset, (function(models) {
             this.controller.setupWidget("childrenField", {modelProperty: "name"});
             list.mojo.noticeUpdatedItems(offset, models);
             this.spinner.hide();

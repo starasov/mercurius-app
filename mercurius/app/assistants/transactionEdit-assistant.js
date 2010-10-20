@@ -10,11 +10,9 @@ TransactionEditAssistant = Class.create(BaseEditAssistant, {
 
         this.transactionsFactory = applicationContext.getTransactionsFactory();
         this.accountsFactory = applicationContext.getAccountsFactory();
-        this.categoriesFactory = applicationContext.getCategoriesFactory();
 
-        this.transactionsManager = null;
-        this.accountsManager = null;
-        this.categoriesManager = null;
+        this.transactionsMapper = null;
+        this.accountsMapper = null;
 
         this.transaction = null;
         this.accounts = null;
@@ -24,18 +22,18 @@ TransactionEditAssistant = Class.create(BaseEditAssistant, {
     setup: function($super) {
         $super();
         this.categoryPicker = this.controller.get("transaction-category-field");
-
-        this.stateChangedCallback = (function() {
-            Mojo.Log.info("[this.stateChangedCallback]");
-        }).bind(this);
-
-        this.form.addStateChangedCallback(this.stateChangedCallback);
     },
 
     /** @override */
     activate: function($super, event) {
         $super(event);
         this.categoryPicker.mojo.setContext(this.context);
+        this.categoryPicker.mojo.setListener(this._adjustAmountSign.bind(this));
+    },
+
+    /** @override */
+    deactivate: function($super, event) {
+        $super(event);
     },
 
     /** @override */
@@ -54,10 +52,9 @@ TransactionEditAssistant = Class.create(BaseEditAssistant, {
     },
 
     /** @override */
-    initializeManagers: function(db) {
-        this.transactionsManager = this.transactionsFactory.createManager(db);
-        this.accountsManager = this.accountsFactory.createManager(db);
-        this.categoriesManager = this.categoriesFactory.createManager(db);
+    initializeMappers: function(db) {
+        this.transactionsMapper = this.transactionsFactory.createMapper(db);
+        this.accountsMapper = this.accountsFactory.createMapper(db);
     },
 
     /** @override */
@@ -69,14 +66,13 @@ TransactionEditAssistant = Class.create(BaseEditAssistant, {
         chain.add(this._loadTransaction.bind(this));
         chain.add(this._loadAccounts.bind(this));
         chain.add(this._createAccountChoices.bind(this));
-        chain.add(this._createTypeChoices.bind(this));
 
         chain.call();
     },
 
     /** @override */
     saveModel: function(model, successCallback, errorCallback) {
-        this.transactionsManager.saveOrUpdate(model, successCallback, errorCallback);
+        this.transactionsMapper.saveOrUpdate(model, successCallback, errorCallback);
     },
 
     /** @private */
@@ -85,7 +81,7 @@ TransactionEditAssistant = Class.create(BaseEditAssistant, {
             this.transaction = this.transactionsFactory.createEmptyModel();
             successCallback();
         } else {
-            this.transactionsManager.findById(this.transactionId, (function(transaction) {
+            this.transactionsMapper.findById(this.transactionId, (function(transaction) {
                 this.transaction = transaction;
                 successCallback();
             }).bind(this), errorCallback);
@@ -94,7 +90,7 @@ TransactionEditAssistant = Class.create(BaseEditAssistant, {
 
     /** @private */
     _loadAccounts: function(successCallback, errorCallback) {
-        this.accountsManager.all({}, (function(accounts) {
+        this.accountsMapper.findAll(Database.NO_LIMIT, 0, (function(accounts) {
             this.accounts = accounts;
             successCallback();
         }).bind(this), errorCallback);
@@ -106,9 +102,15 @@ TransactionEditAssistant = Class.create(BaseEditAssistant, {
         successCallback();
     },
 
-    /** @private */
-    _createTypeChoices: function(successCallback, errorCallback) {
-        this.transaction.type_choices = Transactions.Type.toChoices();
-        successCallback();
+    _adjustAmountSign: function(pickedCategory) {
+        var amount = this.form.getFieldValue("amount");
+        if (isNaN(amount)) {
+            return;
+        }
+
+        var isIncome = pickedCategory.type == Categories.Type.INCOME;
+
+        var adjustedAmount =  isIncome ? Math.abs(amount) : -Math.abs(amount);
+        this.form.setFieldValue("amount", adjustedAmount);
     }
 });

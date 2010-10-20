@@ -1,12 +1,12 @@
 {
     "createStatements": [
         "DROP TABLE IF EXISTS currencies;",
-        "CREATE TABLE IF EXISTS currencies(id INTEGER PRIMARY KEY, name TEXT NOT NULL, symbol TEXT NOT NULL, rate REAL NOT NULL, home_flag INTEGER NOT NULL);"
+        "CREATE TABLE currencies(id INTEGER PRIMARY KEY, name TEXT NOT NULL, symbol TEXT NOT NULL, rate REAL NOT NULL, home_flag INTEGER NOT NULL);"
     ],
 
     "initialData": [
-        "INSERT INTO currencies(1, 'US Dollar', '$', 1.0, 1);",
-        "INSERT INTO currencies(1, 'GB Pound', 'gbp', 1.5, 0);",
-        "INSERT INTO currencies(1, 'Euro', 'eur', 1.2, 0);"
+        "INSERT INTO currencies VALUES(1, 'US Dollar', '$', 1.0, 1);",
+        "INSERT INTO currencies VALUES(2, 'GB Pound', 'gbp', 1.5, 0);",
+        "INSERT INTO currencies VALUES(3, 'Euro', 'eur', 1.2, 0);"
     ]
 }

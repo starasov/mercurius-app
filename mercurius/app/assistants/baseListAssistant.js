@@ -37,7 +37,7 @@ BaseListAssistant = Class.create(BaseAssistant, {
     /** @override */
     activate: function(event) {
         if (!event) {
-            this.listWidget.mojo.setLengthAndInvalidate(this.listWidget.mojo.getLength());
+            this.invalidateItems();
         }
 
         this.controller.listen(this.listWidgetId, Mojo.Event.listTap, this.itemTapHandler);
@@ -75,8 +75,8 @@ BaseListAssistant = Class.create(BaseAssistant, {
     /** @private */
     _listItemsCallback: function(list, offset, limit) {
         if (!this.isInitialized) {
-            this.log.info("[%s][BaseListAssistant][_listItemsCallback] - initializing manager", this.name);
-            this._setupManager(list, offset, limit);
+            this.log.info("[%s][BaseListAssistant][_listItemsCallback] - initializing mapper(s)", this.name);
+            this._setupMapper(list, offset, limit);
         } else {
             this.spinner.show();
             this.listItemsCallback(offset, limit, (function(models) {
@@ -87,7 +87,7 @@ BaseListAssistant = Class.create(BaseAssistant, {
     },
 
     /** @private */
-    _setupManager: function(list, offset, limit) {
+    _setupMapper: function(list, offset, limit) {
         this.spinner.show();
         this.context.getDatabase((function(db) {
             this.initializeFromDatabase(db);
