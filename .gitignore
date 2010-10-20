@@ -3,4 +3,5 @@ dist
 *.ipr
 *.iws
 *.ids
+*.class
 tests.log
